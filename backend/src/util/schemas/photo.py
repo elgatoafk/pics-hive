@@ -12,7 +12,7 @@ class PhotoCreate(PhotoBase):
 class PhotoUpdate(PhotoBase):
     pass
 
-class CommentResponse(BaseModel):
+class PhotoResponse(BaseModel):
     id: int
     text: str
     user_id: int
