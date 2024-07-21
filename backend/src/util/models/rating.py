@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
+from sqlalchemy import Column, Integer,ForeignKey
 from sqlalchemy.orm import relationship
 from backend.src.util.db import Base
 
