@@ -8,15 +8,19 @@ router = APIRouter()
 
 @router.post("/ratings/", response_model=RatingResponse)
 async def creat_rating_route(photo: RatingCreate, user_id: int, db: Session = Depends(get_db)):
-	return await create_rating(db, photo, user_id)
+    return await create_rating(db, photo, user_id)
 
 @router.get("/ratings/", response_model=RatingResponse)
 async def get_rating_route():
-	pass
+    pass
 
 @router.put("/ratings/", response_model=RatingResponse)
-async def update_rating_route():
-	pass
+async def update_rating_route(rating: RatingCreate, rating_id: int, db: Session = Depends(get_db)):
+    updated_rating = update_rating(rating, rating_id, db)
+    if not updated_rating:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    return updated_rating
+
 @router.delete("/ratings/")
 async def delete_rating_route():
-	pass
+    pass
