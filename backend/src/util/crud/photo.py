@@ -23,6 +23,10 @@ def update_photo(body: PhotoCreate, photo_id: int, db: Session = Depends(get_db)
     db.commit()
     db.refresh (db_photo)
     return db_photo
-def delete_photo():
-    pass
-
+def delete_photo(photo_id: int ,db: Session = Depends(get_db)):
+    db_photo = db.query(Photo).filter(Photo.id == photo_id).first()
+    if db_photo:
+        db.delete(db_photo)
+        db.commit()
+        db.refresh(db_photo)
+        return db_photo

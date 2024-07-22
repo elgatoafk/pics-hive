@@ -21,7 +21,12 @@ def update_tag(body: TagCreate, tag_id: int, db:Session = Depends(get_db)) -> Ta
         db.commit()
         db.refresh(tag_db)
         return tag_db
-def delete_tag() :
-    pass
+def delete_tag(tag_name: str, db:Session = Depends(get_db)) -> Tag:
+    tag_db = db.query(Tag).filter(Tag.name == tag_name).first()
+    if tag_db:
+        db.delete(tag_db)
+        db.commit()
+        db.refresh(tag_db)
+        return tag_db
 
 
