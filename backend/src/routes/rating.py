@@ -11,16 +11,21 @@ async def creat_rating_route(photo: RatingCreate, user_id: int, db: Session = De
     return await create_rating(db, photo, user_id)
 
 @router.get("/ratings/", response_model=RatingResponse)
-async def get_rating_route():
-    pass
+async def get_rating_route(rating_id: int, db: Session = Depends(get_db)):
+    return await get_rating(db, rating_id)
 
 @router.put("/ratings/", response_model=RatingResponse)
 async def update_rating_route(rating: RatingCreate, rating_id: int, db: Session = Depends(get_db)):
-    updated_rating = update_rating(rating, rating_id, db)
+    updated_rating = await update_rating(rating, rating_id, db)
     if not updated_rating:
         raise HTTPException(status_code=404, detail="Rating not found")
     return updated_rating
 
 @router.delete("/ratings/")
-async def delete_rating_route():
-    pass
+async def delete_rating_route(rating_id: int, db: Session = Depends(get_db)):
+    rating_db = await get_rating(db, rating_id)
+    if not rating_db:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    else:
+        await delete_rating(db, rating_id)
+        return {"detail": "Rating deleted"}

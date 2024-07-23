@@ -22,5 +22,10 @@ def update_rating(rating_id: int, body: RatingCreate, db:Session =Depends(get_db
         db.commit()
         db.refresh(rating_db)
         return rating_db
-def delete_rating() :
-    pass
+def delete_rating(rating_id: int, db:Session =Depends(get_db))-> Rating:
+    rating_db = db.query(Rating).filter(Rating.id == rating_id).first()
+    if rating_db:
+        db.delete(rating_db)
+        db.commit()
+        db.refresh(rating_db)
+        return rating_db

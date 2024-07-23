@@ -9,10 +9,9 @@ router = APIRouter()
 async def creat_photo_route(photo: PhotoCreate, user_id: int, db: Session = Depends(get_db)):
     return await create_photo(db, photo, user_id)
 
-
 @router.get("/photos/", response_model=PhotoResponse)
-async def get_photo_route():
-    pass
+async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
+    return await get_photo(db, photo_id)
 
 @router.put("/photos/", response_model=PhotoResponse)
 async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = Depends(get_db)):
@@ -22,5 +21,10 @@ async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = De
     return updated_photo
 
 @router.delete("/photos/")
-async def delete_photo_route():
-    pass
+async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
+    photo_db = await get_photo(db, photo_id)
+    if not photo_db:
+        raise HTTPException(status_code=404, detail="Photo not found")
+    else:
+        await delete_photo(db, photo_db)
+        return {"detail": "Photo deleted successfully"}
