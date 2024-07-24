@@ -1,10 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
-from sqlalchemy.orm import Session
-from backend.src.util.schemas import schemas
-from backend.src.util.models import models
-from backend.src.util.crud import crud
-from backend.src.config import auth 
-from backend.src.config.auth import get_db, get_current_active_user, get_password_hash, create_access_token
-from backend.src.config.dependencies import get_current_admin
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
+from .base import Base
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    disabled = Column(Boolean, default=False)
+    role = Column(String)
+
+    photos = relationship("Photo", back_populates="owner")

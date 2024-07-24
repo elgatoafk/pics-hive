@@ -6,10 +6,10 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 from fastapi import FastAPI
-from src.routes import user, photo, comment, tag, rating
+from src.routes import auth, user, photo, comment, tag, rating
 from src.util.db import engine  #, Base
 #from src.util.models import models
-from src.util.models.models import Base
+from backend.src.util.models.base import Base
 
 import cloudinary
 from src.config.config import settings
@@ -29,8 +29,7 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 # Include API routers
-#app.include_router(auth.router, prefix="/auth", tags=["auth"])
-#app.include_router(user.router)
+app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
 app.include_router(photo.router, prefix="", tags=["photos"])
 app.include_router(comment.router, prefix="", tags=["comments"])
@@ -46,4 +45,9 @@ if __name__ == "__main__":
     import uvicorn
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
+
+
+
+
+
 

@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 from typing import List, Optional
-from . import tag 
+from . import tag
 
-        
+
+
 class PhotoBase(BaseModel):
     url: str
     description: Optional[str] = None
-    
+
 class PhotoCreate(PhotoBase):
     tags: Optional[List[tag.TagCreate]] = None
 
@@ -18,6 +19,7 @@ class Photo(PhotoBase):
 
     class Config:
         from_attributes = True #orm_mode = True
+
 
 class TransformedImageBase(BaseModel):
     original_photo_id: int
