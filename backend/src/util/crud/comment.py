@@ -1,3 +1,4 @@
+feature/adding-comments
 from sqlalchemy.orm import Session
 from datetime import datetime
 from models.comment import Comment
@@ -28,3 +29,4 @@ def delete_comment(db: Session, comment_id: int):
         db.delete(db_comment)
         db.commit()
     return db_comment
+
