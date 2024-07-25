@@ -2,15 +2,9 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic
-python-jose[cryptography]
+psycopg2-binary
+python-jose
 passlib[bcrypt]
 alembic
-python-multipart
 cloudinary
 qrcode
-pillow
-python-dotenv
-psycopg2-binary
-pydantic-settings
-psycopg2
-bcrypt
