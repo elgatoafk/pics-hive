@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql+psycopg2://user:password@localhost/dbname")
+    cloudinary_api_key: str = os.getenv("CLOUDINARY_API_KEY")
+    cloudinary_api_secret: str = os.getenv("CLOUDINARY_API_SECRET")
+    cloudinary_name: str = os.getenv("CLOUDINARY_name")
+
 
 settings = Settings()
 
