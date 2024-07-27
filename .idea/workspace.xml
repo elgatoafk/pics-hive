@@ -105,8 +105,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+ update/async_for_CRUD
+          <url>file://$PROJECT_DIR$/backend/src/util/crud/comment.py</url>
+          <line>1</line>
+
           <url>file://$PROJECT_DIR$/backend/src/routes/transformations.py</url>
           <line>3</line>
+
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
