@@ -7,7 +7,7 @@ from typing import Callable
 def role_required(*roles: str):
     def decorator(func: Callable):
         async def wrapper(*args, current_user: model_user.User = Depends(get_current_active_user), **kwargs):
-            print(f'role_require: current_user.role: {current_user.role}')
+            
             if current_user.role not in roles:
                 raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
             return await func(*args, current_user=current_user, **kwargs)
