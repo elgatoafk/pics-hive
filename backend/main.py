@@ -18,12 +18,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Cloudinary configuration
-# cloudinary.config(
-#     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
-#     api_key=settings.CLOUDINARY_API_KEY,
-#     api_secret=settings.CLOUDINARY_API_SECRET
-# )
+#Cloudinary configuration
+cloudinary.config(
+    cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+    api_key=settings.CLOUDINARY_API_KEY,
+    api_secret=settings.CLOUDINARY_API_SECRET
+)
 
 # FastAPI app initialization
 app = FastAPI(
@@ -52,10 +52,10 @@ async def init_db():
         await conn.run_sync(Base.metadata.create_all)
 
 # Include API routers
-# app.include_router(auth.router, prefix="", tags=["auth"])
+app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
 app.include_router(photo.router, prefix="/photos", tags=["photos"])
-# app.include_router(comment.router, prefix="/comments", tags=["comments"])
+app.include_router(comment.router, prefix="/comments", tags=["comments"])
 app.include_router(tag.router, prefix="/tags", tags=["tags"])
 app.include_router(rating.router, prefix="/ratings", tags=["ratings"])
 
