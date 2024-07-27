@@ -1,7 +1,6 @@
 import sys
 import os
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+import uvicorn
 
 from fastapi import FastAPI
 from src.routes import auth, user, photo, comment, tag, rating
@@ -15,6 +14,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -80,6 +81,6 @@ async def on_startup():
     await init_db()
 
 if __name__ == "__main__":
-    import uvicorn
+   
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
