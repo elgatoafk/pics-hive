@@ -9,8 +9,6 @@ from backend.src.util.schemas import user
 #from backend.src.util.db import SessionLocal
 
 #from backend.src.util.db import AsyncSessionLocal as SessionLocal
-
-
 from backend.src.config.config import settings
 from typing import Optional
 from backend.src.util.crud import user as crud_user
@@ -18,13 +16,13 @@ from backend.src.util.models import user as model_user, token as model_token
 
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from src.config.config import settings
+from backend.src.config.config import settings
 #from src.util.db import get_db
-from backend.src.util.crud import token as crud_token
+from backend.src.util.models import token as crud_token
 from backend.src.util.schemas.user import TokenData
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.src.util.db import AsyncSessionLocal as SessionLocal, get_db
+from backend.src.util.db import get_db
 
 from backend.src.util.logging_config import logger
 
