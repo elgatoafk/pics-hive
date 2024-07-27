@@ -49,3 +49,7 @@ async def add_tags_to_photo(
     )
 
 
+@router.get("/tags/", response_model=TagResponse)
+async def get_tag_route(tag_name: str, db: Session = Depends(get_db)):
+    return await get_tag(db, tag_name)
+

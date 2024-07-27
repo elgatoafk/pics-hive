@@ -1,3 +1,4 @@
+
 from pydantic import BaseModel, conlist
 from typing import List
 
@@ -13,6 +14,7 @@ class PhotoTaggingRequest(BaseModel):
 class PhotoTaggingResponse(BaseModel):
     photo_id: int
     tags: List[str]
+
 
     class Config:
         orm_mode = True
