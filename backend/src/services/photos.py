@@ -30,7 +30,7 @@ class PhotoService:
 
         """
         unique_filename = str(uuid4())
-        public_id = f"KillerInstagram/{unique_filename}"
+        public_id = f"f4aaafaf-7376-4506-976a-bae4d91b5e7c/{unique_filename}"
         r = cloudinary.uploader.upload(file.file, public_id=public_id, overwrite=True)
         src_url = cloudinary.CloudinaryImage(public_id).build_url(
             version=r.get("version")
