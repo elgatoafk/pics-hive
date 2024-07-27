@@ -1,8 +1,7 @@
-feature/adding-comments
 from sqlalchemy.orm import Session
 from datetime import datetime
-from models.comment import Comment
-from schemas.comment import CommentCreate, CommentUpdate
+from backend.src.util.models.comment import Comment
+from backend.src.util.schemas.comment import CommentCreate, CommentUpdate
 
 def create_comment(db: Session, comment: CommentCreate, user_id: int, photo_id: int):
     db_comment = Comment(**comment.dict(), user_id=user_id, photo_id=photo_id)
