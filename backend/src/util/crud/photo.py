@@ -1,39 +1,53 @@
 import bcrypt
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 from backend.src.util.schemas import photo as schema_photo
 from backend.src.util.models import photo as model_photo, tag as model_tag
+from backend.src.util.logging_config import logger
 
-dbg = True
+async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_id: int):
+    if len(photo.tags) > 5:
+        raise ValueError('A photo cannot have more than 5 tags.')
 
-
-
-def create_photo(db: Session, photo: schema_photo.PhotoCreate, user_id: int):
-    print('create_photo')
+    logger.debug('start : model_photo.Photo')
     db_photo = model_photo.Photo(
         url=photo.url,
         description=photo.description,
         owner_id=user_id
     )
+    logger.debug('end : model_photo.Photo')
+
     db.add(db_photo)
-    db.commit()
-    db.refresh(db_photo)
-
-    print('commit test')
-
-    print(photo.tags)
+    await db.commit()
+    await db.refresh(db_photo)
 
     for tag_create in photo.tags or []:
-        tag_name = tag_create.name  # Access the tag name from TagCreate
-        db_tag = db.query(model_photo.Tag).filter(model_tag.Tag.name == tag_name).first()
-        if not db_tag:
-            db_tag = model_photo.Tag(name=tag_name)
-            db.add(db_tag)
-            db.commit()
-            db.refresh(db_tag)
-        db_photo.tags.append(db_tag)
-        db.commit()
+        tag_name = tag_create.name
 
-    # Return a response model with tag names
+        logger.debug('start : tag')
+
+        result = await db.execute(select(model_tag.Tag).filter(model_tag.Tag.name == tag_name))
+        db_tag = result.scalars().first()
+        logger.debug('end: tag')
+
+
+        if not db_tag:
+            logger.debug('start: add a new tag')
+            db_tag = model_tag.Tag(name=tag_name)
+            db.add(db_tag)
+            await db.commit()
+            await db.refresh(db_tag)
+            logger.debug('end: add a new tag')
+
+
+        db_photo.tags.append(db_tag)
+        await db.commit()
+
+        
+
+    logger.debug('start : schema_photo')
+
     response_photo = schema_photo.Photo(
         id=db_photo.id,
         url=db_photo.url,
@@ -41,19 +55,19 @@ def create_photo(db: Session, photo: schema_photo.PhotoCreate, user_id: int):
         owner_id=db_photo.owner_id,
         tags=[tag.name for tag in db_photo.tags]
     )
+    logger.debug('end: schema_photo')
 
-    print('crate_photo completed')
     return response_photo
 
 
 
-def get_photo(db: Session, photo_id: int):
-    if dbg: print('get_photo')
-    db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
+
+async def get_photo(db: AsyncSession, photo_id: int):
+    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
+    db_photo = result.scalars().first()
     if not db_photo:
         return None
 
-    # Return a response model with tag names
     response_photo = schema_photo.Photo(
         id=db_photo.id,
         url=db_photo.url,
@@ -66,7 +80,10 @@ def get_photo(db: Session, photo_id: int):
 
 
 def update_photo(db: Session, photo_id: int, photo_update: schema_photo.PhotoCreate):
-    if dbg: print('update_photo')
+
+    if len(photo_update.tags) > 5:
+        raise ValueError('A photo cannot have more than 5 tags.')
+
 
     db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
     if not db_photo:
@@ -100,12 +117,11 @@ def update_photo(db: Session, photo_id: int, photo_update: schema_photo.PhotoCre
         tags=[tag.name for tag in db_photo.tags]
     )
 
-    print('update_photo completed')
     return response_photo
 
 def delete_photo(db: Session, photo_id: int):
-    if dbg: print('delete_photo')
-    if dbg: print('photo_id : {}'.format(photo_id))
+    #if dbg: print('delete_photo')
+    #if dbg: print('photo_id : {}'.format(photo_id))
     db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
     if db_photo:
         db.delete(db_photo)

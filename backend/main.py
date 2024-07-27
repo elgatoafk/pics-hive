@@ -1,18 +1,22 @@
 import sys
 import os
-
-#from backend.src.routes import ddddauth
-
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 from fastapi import FastAPI
 from src.routes import auth, user, photo, comment, tag, rating
-from src.util.db import engine  #, Base
-#from src.util.models import models
+from src.util.db import engine
 from backend.src.util.models.base import Base
 
 import cloudinary
 from src.config.config import settings
+
+from fastapi.middleware.cors import CORSMiddleware
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 
 cloudinary.config(
     cloud_name = settings.CLOUDINARY_CLOUD_NAME,
@@ -21,12 +25,24 @@ cloudinary.config(
 )
 
 
-app = FastAPI()
+app = FastAPI(
+    title = settings.PROJECT_NAME,
+    description = settings.DESCRIPTION,
+    version = settings.VERSION
+)
 
+# CORS Middleware setup, adjust as necessary
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Create database tables
 #Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine)
 
 # Include API routers
 app.include_router(auth.router, prefix="", tags=["auth"])

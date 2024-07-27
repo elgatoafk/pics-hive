@@ -13,3 +13,5 @@ psycopg2-binary
 pydantic-settings
 psycopg2
 bcrypt
+sqlalchemy[asyncio] 
+asyncpg
