@@ -1,32 +1,17 @@
+
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Depends
-from backend.src.util.db import get_db
-from backend.src.util.models.tag import Tag
-from backend.src.util.schemas.tag import TagCreate
+from backend.src.util.models import Tag, Photo
 
 
-async def get_tag(tag_name: str, db:AsyncSession = Depends(get_db)) -> Tag:
-     return await db.execute(db.query(Tag).filter(Tag.name == tag_name).first())
-
-async def create_tag(body: TagCreate, db:AsyncSession = Depends(get_db)) -> Tag:
-    tag_db = Tag(name=body.name)
-    db.add(tag_db)
+async def create_tag(db: AsyncSession, tag_name: str) -> Tag:
+    tag = Tag(tag_name=tag_name)
+    db.add(tag)
     await db.commit()
-    await db.refresh(tag_db)
-    return tag_db
-async def update_tag(body: TagCreate, tag_id: int, db:AsyncSession = Depends(get_db)) -> Tag:
-    tag_db = db.execute(db.query(Tag).filter(Tag.id == tag_id).first())
-    if tag_db:
-        tag_db.name = body.name
-        await db.commit()
-        await db.refresh(tag_db)
-        return tag_db
-async def delete_tag(tag_name: str, db:AsyncSession = Depends(get_db)) -> Tag:
-    tag_db = db.execute(db.query(Tag).filter(Tag.name == tag_name).first())
-    if tag_db:
-        await db.delete(tag_db)
-        await db.commit()
-        await db.refresh(tag_db)
-        return tag_db
+    await db.refresh(tag)
+    return tag
 
 
+async def get_tag_by_name(db: AsyncSession, tag_name: str) -> Tag:
+    result = await db.execute(select(Tag).filter_by(name=tag_name))
+    return result.scalars().first()

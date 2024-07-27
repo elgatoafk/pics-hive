@@ -1,13 +1,20 @@
-from pydantic import BaseModel
 
-class TagBase(BaseModel):
+from pydantic import BaseModel, conlist
+from typing import List
+
+
+class TagCreate(BaseModel):
     name: str
 
-class TagCreate(TagBase):
-    pass
 
-class TagResponse(TagBase):
-    id: int
+class PhotoTaggingRequest(BaseModel):
+    tags: conlist(TagCreate, min_length=1, max_length=5)
+
+
+class PhotoTaggingResponse(BaseModel):
+    photo_id: int
+    tags: List[str]
+
 
     class Config:
         orm_mode = True
