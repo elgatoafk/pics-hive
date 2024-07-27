@@ -13,35 +13,9 @@ import cloudinary
 import cloudinary.uploader
 from backend.src.util.logging_config import logger
 #import qrcode
-
+from sqlalchemy.future import select
 
 router = APIRouter()
-
-#@router.post("/photos/", response_model=schema_photo.Photo)
-#async def create_photo(
-#    description: str = Form(None),
-#    tags: str = Form(""),
-#    file: UploadFile = File(...),
-#    current_user: schema_user.User = Depends(get_current_active_user),
-#    db: Session = Depends(get_db)
-#):
-#    # Upload file to Cloudinary
-#    upload_result = cloudinary.uploader.upload(file.file)
-    
-#    # Convert comma-separated tags into a list of TagCreate objects
-#    tag_list = [tag.strip() for tag in tags.split(",")] if tags else []
-#    tags_objects = [schema_tag.TagCreate(name=tag) for tag in tag_list]
-    
-#    # Create PhotoCreate schema instance
-#    photo_in = schema_photo.PhotoCreate(
-#        url=upload_result["secure_url"], 
-#        description=description, 
-#        tags=tags_objects
-#    )
-    
-#    # Use CRUD function to create photo in the database
-#    return crud_photo.create_photo(db=db, photo=photo_in, user_id=current_user.id)
-
 
 @router.post("/photos/", response_model=schema_photo.Photo)
 async def create_photo(
@@ -85,48 +59,55 @@ async def read_photo(photo_id: int, db: AsyncSession = Depends(get_db)):
     return photo
 
 
+
 @router.put("/photos/{photo_id}", response_model=schema_photo.Photo)
 @role_required("admin", "moderator")
-def update_photo(
+async def update_photo(
     photo_id: int,
     photo: schema_photo.PhotoCreate,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: model_user.User = Depends(get_current_active_user)
 ):
-    db_photo = crud_photo.get_photo(db, photo_id)
+    db_photo = await crud_photo.get_photo(db, photo_id)
     if db_photo is None:
         raise HTTPException(status_code=404, detail="Photo not found")
     if db_photo.owner_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not enough permissions")
-    return crud_photo.update_photo(db, photo_id, photo)
+    return await crud_photo.update_photo(db, photo_id, photo)
+
+
 
 @router.delete("/photos/{photo_id}", status_code=204)
 @role_required("admin")
 async def delete_photo(
     photo_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: model_user.User = Depends(get_current_active_user)
 ):
-    db_photo = crud_photo.get_photo(db, photo_id)
+    db_photo = await crud_photo.get_photo(db, photo_id)
     if db_photo is None:
         raise HTTPException(status_code=404, detail="Photo not found")
     if db_photo.owner_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not enough permissions")
     await crud_photo.delete_photo(db, photo_id)
 
+
+
+
 @router.post("/photos/{photo_id}/transform", response_model=schema_photo.Photo)
 @role_required("admin", "moderator")
-def transform_photo(
+async def transform_photo(
     photo_id: int,
     transformation: str,
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
-    db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
+    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
+    db_photo = result.scalars().first()
     if not db_photo:
         raise HTTPException(status_code=404, detail="Photo not found")
 
     try:
-        transformed_photo = crud_photo.transform_photo(db, db_photo, transformation)
+        transformed_photo = await crud_photo.transform_photo(db, db_photo, transformation)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

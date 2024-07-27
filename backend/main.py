@@ -12,6 +12,8 @@ from src.config.config import settings
 
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -44,6 +46,18 @@ app.add_middleware(
 #Base.metadata.drop_all(bind=engine)
 #Base.metadata.create_all(bind=engine)
 
+DATABASE_URL = settings.DATABASE_URL 
+
+async_engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+AsyncSessionLocal = sessionmaker(
+    bind=async_engine, class_=AsyncSession, expire_on_commit=False
+)
+
+
+async def init_db():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
 # Include API routers
 app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
@@ -56,6 +70,10 @@ app.include_router(tag.router, prefix="", tags=["tags"])
 @app.get("/")
 async def root():
     return {"message": "Welcome to PhotoShare API"}
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
 
 if __name__ == "__main__":
     import uvicorn

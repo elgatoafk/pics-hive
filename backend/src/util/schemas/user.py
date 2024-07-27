@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 
 
 class Token(BaseModel):
@@ -8,6 +9,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None        
+
+class BlacklistedToken(BaseModel):
+    token: str
+    blacklisted_on: datetime
 
 class UserBase(BaseModel):
     email: str

@@ -1,4 +1,3 @@
-
 from fastapi import Depends, HTTPException, status
 from backend.src.util.models import user as model_user
 from backend.src.config.security import get_current_active_user

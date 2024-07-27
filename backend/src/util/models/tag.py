@@ -13,3 +13,5 @@ class Tag(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     photos = relationship("Photo", secondary=photo_tag, back_populates="tags")
+
+    

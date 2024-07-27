@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from backend.src.util.schemas import photo as schema_photo
 from backend.src.util.models import photo as model_photo, tag as model_tag
 from backend.src.util.logging_config import logger
+from sqlalchemy.orm import selectinload
 
 async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_id: int):
     if len(photo.tags) > 5:
@@ -31,7 +32,6 @@ async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_i
         db_tag = result.scalars().first()
         logger.debug('end: tag')
 
-
         if not db_tag:
             logger.debug('start: add a new tag')
             db_tag = model_tag.Tag(name=tag_name)
@@ -40,11 +40,8 @@ async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_i
             await db.refresh(db_tag)
             logger.debug('end: add a new tag')
 
-
         db_photo.tags.append(db_tag)
         await db.commit()
-
-        
 
     logger.debug('start : schema_photo')
 
@@ -63,7 +60,11 @@ async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_i
 
 
 async def get_photo(db: AsyncSession, photo_id: int):
-    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
+    result = await db.execute(
+        select(model_photo.Photo)
+        .options(selectinload(model_photo.Photo.tags))
+        .filter(model_photo.Photo.id == photo_id)
+    )
     db_photo = result.scalars().first()
     if not db_photo:
         return None
@@ -79,13 +80,16 @@ async def get_photo(db: AsyncSession, photo_id: int):
 
 
 
-def update_photo(db: Session, photo_id: int, photo_update: schema_photo.PhotoCreate):
 
+async def update_photo(db: AsyncSession, photo_id: int, photo_update: schema_photo.PhotoCreate):
     if len(photo_update.tags) > 5:
         raise ValueError('A photo cannot have more than 5 tags.')
 
-
-    db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
+    # Get the photo by ID
+    result = await db.execute(
+        select(model_photo.Photo).options(selectinload(model_photo.Photo.tags)).filter(model_photo.Photo.id == photo_id)
+    )
+    db_photo = result.scalars().first()
     if not db_photo:
         return None
 
@@ -98,15 +102,17 @@ def update_photo(db: Session, photo_id: int, photo_update: schema_photo.PhotoCre
     # Add new tags
     for tag_create in photo_update.tags or []:
         tag_name = tag_create.name
-        db_tag = db.query(model_tag.Tag).filter(model_tag.Tag.name == tag_name).first()
+        result = await db.execute(select(model_tag.Tag).filter(model_tag.Tag.name == tag_name))
+        db_tag = result.scalars().first()
         if not db_tag:
             db_tag = model_tag.Tag(name=tag_name)
             db.add(db_tag)
-            db.commit()
-            db.refresh(db_tag)
+            await db.commit()
+            await db.refresh(db_tag)
         db_photo.tags.append(db_tag)
-    db.commit()
-    db.refresh(db_photo)
+
+    await db.commit()
+    await db.refresh(db_photo)
 
     # Return a response model with tag names
     response_photo = schema_photo.Photo(
@@ -119,29 +125,33 @@ def update_photo(db: Session, photo_id: int, photo_update: schema_photo.PhotoCre
 
     return response_photo
 
-def delete_photo(db: Session, photo_id: int):
-    #if dbg: print('delete_photo')
-    #if dbg: print('photo_id : {}'.format(photo_id))
-    db_photo = db.query(model_photo.Photo).filter(model_photo.Photo.id == photo_id).first()
+
+
+
+async def delete_photo(db: AsyncSession, photo_id: int):
+    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
+    db_photo = result.scalars().first()
     if db_photo:
-        db.delete(db_photo)
-        db.commit()
+        await db.delete(db_photo)
+        await db.commit()
 
 
+async def transform_photo(db: AsyncSession, photo_id: int, transformation: str) -> schema_photo.Photo:
+    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
+    db_photo = result.scalars().first()
+    if not db_photo:
+        raise ValueError("Photo not found")
 
-def transform_photo(db: Session, db_photo: model_photo.Photo, transformation: str) -> schema_photo.Photo:
     if transformation == "scale":
-        # Example transformation logic
         db_photo.url += "?transformation=scale"
     elif transformation == "r_max":
-        # Example transformation logic for r_max
         db_photo.url += "?transformation=r_max"
     else:
         raise ValueError("Invalid transformation")
 
     # Commit the changes to the database
-    db.commit()
-    db.refresh(db_photo)
+    await db.commit()
+    await db.refresh(db_photo)
 
     # Convert ORM model instance to Pydantic schema
     response_photo = schema_photo.Photo.from_orm(db_photo)
