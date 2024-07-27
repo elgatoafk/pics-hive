@@ -38,3 +38,6 @@ def deactivate_user(db: Session, user_id: int):
         db.commit()
         db.refresh(user)
     return user
+
+def get_user_by_email(db: Session, email: str) -> User:
+    return db.query(User).filter(User.email == email).first()

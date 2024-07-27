@@ -6,10 +6,10 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from backend.src.util.schemas import user as schema_user
+from src.util.schemas import user as schema_user
 #from backend.src.util.db import SessionLocal
 
-from backend.src.config.config import settings
+from src.config.config import settings
 from typing import Optional
 from backend.src.util.crud import user as crud_user
 from backend.src.util.models import user as model_user

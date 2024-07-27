@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 from src.routes import auth, user, photo, comment, tag, rating
 from src.util.db import engine, Base
-from backend.src.util.models.base import Base
+from src.util.db import Base
 
 import cloudinary
 from src.config.config import settings
@@ -26,6 +26,7 @@ cloudinary.config(
     cloud_name = settings.CLOUDINARY_CLOUD_NAME,
     api_key = settings.CLOUDINARY_API_KEY,
     api_secret = settings.CLOUDINARY_API_SECRET
+)
 
 app = FastAPI(
     title = settings.PROJECT_NAME,
