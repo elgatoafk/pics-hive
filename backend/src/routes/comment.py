@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from util.db import get_db
-from auth import get_current_user
+from src.config.dependencies import role_required
+from config.security import get_current_user
 from util.schemas.comment import Comment, CommentCreate, CommentUpdate
 from util.crud.comment import create_comment, get_comments, update_comment, delete_comment
 from util.schemas.user import User
@@ -25,6 +26,7 @@ async def update_photo_comment(comment_id: int, comment: CommentUpdate, db: Sess
     return await update_comment(db=db, comment_id=comment_id, comment=comment)
 
 @router.delete("/comments/{comment_id}/", response_model=Comment)
+@role_required("admin", "moderator")
 async def delete_photo_comment(comment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     db_comment = db.query(Comment).filter(Comment.id == comment_id, Comment.user_id == current_user.id).first()
     if db_comment is None:
