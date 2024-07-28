@@ -1,11 +1,13 @@
+import asyncio
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 from backend.src.util.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
 from backend.src.util.crud.photo import create_photo, get_photo, update_photo, delete_photo
 from backend.src.util.db import get_db
 from backend.src.services.photos import PhotoService
 from backend.src.config.security import get_current_user
+from starlette.responses import StreamingResponse
 router = APIRouter()
 
 @router.post("/photos/", response_model=PhotoResponse)
@@ -75,36 +77,27 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
         return {"detail": "Photo deleted successfully"}
 
 
-@router.post("photos/generate_qr_code")
+@router.post("/generate_qrcode/{photo_id}")
 async def generate_qr_code(
-    photo_url: str, request: Request, user=Depends(get_current_user())
+    photo_id: int, db: Session = Depends(get_db)
 ):
-    """Generates a QR code for the given image URL.
+    """Generates a QR code for the given photo ID.
 
     Args:
-        photo_url (str): The URL of the image for which the QR code needs to be generated.
-        request (Request): The FastAPI request object.
-        user (User, optional): The authenticated user. Defaults to Depends(get_current_user()).
+        photo_ID (str): The ID of the image for which the QR code needs to be generated.
+        db (Session, optional): The database session. Defaults to Depends(get_db).
 
     Returns:
-        Response: A FastAPI response object containing the generated QR code as a PNG image.
-        The response has the following properties:
-            - content: The QR code image data.
-            - media_type: The MIME type of the content, which is "image/png".
-            - headers: A dictionary containing the "content-disposition" header with the value "inline".
-            - status_code: The HTTP status code, which is 200.
+         image/png: streamingresponse
 
     Raises:
-        HTTPException: If the user is not authenticated.
+        HTTPException: If the photo is not found
     """
-    if user:
-        qr_code = await PhotoService.generate_qr_code(photo_url=photo_url)
-        return Response(
-            content=qr_code,
-            media_type="image/png",
-            headers={"content-disposition": "inline"},
-            status_code=200,
-        )
-    else:
-        raise HTTPException(status_code=401, detail="User not authenticated")
+    photo = await get_photo(photo_id)
+    if photo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+    qr_code = await PhotoService.generate_qr_code(photo.photo_url)
+    if qr_code is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+    return StreamingResponse(qr_code, media_type="image/png", status_code=status.HTTP_201_CREATED)
 

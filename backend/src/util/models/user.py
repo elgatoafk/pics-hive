@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from backend.src.util.db import Base
+from datetime import datetime
 
 class User(AsyncAttrs, Base):
     """

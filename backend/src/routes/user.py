@@ -15,6 +15,8 @@ from backend.src.config import security
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.logging_config import logger
+from src.config.security import get_current_active_user
+from src.util.crud.user import get_user_profile
 
 router = APIRouter()
 
@@ -47,7 +49,7 @@ async def update_user(
     logger.debug('user - update_user - get_user')
     db_user = await crud_user.get_user(db, user_id=user_id)
 
-@router.get("/user/{username}", response_model=UserProfile)
+@router.get("/user/{username}", response_model=schema_user.UserProfile)
 async def read_user_profile(username: str, db: Session = Depends(get_db)):
     user_profile = await get_user_profile(db, username)
     if user_profile is None:
@@ -55,13 +57,13 @@ async def read_user_profile(username: str, db: Session = Depends(get_db)):
     return user_profile
 
 
-@router.put("/{user_id}", response_model=User)
+@router.put("/{user_id}", response_model=schema_user.User)
 @role_required("admin", "moderator")
 async def update_user(
     user_id: int,
-    user: UserUpdate,
+    user: schema_user.UserUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
+    current_user: schema_user.User = Depends(get_current_active_user)
 ):
     logger.debug('user - update_user - get_user')
     db_user = await get_user_profile(db, user_id=user_id)
