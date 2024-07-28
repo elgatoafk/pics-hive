@@ -6,10 +6,12 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
+
 from backend.src.util.schemas import user as schema_user
 #from backend.src.util.db import SessionLocal
 
 from backend.src.config.config import settings
+
 from typing import Optional
 from backend.src.util.crud import user as crud_user
 from backend.src.util.models import user as model_user
@@ -80,4 +82,5 @@ async def get_current_active_user(current_user: model_user.User = Depends(get_cu
     #print(current_user.email)
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
+
     return current_user

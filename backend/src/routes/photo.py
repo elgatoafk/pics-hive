@@ -1,114 +1,110 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, UploadFile, File, Form, status
-from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
-from backend.src.util.schemas import photo as schema_photo, user as schema_user, tag as schema_tag
-from backend.src.util.models import photo as model_photo, user as model_user
-from backend.src.util.crud import photo as crud_photo
-from backend.src.config.security import get_current_active_user
-from backend.src.util.db import get_db
-#from backend.src.config.dependencies import is_administrator, is_moderator
-from backend.src.config.dependencies import role_required
-from typing import List, Optional
-import cloudinary
-import cloudinary.uploader
-from backend.src.util.logging_config import logger
-#import qrcode
-from sqlalchemy.future import select
 
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from sqlalchemy.orm import Session
+from backend.src.util.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
+from backend.src.util.crud.photo import create_photo, get_photo, update_photo, delete_photo
+from backend.src.util.db import get_db
+from backend.src.services.photos import PhotoService
+from backend.src.config.security import get_current_user
 router = APIRouter()
 
-@router.post("/photos/", response_model=schema_photo.Photo)
-async def create_photo(
-    description: str = Form(None),
-    tags: str = Form(""),
-    file: UploadFile = File(...),
-    current_user: schema_user.User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
-):
-    # Upload file to Cloudinary
-    logger.debug('start : upload')
-    upload_result = cloudinary.uploader.upload(file.file)
-    logger.debug('end : upload')
-    
-    # Convert comma-separated tags into a list of TagCreate objects
-    tag_list = [tag.strip() for tag in tags.split(",")] if tags else []
-    tags_objects = [schema_tag.TagCreate(name=tag) for tag in tag_list]
-    
-    # Create PhotoCreate schema instance
-    logger.debug('start : schema_photo')
-    photo_in = schema_photo.PhotoCreate(
-        url=upload_result["secure_url"], 
-        description=description, 
-        tags=tags_objects
-    )
-    logger.debug('end : schema_photo')
-    
-    # Use CRUD function to create photo in the database
-    logger.debug('start : create_photo in database')
-    return await crud_photo.create_photo(db=db, photo=photo_in, user_id=current_user.id)
+@router.post("/photos/", response_model=PhotoResponse)
+async def creat_photo_route(photo: PhotoCreate, user_id: int, db: Session = Depends(get_db)):
+    """
+    Creates a new photo in the database.
 
+    Parameters:
+    photo (PhotoCreate): The photo data to be created.
+    user_id (int): The ID of the user creating the photo.
+    db (Session, optional): The database session. Defaults to Depends(get_db).
 
+    Returns:
+    PhotoResponse: The created photo data.
+    """
+    return await create_photo(db, photo, user_id)
 
+@router.get("/photos/", response_model=PhotoResponse)
+async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
+    """
+    Retrieves a photo from the database based on the provided photo ID.
 
+    Parameters:
+    photo_id (int): The unique identifier of the photo to retrieve.
+    db (Session, optional): The database session. Defaults to Depends(get_db).
 
-@router.get("/photos/{photo_id}", response_model=schema_photo.Photo)
-async def read_photo(photo_id: int, db: AsyncSession = Depends(get_db)):
-    photo = await crud_photo.get_photo(db, photo_id)
-    if photo is None:
+    Returns:
+    PhotoResponse: The retrieved photo data. If the photo is not found, returns None.
+    """
+    return await get_photo(db, photo_id)
+
+@router.put("/photos/", response_model=PhotoResponse)
+async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = Depends(get_db)):
+    """
+    Updates an existing photo in the database based on the provided photo ID.
+
+    Parameters:
+    photo (PhotoUpdate): The updated photo data.
+    photo_id (int): The unique identifier of the photo to update.
+    db (Session, optional): The database session. Defaults to Depends(get_db).
+
+    Returns:
+    PhotoResponse: The updated photo data. If the photo is not found, raises a 404 HTTPException.
+    """
+    updated_photo = await update_photo(db, photo, photo_id)
+    if not updated_photo:
         raise HTTPException(status_code=404, detail="Photo not found")
-    return photo
+    return updated_photo
 
+@router.delete("/photos/")
+async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
+    """
+    Deletes a photo from the database based on the provided photo ID.
 
+    Parameters:
+    photo_id (int): The unique identifier of the photo to delete.
+    db (Session, optional): The database session. Defaults to Depends(get_db).
 
-@router.put("/photos/{photo_id}", response_model=schema_photo.Photo)
-@role_required("admin", "moderator")
-async def update_photo(
-    photo_id: int,
-    photo: schema_photo.PhotoCreate,
-    db: AsyncSession = Depends(get_db),
-    current_user: model_user.User = Depends(get_current_active_user)
-):
-    db_photo = await crud_photo.get_photo(db, photo_id)
-    if db_photo is None:
+    Returns:
+    dict: A dictionary with a 'detail' key indicating the success message. If the photo is not found, raises a 404 HTTPException.
+    """
+    photo_db = await get_photo(db, photo_id)
+    if not photo_db:
         raise HTTPException(status_code=404, detail="Photo not found")
-    if db_photo.owner_id != current_user.id and current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    return await crud_photo.update_photo(db, photo_id, photo)
+    else:
+        await delete_photo(db, photo_db)
+        return {"detail": "Photo deleted successfully"}
 
 
-
-@router.delete("/photos/{photo_id}", status_code=204)
-@role_required("admin")
-async def delete_photo(
-    photo_id: int,
-    db: AsyncSession = Depends(get_db),
-    current_user: model_user.User = Depends(get_current_active_user)
+@router.post("photos/generate_qr_code")
+async def generate_qr_code(
+    photo_url: str, request: Request, user=Depends(get_current_user())
 ):
-    db_photo = await crud_photo.get_photo(db, photo_id)
-    if db_photo is None:
-        raise HTTPException(status_code=404, detail="Photo not found")
-    if db_photo.owner_id != current_user.id and current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    await crud_photo.delete_photo(db, photo_id)
+    """Generates a QR code for the given image URL.
 
+    Args:
+        photo_url (str): The URL of the image for which the QR code needs to be generated.
+        request (Request): The FastAPI request object.
+        user (User, optional): The authenticated user. Defaults to Depends(get_current_user()).
 
+    Returns:
+        Response: A FastAPI response object containing the generated QR code as a PNG image.
+        The response has the following properties:
+            - content: The QR code image data.
+            - media_type: The MIME type of the content, which is "image/png".
+            - headers: A dictionary containing the "content-disposition" header with the value "inline".
+            - status_code: The HTTP status code, which is 200.
 
+    Raises:
+        HTTPException: If the user is not authenticated.
+    """
+    if user:
+        qr_code = await PhotoService.generate_qr_code(photo_url=photo_url)
+        return Response(
+            content=qr_code,
+            media_type="image/png",
+            headers={"content-disposition": "inline"},
+            status_code=200,
+        )
+    else:
+        raise HTTPException(status_code=401, detail="User not authenticated")
 
-@router.post("/photos/{photo_id}/transform", response_model=schema_photo.Photo)
-@role_required("admin", "moderator")
-async def transform_photo(
-    photo_id: int,
-    transformation: str,
-    db: AsyncSession = Depends(get_db)
-):
-    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
-    db_photo = result.scalars().first()
-    if not db_photo:
-        raise HTTPException(status_code=404, detail="Photo not found")
-
-    try:
-        transformed_photo = await crud_photo.transform_photo(db, db_photo, transformation)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-    return transformed_photo

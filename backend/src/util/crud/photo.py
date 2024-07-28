@@ -1,159 +1,94 @@
-import bcrypt
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from sqlalchemy.orm import Session
-from backend.src.util.schemas import photo as schema_photo
-from backend.src.util.models import photo as model_photo, tag as model_tag
-from backend.src.util.logging_config import logger
-from sqlalchemy.orm import selectinload
+from backend.src.util.models.photo import Photo
+from backend.src.util.schemas.photo import PhotoCreate
+from backend.src.util.db import get_db
 
-async def create_photo(db: AsyncSession, photo: schema_photo.PhotoCreate, user_id: int):
-    if len(photo.tags) > 5:
-        raise ValueError('A photo cannot have more than 5 tags.')
 
-    logger.debug('start : model_photo.Photo')
-    db_photo = model_photo.Photo(
-        url=photo.url,
-        description=photo.description,
-        owner_id=user_id
-    )
-    logger.debug('end : model_photo.Photo')
+"""
+Retrieve a photo by its ID from the database.
 
-    db.add(db_photo)
+Parameters:
+- photo_id (int): The unique identifier of the photo to retrieve.
+- db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
+
+Returns:
+- Photo: The retrieved photo object if found, otherwise None.
+"""
+async def get_photo(photo_id:int, db:AsyncSession = Depends(get_db) ):
+    return await db.execute(db.query(Photo).filter(Photo.id == photo_id).first())
+"""
+Create a new photo in the database.
+
+Parameters:
+- body (PhotoCreate): The photo data to be created. It should be an instance of the PhotoCreate schema.
+- user_id (int): The unique identifier of the user who is creating the photo.
+- db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
+
+Returns:
+- Photo: The newly created photo object.
+"""
+async def create_photo (body: PhotoCreate,user_id: int,db:AsyncSession = Depends (get_db)):
+    db_photo = Photo (**body.dict (),user_id=user_id)
+    db.add (db_photo)
+    await db.commit ()
+    await db.refresh (db_photo)
+    return db_photo
+"""
+Update an existing photo in the database.
+
+Parameters:
+- body (PhotoCreate): The updated photo data. It should be an instance of the PhotoCreate schema.
+- photo_id (int): The unique identifier of the photo to update.
+- db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
+
+Returns:
+- Photo: The updated photo object. If the photo with the given ID does not exist, it returns None.
+"""
+async def update_photo(body: PhotoCreate, photo_id: int, db: AsyncSession = Depends(get_db)):
+    db_photo = db.execute(db.query(Photo).filter(Photo.id == photo_id).first())
+    if db_photo:
+        for key, value in body.dict().items():
+            setattr(db_photo, key, value)
     await db.commit()
-    await db.refresh(db_photo)
+    await db.refresh (db_photo)
+    return db_photo
 
-    for tag_create in photo.tags or []:
-        tag_name = tag_create.name
+"""
+Updates an existing photo in the database.
 
-        logger.debug('start : tag')
+Parameters:
+- body (PhotoCreate): The updated photo data. It should be an instance of the PhotoCreate schema.
+- photo_id (int): The unique identifier of the photo to update.
+- db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
 
-        result = await db.execute(select(model_tag.Tag).filter(model_tag.Tag.name == tag_name))
-        db_tag = result.scalars().first()
-        logger.debug('end: tag')
-
-        if not db_tag:
-            logger.debug('start: add a new tag')
-            db_tag = model_tag.Tag(name=tag_name)
-            db.add(db_tag)
-            await db.commit()
-            await db.refresh(db_tag)
-            logger.debug('end: add a new tag')
-
-        db_photo.tags.append(db_tag)
-        await db.commit()
-
-    logger.debug('start : schema_photo')
-
-    response_photo = schema_photo.Photo(
-        id=db_photo.id,
-        url=db_photo.url,
-        description=db_photo.description,
-        owner_id=db_photo.owner_id,
-        tags=[tag.name for tag in db_photo.tags]
-    )
-    logger.debug('end: schema_photo')
-
-    return response_photo
-
-
-
-
-async def get_photo(db: AsyncSession, photo_id: int):
-    result = await db.execute(
-        select(model_photo.Photo)
-        .options(selectinload(model_photo.Photo.tags))
-        .filter(model_photo.Photo.id == photo_id)
-    )
-    db_photo = result.scalars().first()
-    if not db_photo:
-        return None
-
-    response_photo = schema_photo.Photo(
-        id=db_photo.id,
-        url=db_photo.url,
-        description=db_photo.description,
-        owner_id=db_photo.owner_id,
-        tags=[tag.name for tag in db_photo.tags]
-    )
-    return response_photo
-
-
-
-
-async def update_photo(db: AsyncSession, photo_id: int, photo_update: schema_photo.PhotoCreate):
-    if len(photo_update.tags) > 5:
-        raise ValueError('A photo cannot have more than 5 tags.')
-
-    # Get the photo by ID
-    result = await db.execute(
-        select(model_photo.Photo).options(selectinload(model_photo.Photo.tags)).filter(model_photo.Photo.id == photo_id)
-    )
-    db_photo = result.scalars().first()
-    if not db_photo:
-        return None
-
-    db_photo.url = photo_update.url
-    db_photo.description = photo_update.description
-
-    # Clear existing tags
-    db_photo.tags = []
-
-    # Add new tags
-    for tag_create in photo_update.tags or []:
-        tag_name = tag_create.name
-        result = await db.execute(select(model_tag.Tag).filter(model_tag.Tag.name == tag_name))
-        db_tag = result.scalars().first()
-        if not db_tag:
-            db_tag = model_tag.Tag(name=tag_name)
-            db.add(db_tag)
-            await db.commit()
-            await db.refresh(db_tag)
-        db_photo.tags.append(db_tag)
-
+Returns:
+- Photo: The updated photo object. If the photo with the given ID does not exist, it returns None.
+"""
+async def update_photo(body: PhotoCreate, photo_id: int, db: AsyncSession = Depends(get_db)):
+    db_photo = db.execute(db.query(Photo).filter(Photo.id == photo_id).first())
+    if db_photo:
+        for key, value in body.dict().items():
+            setattr(db_photo, key, value)
     await db.commit()
-    await db.refresh(db_photo)
+    await db.refresh (db_photo)
+    return db_photo
 
-    # Return a response model with tag names
-    response_photo = schema_photo.Photo(
-        id=db_photo.id,
-        url=db_photo.url,
-        description=db_photo.description,
-        owner_id=db_photo.owner_id,
-        tags=[tag.name for tag in db_photo.tags]
-    )
+"""
+Delete a photo from the database by its ID.
 
-    return response_photo
+Parameters:
+- photo_id (int): The unique identifier of the photo to delete.
+- db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
 
-
-
-
-async def delete_photo(db: AsyncSession, photo_id: int):
-    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
-    db_photo = result.scalars().first()
+Returns:
+- Photo: The deleted photo object if found and successfully deleted, otherwise None.
+"""
+async def delete_photo(photo_id: int ,db: AsyncSession = Depends(get_db)):
+    db_photo = await db.execute(db.query(Photo).filter(Photo.id == photo_id).first())
     if db_photo:
         await db.delete(db_photo)
         await db.commit()
+        await db.refresh(db_photo)
+        return db_photo
 
-
-async def transform_photo(db: AsyncSession, photo_id: int, transformation: str) -> schema_photo.Photo:
-    result = await db.execute(select(model_photo.Photo).filter(model_photo.Photo.id == photo_id))
-    db_photo = result.scalars().first()
-    if not db_photo:
-        raise ValueError("Photo not found")
-
-    if transformation == "scale":
-        db_photo.url += "?transformation=scale"
-    elif transformation == "r_max":
-        db_photo.url += "?transformation=r_max"
-    else:
-        raise ValueError("Invalid transformation")
-
-    # Commit the changes to the database
-    await db.commit()
-    await db.refresh(db_photo)
-
-    # Convert ORM model instance to Pydantic schema
-    response_photo = schema_photo.Photo.from_orm(db_photo)
-
-    return response_photo

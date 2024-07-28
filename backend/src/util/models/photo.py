@@ -1,24 +1,37 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from .base import Base
-from .tag import photo_tag
+from backend.src.util.db import Base
+
+photo_m2m_tag = Table(
+    "photo_m2m_tag",
+    Base.metadata,
+    Column("id", Integer, primary_key=True),
+    Column("photo", Integer, ForeignKey("photos.id", ondelete="CASCADE")),
+    Column("tag", Integer, ForeignKey("tags.id", ondelete="CASCADE")))
+
 
 class Photo(Base):
-    __tablename__ = "photos"
+    """
+    This class represents a photo in the application. It is associated with a user,
+    can have multiple tags, and can have comments.
+
+    Attributes:
+    id (int): The unique identifier of the photo.
+    description (str): A brief description of the photo.
+    url (str): The URL of the photo.
+    user_id (int): The foreign key to the user who owns the photo.
+    owner (User): The user who owns the photo.
+    tags (List[Tag]): The list of tags associated with the photo.
+    comments (List[Comment]): The list of comments associated with the photo.
+    """
+
+    __tablename__ = 'photos'
 
     id = Column(Integer, primary_key=True, index=True)
-    url = Column(String)
-    description = Column(String)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
+    description = Column(String, index=True)
+    url = Column(String, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
     owner = relationship("User", back_populates="photos")
-    tags = relationship("Tag", secondary=photo_tag, back_populates="photos")
+    tags = relationship("Tag", secondary=photo_m2m_tag, back_populates="photos")
+    comments = relationship("Comment", back_populates="photos")
 
-
-class TransformedImage(Base):
-    __tablename__ = "transformed_images"
-
-    id = Column(Integer, primary_key=True, index=True)
-    original_photo_id = Column(Integer, ForeignKey("photos.id"))
-    transformed_url = Column(String)
-    qr_code_url = Column(String)    

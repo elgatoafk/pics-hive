@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="26e5b1fd-e920-44fa-ac2e-9ef0d8a2d3a3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Final_Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/jwt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/token.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/photoshare" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2jVecumRaXmrCjerhgh5puF2S2M" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging update/adding-docstring",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/NextCloud/3D_NAS_Code/Courses_Python/Storage_Code/python_web_GOIT/Final_Project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Final_Project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="26e5b1fd-e920-44fa-ac2e-9ef0d8a2d3a3" name="Changes" comment="" />
+      <created>1721476753130</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721476753130</updated>
+      <workItem from="1721476754141" duration="1397000" />
+      <workItem from="1721478165054" duration="479000" />
+      <workItem from="1721478652721" duration="325000" />
+      <workItem from="1721478982657" duration="12042000" />
+      <workItem from="1721566777677" duration="4981000" />
+      <workItem from="1721667375811" duration="17000" />
+      <workItem from="1721667398536" duration="426000" />
+      <workItem from="1721668399352" duration="1310000" />
+      <workItem from="1722019955602" duration="16000" />
+      <workItem from="1722020013569" duration="3141000" />
+      <workItem from="1722024444382" duration="1108000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+      <path value="$PROJECT_DIR$" />
+      <path value="$PROJECT_DIR$/photoshare" />
+    </ignored-roots>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/src/routes/transformations.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
