@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from src.config import security
-from src.config.jwt import create_access_token
-from src.util import db
-from src.util.db import get_db
+from backend.src.config import security
+from backend.src.config.jwt import create_access_token
+from backend.src.util import db
+from backend.src.util.db import get_db
 
 from datetime import timedelta
 
@@ -40,8 +40,8 @@ async def read_users_me(current_user: user_schemas.User = Depends(security.get_c
 
 @router.post("/token", response_model=user_schemas.Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
-    
-    logger.debug('token - authenticate_user')    
+
+    logger.debug('token - authenticate_user')
     user = await security.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -51,11 +51,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token_expires = timedelta(minutes=jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    logger.debug('token - create_access_token')    
+    logger.debug('token - create_access_token')
 
     access_token = await jwt.create_access_token(
         data={"sub": user.email}, user_id=user.id, db=db, expires_delta=access_token_expires
-    ) 
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
