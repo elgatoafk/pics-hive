@@ -91,3 +91,4 @@ async def delete_photo(photo_id: int ,db: AsyncSession = Depends(get_db)):
         await db.commit()
         await db.refresh(db_photo)
         return db_photo
+

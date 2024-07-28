@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from sqlalchemy.orm import Session
 from backend.src.util.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
@@ -106,3 +107,4 @@ async def generate_qr_code(
         )
     else:
         raise HTTPException(status_code=401, detail="User not authenticated")
+

@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, conlist
 from typing import List
 
@@ -15,3 +14,4 @@ class PhotoTaggingResponse(BaseModel):
 
     class Config:
         orm_mode = True
+

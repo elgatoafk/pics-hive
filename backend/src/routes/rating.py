@@ -74,3 +74,4 @@ async def delete_rating_route(rating_id: int, db: Session = Depends(get_db)):
     else:
         await delete_rating(db, rating_id)
         return {"detail": "Rating deleted"}
+

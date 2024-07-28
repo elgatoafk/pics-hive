@@ -1,6 +1,8 @@
-class Tag:
-    pass
 
+from .user import User
+from .photo import Photo
+from .tag import Tag
+from .token import BlacklistedToken
 
-class Photo:
-    pass
+__all__ = ["User", "Photo", "Tag", "BlacklistedToken"]
+

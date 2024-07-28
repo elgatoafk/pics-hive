@@ -1,6 +1,4 @@
 import os
-
-from pydantic_settings import BaseSettings
 from dotenv import load_dotenv, dotenv_values
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,6 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 load_dotenv()
+
 
 class Settings(BaseSettings):
     
@@ -29,14 +28,19 @@ class Settings(BaseSettings):
     DATABASE_DOMAIN: str
     DATABASE_PORT: int
 
-    cloudinary_api_key: str = os.getenv("CLOUDINARY_API_KEY")
-    cloudinary_api_secret: str = os.getenv("CLOUDINARY_API_SECRET")
-    cloudinary_name: str = os.getenv("CLOUDINARY_name")
+    
+    CLOUDINARY_CLOUD_NAME: str
+    CLOUDINARY_API_KEY: str
+    CLOUDINARY_API_SECRET: str
+    CLOUDINARY_API_URL: str
 
     model_config = SettingsConfigDict(env_file=os.path.join(os.path.dirname(__file__), '.env'))
 
 
-
 settings = Settings()
+
+#print("Loaded settings:", settings.model_dump())  # This will print all settings
+
+
 
 

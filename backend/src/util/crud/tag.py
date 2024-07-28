@@ -1,4 +1,3 @@
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.models import Tag
@@ -40,3 +39,4 @@ If a tag with the specified name exists in the database, it is returned. Otherwi
 async def get_tag_by_name(db: AsyncSession, tag_name: str) -> Tag:
     result = await db.execute(select(Tag).filter_by(name=tag_name))
     return result.scalars().first()
+

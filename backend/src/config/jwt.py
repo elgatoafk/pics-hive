@@ -16,6 +16,7 @@ from backend.src.util.models import user as model_user, token as model_token
 
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
+
 from backend.src.config.config import settings
 #from src.util.db import get_db
 from backend.src.util.models import token as crud_token
@@ -30,6 +31,7 @@ from backend.src.util.logging_config import logger
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+
 
 async def create_access_token(data: dict, user_id: int, db: AsyncSession, expires_delta: Optional[timedelta] = None):
     logger.debug('create_access_token test')

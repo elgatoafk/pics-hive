@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
@@ -31,3 +32,4 @@ async def delete_photo_comment(comment_id: int, db: Session = Depends(get_db), c
     if db_comment is None:
         raise HTTPException(status_code=404, detail="Comment not found")
     return await delete_comment(db=db, comment_id=comment_id)
+

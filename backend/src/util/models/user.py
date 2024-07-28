@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -34,3 +33,4 @@ class User(AsyncAttrs, Base):
 
     photos = relationship("Photo", back_populates="owner")
     tokens = relationship("Token", back_populates="user", cascade="all, delete-orphan")    
+

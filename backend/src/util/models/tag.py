@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column, Integer, String, ForeignKey
 from backend.src.util.db import Base
 
@@ -36,4 +35,5 @@ class Tag(Base):
             The tag_name of the Tag.
         """
         return self.tag_name
+
 

@@ -5,6 +5,7 @@ from datetime import datetime as dt, timedelta
 from sqlalchemy.orm import relationship
 from backend.src.util.db import Base
 
+
 class BlacklistedToken(Base):
     __tablename__ = "blacklisted_tokens"
 
