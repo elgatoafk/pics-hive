@@ -9,6 +9,8 @@ from backend.src.config.jwt import create_access_token
 from backend.src.util.logging_config import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from backend.src.util.models.photo import Photo
+
 
 #async def get_user_by_email(db: AsyncSession, email: str):
 #    logger.debug('get_user_by_email')
@@ -17,7 +19,20 @@ from sqlalchemy.future import select
     
 #    return result.scalars().first()
 
-
+def get_user_profile(db: Session, username: str):
+    user = db.query(model_user.User).filter(model_user.User.username == username).first()
+    if user:
+        photos_count = db.query(Photo).filter(Photo.owner_id == user.id).count()
+        return {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "full_name": user.full_name,
+            "registered_at": user.registered_at,
+            "is_active": user.is_active,
+            "photos_count": photos_count
+        }
+    return None
 
 async def get_user_by_email(db: AsyncSession, email: str):
     logger.debug('get_user_by_email')

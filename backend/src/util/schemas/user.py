@@ -26,6 +26,13 @@ class UserUpdate(BaseModel):
     password: Optional[str] = None
     role: Optional[str] = None
 
+class UserProfile(UserBase):
+    id: int
+    full_name: Optional[str] = None
+    registered_at: datetime
+    is_active: bool
+    photos_count: int
+
 class User(UserBase):
     id: int
 
