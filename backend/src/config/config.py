@@ -6,6 +6,9 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
+    """
+    Class that stores project-wide configurations.
+    """
     PROJECT_NAME: str = "PhotoShare"
     DESCRIPTION: str = "API for PhotoShare application"
     VERSION: str = "1.0"

@@ -3,14 +3,15 @@ import os
 import uvicorn
 import logging
 from fastapi import FastAPI
-from backend.src.routes import auth, user, photo, comment, tag, rating
-from backend.src.util.db import engine, Base
+from backend.src.routes import auth, user, photo, comment, tag, rating, root
+from backend.src.util.db import Base, async_engine
 import cloudinary
 from backend.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from backend.src.util.db import DATABASE_URL
+
 # Ensure correct PYTHONPATH
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
@@ -32,11 +33,11 @@ app.add_middleware(
 # Create database tables
 #Base.metadata.drop_all(bind=engine)
 #Base.metadata.create_all(bind=engine)
-
-async_engine = create_async_engine(DATABASE_URL, echo=True, future=True)
-AsyncSessionLocal = sessionmaker(
-    bind=async_engine, class_=AsyncSession, expire_on_commit=False
-)
+#
+# async_engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+# AsyncSessionLocal = sessionmaker(
+#     bind=async_engine, class_=AsyncSession, expire_on_commit=False
+# )
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -51,6 +52,7 @@ async def init_db():
 
 
 # Include API routers
+app.include_router(root.router, prefix="", tags=["root"])
 app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
 app.include_router(photo.router, prefix="", tags=["photos"])
@@ -58,12 +60,6 @@ app.include_router(comment.router, prefix="", tags=["comments"])
 app.include_router(tag.router, prefix="", tags=["tags"])
 app.include_router(rating.router, prefix="", tags=["ratings"])
 
-
-# Root endpoint
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to PhotoShare API"}
 
 
 @app.on_event("startup")
@@ -74,4 +70,4 @@ async def on_startup():
 # Run the application
 if __name__ == "__main__":
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=debug_mode)

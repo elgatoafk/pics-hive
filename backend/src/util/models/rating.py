@@ -16,10 +16,11 @@ class Rating(Base):
     """
 
     __tablename__ = 'ratings'
+    __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     rating = Column(Integer, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     photo_id = Column(Integer, ForeignKey('photos.id'))
-    owner = relationship("User")
-    photo = relationship("Photo")
+    owner = relationship("User", backref="ratings")
+    photo = relationship("Photo", backref='ratings')
