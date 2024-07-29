@@ -4,6 +4,7 @@ from backend.src.config.security import get_current_active_user
 from functools import wraps, update_wrapper
 from typing import Callable
 
+
 def role_required(*roles: str):
     def decorator(func: Callable):
         async def wrapper(*args, current_user: model_user.User = Depends(get_current_active_user), **kwargs):

@@ -1,10 +1,14 @@
 import sys
 import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+
 import uvicorn
 import logging
 from fastapi import FastAPI
-from backend.src.routes import auth, user, photo, comment, tag, rating
-from backend.src.util.db import engine, Base
+from src.routes import auth, user, photo, comment, tag, rating
+from backend.src.util.db import engine
+from backend.src.util.models.base import Base
 import cloudinary
 from backend.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,7 +17,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 # Ensure correct PYTHONPATH
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+
 
 
 app = FastAPI(

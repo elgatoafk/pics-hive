@@ -1,18 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from sqlalchemy.orm import Session
 from backend.src.config import security
-from backend.src.config.jwt import create_access_token
-from backend.src.util import db
+from backend.src.config import jwt
 from backend.src.util.db import get_db
-
 
 from datetime import timedelta
 
-from ..util import db
-from ..util.schemas import user as user_schemas
-from ..util.crud import user as user_crud, token as crud_token
-from ..config import security, jwt
+from backend.src.util.schemas import user as user_schemas
+from backend.src.util.crud import user as user_crud, token as crud_token
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select

@@ -1,24 +1,14 @@
-from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from backend.src.util.schemas import user
-#from backend.src.util.db import SessionLocal
 
-#from backend.src.util.db import AsyncSessionLocal as SessionLocal
 from backend.src.config.config import settings
 from typing import Optional
-from backend.src.util.crud import user as crud_user
-from backend.src.util.models import user as model_user, token as model_token
 
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
-from backend.src.config.config import settings
-#from src.util.db import get_db
 from backend.src.util.models import token as crud_token
 from backend.src.util.schemas.user import TokenData
 
@@ -45,7 +35,7 @@ async def create_access_token(data: dict, user_id: int, db: AsyncSession, expire
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     # Store the token in the tokens table
-    token = model_token.Token(
+    token = crud_token.Token(
         token=encoded_jwt,
         user_id=user_id,
         expires_at=expire

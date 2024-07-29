@@ -1,9 +1,8 @@
 from sqlalchemy import Column, String, DateTime, Integer, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-#import datetime
 from datetime import datetime as dt, timedelta
 from sqlalchemy.orm import relationship
-from backend.src.util.db import Base
+from .base import Base
 
 
 class BlacklistedToken(Base):

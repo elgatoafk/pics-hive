@@ -28,15 +28,13 @@ class Settings(BaseSettings):
     DATABASE_DOMAIN: str
     DATABASE_PORT: int
 
-    
     CLOUDINARY_CLOUD_NAME: str
     CLOUDINARY_API_KEY: str
     CLOUDINARY_API_SECRET: str
     CLOUDINARY_API_URL: str
 
     model_config = SettingsConfigDict(env_file=os.path.join(os.path.dirname(__file__), '.env'))
-
-
+   
 settings = Settings()
 
 #print("Loaded settings:", settings.model_dump())  # This will print all settings

@@ -8,13 +8,13 @@ from backend.src.util.crud.photo import get_photo
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from backend.src.config.config import Settings
+from backend.src.config.config import settings #TODO: to discuss(there was class Settings instead of reference to object settings)
 from backend.src.util.models.user import User
 
 cloudinary.config(
-    cloud_name=Settings.cloudinary_name,
-    api_key=Settings.cloudinary_api_key,
-    api_secret=Settings.cloudinary_api_secret,
+    cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+    api_key=settings.CLOUDINARY_API_KEY,
+    api_secret=settings.CLOUDINARY_API_SECRET,
     secure=True,
 )
 

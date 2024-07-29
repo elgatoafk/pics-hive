@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from backend.src.util.db import Base
-
+from sqlalchemy.orm import relationship
+from .base import Base
+from .photo import photo_m2m_tag
 
 class Tag(Base):
     """
@@ -24,6 +25,8 @@ class Tag(Base):
     __tablename__ = "tags"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     tag_name = Column(String, unique=True, nullable=False, index=True)
+    photos = relationship("Photo", secondary=photo_m2m_tag, back_populates="tags")
+
 
     def __repr__(self):
         """

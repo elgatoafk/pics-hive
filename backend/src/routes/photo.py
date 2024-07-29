@@ -75,6 +75,7 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
         return {"detail": "Photo deleted successfully"}
 
 
+a= '''
 @router.post("photos/generate_qr_code")
 async def generate_qr_code(
     photo_url: str, request: Request, user=Depends(get_current_user())
@@ -107,4 +108,5 @@ async def generate_qr_code(
         )
     else:
         raise HTTPException(status_code=401, detail="User not authenticated")
+        '''
 

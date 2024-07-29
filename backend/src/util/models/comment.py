@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from backend.src.util.db import Base
+from .base import Base
 
 class Comment(Base):
     """
@@ -28,4 +28,4 @@ class Comment(Base):
     updated_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="comments")
-    photo = relationship("Photo", back_populates="comments")
+    photos = relationship("Photo", back_populates="comments")

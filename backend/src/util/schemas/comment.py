@@ -18,4 +18,4 @@ class Comment(CommentBase):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True #orm_mode = True
