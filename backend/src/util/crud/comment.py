@@ -1,9 +1,8 @@
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from backend.src.util.models.comment import Comment
 from backend.src.util.schemas.comment import CommentCreate, CommentUpdate
-from backend.src.util.db import get_db
 from sqlalchemy.future import select
 
 

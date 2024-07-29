@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
+from fastapi import APIRouter, Depends, HTTPException
+
 from sqlalchemy.orm import Session
 from backend.src.util.schemas import user as schema_user
-from backend.src.util.models import user as model_user
+
 from backend.src.util.crud import user as crud_user
 
 from backend.src.config.dependencies import role_required
 from backend.src.util.db import get_db
-from backend.src.util import db
 from typing import List
 from backend.src.config import security
 

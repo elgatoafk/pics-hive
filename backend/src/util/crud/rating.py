@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Depends, HTTPException, status
-from backend.src.util.db import get_db
+from fastapi import HTTPException, status
 from backend.src.util.models.rating import Rating
 from backend.src.util.schemas.rating import RatingCreate
 from sqlalchemy.future import select

@@ -1,6 +1,6 @@
 from sqlalchemy import func
 import bcrypt
-from fastapi import Depends
+
 from sqlalchemy.orm.exc import NoResultFound
 from backend.src.util.schemas import user as schema_user
 from backend.src.util.models import user as model_user
@@ -10,7 +10,6 @@ from backend.src.util.logging_config import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from backend.src.util.models.photo import Photo
-from backend.src.util.db import get_db
 
 
 async def get_user_profile(db: AsyncSession, username: str):
@@ -51,6 +50,7 @@ async def get_user_profile(db: AsyncSession, username: str):
         }
     return None
 
+
 async def get_user_by_email(db: AsyncSession, email: str):
     """
     Retrieve a user by email.
@@ -68,11 +68,10 @@ async def get_user_by_email(db: AsyncSession, email: str):
     logger.debug('get_user_by_email')
     result = await db.execute(select(model_user.User).filter(model_user.User.email == email))
     user = result.scalars().first()
-    if user :
+    if user:
         logger.debug('get_user_by_email : user : {}'.format(user.email))
-    
-    return user
 
+    return user
 
 
 async def create_user(db: AsyncSession, user: schema_user.UserCreate):
@@ -92,7 +91,7 @@ async def create_user(db: AsyncSession, user: schema_user.UserCreate):
     logger.debug('create_user')
     hashed_password = hash_password(user.password)
     db_user = model_user.User(email=user.email, hashed_password=hashed_password, role=user.role)
-    
+
     db.add(db_user)
     await db.commit()
     await db.refresh(db_user)
@@ -118,6 +117,7 @@ async def get_user(db: AsyncSession, user_id: int):
     logger.debug('get_user')
     result = await db.execute(select(model_user.User).filter(model_user.User.id == user_id))
     return result.scalars().first()
+
 
 async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100):
     """
@@ -158,6 +158,7 @@ def hash_password(password: str) -> str:
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password.decode('utf-8')
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify the given plain text password against the stored hashed password.
@@ -175,7 +176,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     logger.debug('verify_password')
     # Verify the given password against the stored hashed password
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
-
 
 
 async def update_user(db: AsyncSession, user: model_user.User, user_update: schema_user.UserUpdate):
@@ -208,7 +208,6 @@ async def update_user(db: AsyncSession, user: model_user.User, user_update: sche
     return user
 
 
-
 async def delete_user(db: AsyncSession, user_id: int):
     """
     Delete a user from the database and blacklist all active tokens associated with the user.
@@ -228,20 +227,18 @@ async def delete_user(db: AsyncSession, user_id: int):
         result = await db.execute(select(model_user.User).filter(model_user.User.id == user_id))
         user = result.scalar_one()
         logger.debug(f'user: {user}')
-        
-        logger.debug(f'start : delete_user: get_active_tokens_for_user')
-        active_tokens = await crud_token.get_active_tokens_for_user(db, user_id) 
-        logger.debug(f'end : delete_user: get_active_tokens_for_user')
 
+        logger.debug(f'start : delete_user: get_active_tokens_for_user')
+        active_tokens = await crud_token.get_active_tokens_for_user(db, user_id)
+        logger.debug(f'end : delete_user: get_active_tokens_for_user')
 
         for token in active_tokens:
             logger.debug(f'TEST token: {token.token}')
             await crud_token.add_token_to_blacklist(db, token.token)
-        
+
         logger.debug('delete test')
         await db.delete(user)
         await db.commit()
         return user
     except NoResultFound:
         raise ValueError(f"User with id {user_id} does not exist")
-

@@ -1,12 +1,11 @@
 import asyncio
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.src.util.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
 from backend.src.util.crud.photo import create_photo, get_photo, update_photo, delete_photo
 from backend.src.util.db import get_db
 from backend.src.services.photos import PhotoService
-from backend.src.config.security import get_current_user
 from starlette.responses import StreamingResponse
 router = APIRouter()
 
