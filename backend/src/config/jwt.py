@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from backend.src.util.schemas import user
 #from backend.src.util.db import SessionLocal
 
-#from backend.src.util.db import AsyncSessionLocal as SessionLocal
+from backend.src.util.db import AsyncSessionLocal as SessionLocal
 from backend.src.config.config import settings
 from typing import Optional
 from backend.src.util.crud import user as crud_user
@@ -33,7 +33,7 @@ ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
-async def create_access_token(data: dict, user_id: int, db: AsyncSession, expires_delta: Optional[timedelta] = None):
+async def create_access_token(data: dict, user_id: int, db: SessionLocal, expires_delta: Optional[timedelta] = None):
     logger.debug('create_access_token test')
     to_encode = data.copy()
     if expires_delta:

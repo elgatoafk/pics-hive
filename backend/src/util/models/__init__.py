@@ -1,8 +1,7 @@
-
-from .user import User
 from .photo import Photo
+from .user import User
 from .tag import Tag
-from .token import BlacklistedToken
+from .token import Token, BlacklistedToken
 
 __all__ = ["User", "Photo", "Tag", "BlacklistedToken"]
 

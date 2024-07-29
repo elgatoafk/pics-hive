@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+
 from backend.src.util.db import Base
+from backend.src.util.models.photo import photo_m2m_tag
 
 
 class Tag(Base):
@@ -22,18 +25,10 @@ class Tag(Base):
     """
 
     __tablename__ = "tags"
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    tag_name = Column(String, unique=True, nullable=False, index=True)
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    tag_name = Column(String, unique=True, nullable=False)
+    photos = relationship("Photo", secondary=photo_m2m_tag, back_populates="tags")
 
     def __repr__(self):
-        """
-        Returns a string representation of the Tag.
-
-        Returns
-        -------
-        str
-            The tag_name of the Tag.
-        """
-        return self.tag_name
-
-
+        return f"<Tag(tag_name={self.tag_name})>"

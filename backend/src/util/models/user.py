@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncAttrs
 from backend.src.util.db import Base
 from datetime import datetime
 
+
+
 class User(AsyncAttrs, Base):
     """
     Represents a user in the application.
@@ -21,10 +23,11 @@ class User(AsyncAttrs, Base):
     """
 
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True)
+    email = Column(String, unique=True)
     full_name = Column(String, nullable=True)
     hashed_password = Column(String)
     disabled = Column(Boolean, default=False)
@@ -32,6 +35,7 @@ class User(AsyncAttrs, Base):
     registered_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
 
-    photos = relationship("Photo", back_populates="owner")
-    tokens = relationship("Token", back_populates="user", cascade="all, delete-orphan")    
+    tokens = relationship("Token", backref="user", cascade="all, delete-orphan")
+
+
 

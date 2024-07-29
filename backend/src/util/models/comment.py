@@ -19,13 +19,14 @@ class Comment(Base):
     """
 
     __tablename__ = "comments"
+    __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer, primary_key=True, index=True)
-    content = Column(String, index=True)
+    id = Column(Integer, primary_key=True)
+    content = Column(String)
     photo_id = Column(Integer, ForeignKey("photos.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", back_populates="comments")
-    photo = relationship("Photo", back_populates="comments")
+    user = relationship("User", backref="comments")
+    photo = relationship("Photo", backref="comments")

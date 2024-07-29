@@ -67,7 +67,7 @@ async def add_tags_to_photo(
     )
 
 @router.get("/tags/", response_model=PhotoTaggingResponse)
-async def get_tag_route(tag_name: str, db: Session = Depends(get_db)):
+async def get_tag_route(tag_name: str, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a tag by its name.
 
