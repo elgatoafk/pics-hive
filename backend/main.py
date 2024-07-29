@@ -53,10 +53,10 @@ async def init_db():
 # Include API routers
 app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
-app.include_router(photo.router, prefix="/photos", tags=["photos"])
-app.include_router(comment.router, prefix="/comments", tags=["comments"])
-app.include_router(tag.router, prefix="/tags", tags=["tags"])
-app.include_router(rating.router, prefix="/ratings", tags=["ratings"])
+app.include_router(photo.router, prefix="", tags=["photos"])
+app.include_router(comment.router, prefix="", tags=["comments"])
+app.include_router(tag.router, prefix="", tags=["tags"])
+app.include_router(rating.router, prefix="", tags=["ratings"])
 
 
 # Root endpoint
