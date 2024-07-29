@@ -1,8 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from backend.src.config.config import settings
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import URL
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 

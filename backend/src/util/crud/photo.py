@@ -1,8 +1,7 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.models.photo import Photo
 from backend.src.util.schemas.photo import PhotoCreate
-from backend.src.util.db import get_db
 from sqlalchemy.future import select
 
 

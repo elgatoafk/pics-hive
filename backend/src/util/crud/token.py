@@ -1,12 +1,10 @@
-from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+
+from datetime import datetime
 from ..models.token import BlacklistedToken, Token
 import time
-from sqlalchemy.orm import Session
 from backend.src.util.db import AsyncSessionLocal as SessionLocal
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import delete
 import asyncio
 
 

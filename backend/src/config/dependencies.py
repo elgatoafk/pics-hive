@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from backend.src.util.models import user as model_user
 from backend.src.config.security import get_current_active_user
-from functools import wraps, update_wrapper
+from functools import update_wrapper
 from typing import Callable
 
 def role_required(*roles: str):
