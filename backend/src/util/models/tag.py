@@ -27,7 +27,7 @@ class Tag(Base):
     __tablename__ = "tags"
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, autoincrement=True)
-    tag_name = Column(String, unique=True, nullable=False)
+    tag_name = Column(String, unique=True, nullable=False, index=True)
     photos = relationship("Photo", secondary=photo_m2m_tag, back_populates="tags")
 
     def __repr__(self):

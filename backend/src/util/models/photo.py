@@ -6,8 +6,8 @@ photo_m2m_tag = Table(
     "photo_m2m_tag",
     Base.metadata,
     Column("id", Integer, primary_key=True),
-    Column("photo_id", Integer, ForeignKey("photos.id", ondelete="CASCADE")),
-    Column("tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE")),
+    Column("photo", Integer, ForeignKey("photos.id", ondelete="CASCADE")),
+    Column("tag", Integer, ForeignKey("tags.id", ondelete="CASCADE")),
     extend_existing=True)
 
 
@@ -30,8 +30,10 @@ class Photo(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
-    description = Column(String, )
+    description = Column(String)
     url = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
-    owner = relationship("User", backref="photos")
+
+    owner = relationship("User", back_populates="photos")
     tags = relationship("Tag", secondary=photo_m2m_tag, back_populates="photos")
+    comments = relationship ('Comment', back_populates='photo')

@@ -8,7 +8,7 @@ from backend.src.util.schemas.comment import Comment, CommentCreate, CommentUpda
 from backend.src.util.crud.comment import delete_comment, create_comment, update_comment, get_comments
 from backend.src.util.schemas.user import User
 
-from src.config.dependencies import role_required
+from backend.src.config.dependencies import role_required
 
 router = APIRouter()
 

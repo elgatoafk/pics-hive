@@ -68,12 +68,8 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
     Returns:
     dict: A dictionary with a 'detail' key indicating the success message. If the photo is not found, raises a 404 HTTPException.
     """
-    photo_db = await get_photo(db, photo_id)
-    if not photo_db:
-        raise HTTPException(status_code=404, detail="Photo not found")
-    else:
-        await delete_photo(db, photo_db)
-        return {"detail": "Photo deleted successfully"}
+    await delete_photo(db, photo_id)
+    return {"detail": "Photo deleted successfully"}
 
 
 @router.post("/generate_qrcode/{photo_id}")

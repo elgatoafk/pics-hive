@@ -14,7 +14,7 @@ class PhotoBase(BaseModel):
     Note:
     This class is used as a base model for other photo-related classes (PhotoCreate, PhotoUpdate, PhotoResponse).
     """
-    description: Optional[str] = None
+    description: Optional[str] or None
     url: str
     tags: Optional[List[str]] = []
 
@@ -22,7 +22,7 @@ class PhotoCreate(PhotoBase):
     pass
 
 class PhotoUpdate(PhotoBase):
-    pass
+    description: Optional[str] or None
 
 class PhotoResponse(BaseModel):
     """
@@ -39,9 +39,10 @@ class PhotoResponse(BaseModel):
     orm_mode (bool): A flag indicating that this model should be used in ORM mode.
     """
     id: int
-    text: str
     user_id: int
-    photo_id: int
+    url: str
+    description: str
+
 
     class Config:
         orm_mode = True

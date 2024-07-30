@@ -8,7 +8,7 @@ from backend.src.util.db import Base, async_engine
 from backend.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.routes import transformations
+from backend.src.routes import transformations
 
 # Ensure correct PYTHONPATH
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')

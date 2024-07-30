@@ -11,12 +11,12 @@ from sqlalchemy.orm import Session
 from backend.src.config.config import settings
 from backend.src.util.models.user import User
 
-cloudinary.config(
-    cloud_name=settings.CLOUDINARY_CLOUD_NAME,
-    api_key=settings.CLOUDINARY_API_KEY,
-    api_secret=settings.CLOUDINARY_API_SECRET,
-    secure=True,
-)
+# cloudinary.config(
+#     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+#     api_key=settings.CLOUDINARY_API_KEY,
+#     api_secret=settings.CLOUDINARY_API_SECRET,
+#     secure=True,
+# )
 
 
 class PhotoService:

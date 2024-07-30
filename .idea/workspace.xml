@@ -5,40 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26e5b1fd-e920-44fa-ac2e-9ef0d8a2d3a3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/README" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/script.py.mako" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/d52b8f2ff0e9_tables_v1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/f8c56202ac3a_tables_v2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/routes/root.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/services/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/phv1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phv1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/jwt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/security.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/services/photos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/services/photos.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/rating.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/token.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/base.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/comment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/rating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/token.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,27 +41,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.env.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.script.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/eager-loading-SQL&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Я/Desktop/photoshare-dev&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Python&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.env.executor": "Run",
+    "Python.main (1).executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.script.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "bug-fix/POST__GET__DELETE__UPDATE",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Я/Desktop/photoshare-dev",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\Projects\phv1\backend\src\routes" />

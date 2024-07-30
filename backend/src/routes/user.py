@@ -13,8 +13,8 @@ from backend.src.config import security
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.logging_config import logger
-from src.config.security import get_current_active_user
-from src.util.crud.user import get_user_profile
+from backend.src.config.security import get_current_active_user
+from backend.src.util.crud.user import get_user_profile
 
 router = APIRouter()
 
