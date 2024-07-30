@@ -1,10 +1,10 @@
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from datetime import datetime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from backend.src.util.db import Base
 from datetime import datetime
-
 
 
 class User(AsyncAttrs, Base):
@@ -35,8 +35,8 @@ class User(AsyncAttrs, Base):
     role = Column(String)
     registered_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
-
     tokens = relationship("Token", backref="user", cascade="all, delete-orphan")
     photos = relationship("Photo", back_populates="owner")
     comments = relationship("Comment", back_populates="user")
+
 

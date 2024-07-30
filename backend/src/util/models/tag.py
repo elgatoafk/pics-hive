@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-
 from backend.src.util.db import Base
 from backend.src.util.models.photo import photo_m2m_tag
 
@@ -29,6 +28,7 @@ class Tag(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     tag_name = Column(String, unique=True, nullable=False, index=True)
     photos = relationship("Photo", secondary=photo_m2m_tag, back_populates="tags")
+
 
     def __repr__(self):
         return f"<Tag(tag_name={self.tag_name})>"

@@ -144,7 +144,6 @@ async def update_user(
     return updated_user
 
 
-
 @router.delete("/{user_id}", response_model=schema_user.User)
 
 @role_required("admin")
@@ -194,3 +193,4 @@ async def delete_user(
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+

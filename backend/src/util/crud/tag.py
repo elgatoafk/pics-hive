@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.src.util.models import Tag
+from backend.src.util.models.tag import Tag
 
 
 async def create_tag(db: AsyncSession, tag_name: str) -> Tag:

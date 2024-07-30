@@ -3,7 +3,9 @@ import bcrypt
 
 from sqlalchemy.orm.exc import NoResultFound
 from backend.src.util.schemas import user as schema_user
+
 from backend.src.util.models import user as model_user
+
 from backend.src.util.crud import token as crud_token
 from backend.src.config.jwt import create_access_token
 from backend.src.util.logging_config import logger
@@ -58,7 +60,6 @@ async def get_user_by_email(db: AsyncSession, email: str):
     Args:
         db (AsyncSession): The database session.
         email (str): The email of the user.
-
     Returns:
         model_user.User: The user object if found, None otherwise.
 
@@ -116,6 +117,9 @@ async def get_user(db: AsyncSession, user_id: int):
     """
     logger.debug('get_user')
     result = await db.execute(select(model_user.User).filter(model_user.User.id == user_id))
+    logger.debug('marina  {}'.format(result))
+    logger.debug('result.scalars().first')
+    
     return result.scalars().first()
 
 
@@ -153,7 +157,6 @@ def hash_password(password: str) -> str:
         A debug log indicating the function execution.
     """
     logger.debug('hash_password')
-    # Generate a salt and hash the password
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password.decode('utf-8')
@@ -174,7 +177,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         A debug log indicating the function execution.
     """
     logger.debug('verify_password')
-    # Verify the given password against the stored hashed password
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
@@ -186,7 +188,6 @@ async def update_user(db: AsyncSession, user: model_user.User, user_update: sche
         db (AsyncSession): The database session.
         user (model_user.User): The user object to update.
         user_update (schema_user.UserUpdate): The new user data to update.
-
     Returns:
         model_user.User: The updated user object.
 
@@ -206,7 +207,6 @@ async def update_user(db: AsyncSession, user: model_user.User, user_update: sche
     await db.refresh(user)
     logger.debug('done - update_user')
     return user
-
 
 async def delete_user(db: AsyncSession, user_id: int):
     """
