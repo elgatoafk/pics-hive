@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26e5b1fd-e920-44fa-ac2e-9ef0d8a2d3a3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phv1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phv1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/comment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/services/photos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/services/photos.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/comment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -245,10 +233,6 @@
           <url>file://$PROJECT_DIR$/backend/src/routes/transformations.py</url>
           <line>3</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/backend/src/services/photos.py</url>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
