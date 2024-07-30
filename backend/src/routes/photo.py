@@ -76,6 +76,7 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
         return {"detail": "Photo deleted successfully"}
 
 
+
 @router.post("/generate_qrcode/{photo_id}")
 async def generate_qr_code(
     photo_id: int, db: Session = Depends(get_db)
@@ -99,4 +100,5 @@ async def generate_qr_code(
     if qr_code is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
     return StreamingResponse(qr_code, media_type="image/png", status_code=status.HTTP_201_CREATED)
+
 
