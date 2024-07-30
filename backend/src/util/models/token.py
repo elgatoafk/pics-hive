@@ -1,8 +1,7 @@
 from sqlalchemy import Column, String, DateTime, Integer, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime as dt, timedelta
 from sqlalchemy.orm import relationship
-from .base import Base
+from backend.src.util.db import Base
 
 
 class BlacklistedToken(Base):
@@ -14,8 +13,9 @@ class BlacklistedToken(Base):
         blacklisted_on (datetime): The date and time when the token was blacklisted.
     """
     __tablename__ = "blacklisted_tokens"
+    __table_args__ = {'extend_existing': True}
 
-    token = Column(String, primary_key=True, unique=True, index=True)
+    token = Column(String, primary_key=True, unique=True)
     blacklisted_on = Column(DateTime, default=dt.utcnow)
 
     def __repr__(self):
@@ -41,11 +41,11 @@ class Token(Base):
         user (User): The relationship to the User model.
     """
     __tablename__ = "tokens"
+    __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer, primary_key=True, index=True)
-    token = Column(String, unique=True, index=True, nullable=False)
+    id = Column(Integer, primary_key=True)
+    token = Column(String, unique=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     created_at = Column(DateTime, default=dt.utcnow)
     expires_at = Column(DateTime, default=lambda: dt.utcnow() + timedelta(minutes=30))
 
-    user = relationship("User", back_populates="tokens")

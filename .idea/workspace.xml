@@ -5,30 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26e5b1fd-e920-44fa-ac2e-9ef0d8a2d3a3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Final_Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/script.py.mako" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/d52b8f2ff0e9_tables_v1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/f8c56202ac3a_tables_v2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/routes/root.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/services/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phv1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phv1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/config/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/jwt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/comment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/security.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/routes/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/tag.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/comment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/rating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/token.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/base.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/comment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/photo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/rating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/tag.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/token.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,34 +46,92 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/photoshare" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2jVecumRaXmrCjerhgh5puF2S2M" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging update/adding-docstring",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/NextCloud/3D_NAS_Code/Courses_Python/Storage_Code/python_web_GOIT/Final_Project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.env.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.script.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/eager-loading-SQL&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Я/Desktop/photoshare-dev&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Python&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Projects\phv1\backend\src\routes" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="env" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/alembic" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/alembic/env.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Final_Project" />
       <option name="ENV_FILES" value="" />
@@ -87,6 +155,60 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="script" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/src/util/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/src/util/models/script.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/src/util/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/src/util/models/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.script" />
+        <item itemvalue="Python.env" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -115,6 +237,10 @@
       <workItem from="1722019955602" duration="16000" />
       <workItem from="1722020013569" duration="3141000" />
       <workItem from="1722024444382" duration="1108000" />
+      <workItem from="1722245808847" duration="9979000" />
+      <workItem from="1722258596124" duration="7665000" />
+      <workItem from="1722266475433" duration="13000" />
+      <workItem from="1722267301432" duration="3846000" />
     </task>
     <servers />
   </component>
@@ -122,6 +248,7 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
       <path value="$PROJECT_DIR$" />
@@ -136,7 +263,17 @@
           <line>3</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/src/services/photos.py</url>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/phv1$test.coverage" NAME="test Coverage Results" MODIFIED="1722265373777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/util/models" />
+    <SUITE FILE_PATH="coverage/phv1$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1722271187344" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/phv1$script.coverage" NAME="script Coverage Results" MODIFIED="1722261951375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/util/models" />
+    <SUITE FILE_PATH="coverage/phv1$env.coverage" NAME="env Coverage Results" MODIFIED="1722259818920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/alembic" />
   </component>
 </project>

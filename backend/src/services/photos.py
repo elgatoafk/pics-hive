@@ -7,8 +7,7 @@ import qrcode
 from backend.src.util.crud.photo import get_photo
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-
-from backend.src.config.config import settings #TODO: to discuss(there was class Settings instead of reference to object settings)
+from backend.src.config.config import settings
 from backend.src.util.models.user import User
 
 cloudinary.config(

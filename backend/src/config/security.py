@@ -1,8 +1,13 @@
-from passlib.context import CryptContext
+from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
+from passlib.context import CryptContext
+from backend.src.util.schemas import user as schema_user
+from backend.src.util.crud import user as crud_user
+from backend.src.util.models import user as model_user
+from backend.src.util.db import get_db
+from backend.src.config import jwt as config_jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.util.schemas import user as schema_user
 from src.config.config import settings
@@ -23,7 +28,6 @@ def verify_password(plain_password, hashed_password):
     Args:
         plain_password (str): The plain text password to verify.
         hashed_password (str): The hashed password to compare against.
-
     Returns:
         bool: True if the password matches, False otherwise.
     """
@@ -88,17 +92,17 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
         token_data = schema_user.TokenData(email=email)
     except JWTError:
         raise credentials_exception
-    
+
     try:
         logger.debug('test - get_user_by_email')
         user = await crud_user.get_user_by_email(db, email=token_data.email)
     except Exception as e:
         logger.error(f"An error occurred: {e}")  # Use logging instead of print
         raise HTTPException(status_code=500, detail="Internal Server Error")
-        
+
     if user is None:
         raise credentials_exception
-    
+
     logger.debug('get_current_user - return : {}'.format(user))
     return user
 

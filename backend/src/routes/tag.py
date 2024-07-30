@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 from backend.src.util.schemas.tag import PhotoTaggingResponse,PhotoTaggingRequest
 from backend.src.util import models, schemas, db
 from backend.src.util.db import get_db
-from backend.src.util.models.tag import Tag
 from backend.src.util.crud.tag import get_tag_by_name
 
 
@@ -67,7 +65,7 @@ async def add_tags_to_photo(
     )
 
 @router.get("/tags/", response_model=PhotoTaggingResponse)
-async def get_tag_route(tag_name: str, db: Session = Depends(get_db)):
+async def get_tag_route(tag_name: str, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a tag by its name.
 

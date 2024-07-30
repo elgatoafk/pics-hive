@@ -12,10 +12,7 @@ import asyncio
 from datetime import datetime
 from ..models.token import BlacklistedToken, Token
 import time
-from backend.src.util.db import AsyncSessionLocal as SessionLocal
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-import asyncio
+
 
 
 async def add_token_to_blacklist(db: AsyncSession, token: str):
@@ -52,6 +49,7 @@ async def is_token_blacklisted(db: AsyncSession, token: str) -> bool:
 
 
 async def remove_expired_tokens(db: AsyncSession):
+
     """
     Remove expired tokens from the database in an infinite loop running once a day.
 

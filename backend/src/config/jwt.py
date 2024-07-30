@@ -2,25 +2,26 @@ from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-
+from backend.src.util.schemas import user
+from backend.src.util.db import AsyncSessionLocal as SessionLocal
 from backend.src.config.config import settings
 from typing import Optional
-
+from backend.src.util.crud import user as crud_user
+from backend.src.util.models import user as model_user, token as model_token
 from datetime import datetime, timedelta
-from jose import JWTError, jwt
+from backend.src.config.config import settings
+
 
 from backend.src.util.models import token as crud_token
 from backend.src.util.schemas.user import TokenData
-
-from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.db import get_db
-
 from backend.src.util.logging_config import logger
 
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+
 
 async def create_access_token(data: dict, user_id: int, db: AsyncSession, expires_delta: Optional[timedelta] = None):
     """
