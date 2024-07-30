@@ -22,7 +22,13 @@ async def creat_photo_route(photo: PhotoCreate, user_id: int, db: Session = Depe
     Returns:
     PhotoResponse: The created photo data.
     """
-    return await create_photo(db, photo, user_id)
+    db_photo = await create_photo(db, photo, user_id)
+    return PhotoResponse(
+        id=db_photo.id,
+        text=db_photo.description,
+        user_id=db_photo.user_id,
+        photo_id=db_photo.id
+    )
 
 @router.get("/photos/", response_model=PhotoResponse)
 async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
@@ -36,7 +42,13 @@ async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
     Returns:
     PhotoResponse: The retrieved photo data. If the photo is not found, returns None.
     """
-    return await get_photo(db, photo_id)
+    db_photo = await get_photo(db, photo_id)
+    return PhotoResponse(
+        id=db_photo.id,
+        text=db_photo.description,
+        user_id=db_photo.user_id,
+        photo_id=db_photo.id
+    )
 
 @router.put("/photos/", response_model=PhotoResponse)
 async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = Depends(get_db)):
@@ -54,7 +66,12 @@ async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = De
     updated_photo = await update_photo(db, photo, photo_id)
     if not updated_photo:
         raise HTTPException(status_code=404, detail="Photo not found")
-    return updated_photo
+    return PhotoResponse(
+        id=updated_photo.id,
+        text=updated_photo.description,
+        user_id=updated_photo.user_id,
+        photo_id=updated_photo.id
+    )
 
 @router.delete("/photos/")
 async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
@@ -74,7 +91,6 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
     else:
         await delete_photo(db, photo_db)
         return {"detail": "Photo deleted successfully"}
-
 
 
 @router.post("/generate_qrcode/{photo_id}")
@@ -100,5 +116,4 @@ async def generate_qr_code(
     if qr_code is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
     return StreamingResponse(qr_code, media_type="image/png", status_code=status.HTTP_201_CREATED)
-
 
