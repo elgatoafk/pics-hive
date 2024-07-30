@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 async def init_db():
     async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all, checkfirst=True)
 
 
 # Include API routers
@@ -59,4 +59,4 @@ async def on_startup():
 # Run the application
 if __name__ == "__main__":
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=debug_mode)

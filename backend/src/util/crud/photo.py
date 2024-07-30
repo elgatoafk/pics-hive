@@ -38,7 +38,7 @@ async def create_photo(db: AsyncSession, body: PhotoCreate, user_id: int) -> Pho
     if body.tags:
         tag_instances = []
         for tag_name in body.tags:
-            stmt = select(Tag).where(Tag.tag_name == tag_name)
+            stmt = select(Tag).where(Tag.name == tag_name)
             result = await db.execute(stmt)
             tag = result.scalars().first()
             if not tag:
@@ -77,7 +77,7 @@ async def update_photo(db: AsyncSession, body: PhotoCreate, photo_id: int ):
     if body.tags:
         tag_instances = []
         for tag_name in body.tags:
-            stmt = select(Tag).where(Tag.tag_name == tag_name)
+            stmt = select(Tag).where(Tag.name == tag_name)
             result = await db.execute(stmt)
             tag = result.scalars().first()
             if not tag:

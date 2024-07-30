@@ -1,15 +1,18 @@
 from io import BytesIO
 from uuid import uuid4
 
+
 import cloudinary
 import cloudinary.uploader
 import qrcode
+
+
 from backend.src.util.crud.photo import get_photo
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from backend.src.config.config import settings
-from backend.src.util.models.user import User
+# from backend.src.util.models.user import User
 
 cloudinary.config(
     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
@@ -39,12 +42,12 @@ class PhotoService:
 
     @staticmethod
     async def resize_photo(
-            photo_id: int, width: int, height: int, user: User, db: Session
+            photo_id: int, width: int, height: int, db: Session
     ):
         """Resizes an image using Cloudinary API.
 
         """
-        photo = await get_photo(photo_id, db=db)
+        photo = await get_photo(db, photo_id)
         transformed_url = cloudinary.uploader.explicit(
             photo.public_id,
             type="upload",
@@ -66,7 +69,7 @@ class PhotoService:
         return url_to_return
 
     @staticmethod
-    async def add_filter(photo_id: int, filter: str, user: User, db: Session):
+    async def add_filter(photo_id: int, filter: str,  db: Session):
         """Apply a filter to an image and return the transformed URL.
 
         """
@@ -92,7 +95,7 @@ class PhotoService:
             "zorro",
         ]
         effect = f"art:{filter}" if filter in filters else filter
-        photo = await get_photo(photo_id, db=db)
+        photo = await get_photo(db, photo_id)
         transformed_url = cloudinary.uploader.explicit(
             photo.public_id,
             type="upload",

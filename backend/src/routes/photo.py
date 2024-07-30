@@ -1,6 +1,7 @@
 import asyncio
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from backend.src.util.schemas.photo import PhotoCreate, PhotoUpdate, PhotoResponse
 from backend.src.util.crud.photo import create_photo, get_photo, update_photo, delete_photo
@@ -10,7 +11,7 @@ from starlette.responses import StreamingResponse
 router = APIRouter()
 
 @router.post("/photos/", response_model=PhotoResponse)
-async def creat_photo_route(photo: PhotoCreate, user_id: int, db: Session = Depends(get_db)):
+async def creat_photo_route(photo: PhotoCreate, user_id: int, db: AsyncSession = Depends(get_db)):
     """
     Creates a new photo in the database.
 
@@ -31,7 +32,7 @@ async def creat_photo_route(photo: PhotoCreate, user_id: int, db: Session = Depe
     )
 
 @router.get("/photos/", response_model=PhotoResponse)
-async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
+async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieves a photo from the database based on the provided photo ID.
 
@@ -51,7 +52,7 @@ async def get_photo_route(photo_id: int, db: Session = Depends(get_db)):
     )
 
 @router.put("/photos/", response_model=PhotoResponse)
-async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = Depends(get_db)):
+async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     Updates an existing photo in the database based on the provided photo ID.
 
@@ -74,7 +75,7 @@ async def update_photo_route(photo: PhotoUpdate, photo_id: int, db: Session = De
     )
 
 @router.delete("/photos/")
-async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
+async def delete_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     Deletes a photo from the database based on the provided photo ID.
 
@@ -95,7 +96,7 @@ async def delete_photo_route(photo_id: int, db: Session = Depends(get_db)):
 
 @router.post("/generate_qrcode/{photo_id}")
 async def generate_qr_code(
-    photo_id: int, db: Session = Depends(get_db)
+    photo_id: int, db: AsyncSession = Depends(get_db)
 ):
     """Generates a QR code for the given photo ID.
 
@@ -109,11 +110,16 @@ async def generate_qr_code(
     Raises:
         HTTPException: If the photo is not found
     """
-    photo = await get_photo(photo_id)
-    if photo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
-    qr_code = await PhotoService.generate_qr_code(photo.photo_url)
-    if qr_code is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
-    return StreamingResponse(qr_code, media_type="image/png", status_code=status.HTTP_201_CREATED)
+    try:
+        photo = await get_photo(db, photo_id)
+        if photo is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
+        qr_code_stream = await PhotoService.generate_qr_code(photo.url)
+        if qr_code_stream is None:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to generate QR code")
+
+        return StreamingResponse(qr_code_stream, media_type="image/png", status_code=status.HTTP_201_CREATED)
+
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

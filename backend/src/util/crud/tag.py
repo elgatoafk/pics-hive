@@ -38,7 +38,7 @@ async def get_tag_by_name(db: AsyncSession, tag_name: str) -> Tag:
     This function uses the provided database session to execute a SQL query to retrieve a tag with the given name.
     If a tag with the specified name exists in the database, it is returned. Otherwise, None is returned.
     """
-    result = await db.execute(select(Tag).filter(Tag.tag_name == tag_name))
+    result = await db.execute(select(Tag).filter(Tag.name == tag_name))
     tag = result.scalars().first()
     if tag is None:
         raise HTTPException(

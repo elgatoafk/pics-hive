@@ -6,7 +6,7 @@ class TagCreate(BaseModel):
     """Schema for creating a new tag.
 
     Attributes:
-        name (str): The name of the tag.
+        tag_name (str): The name of the tag.
     """
     name: str
 
