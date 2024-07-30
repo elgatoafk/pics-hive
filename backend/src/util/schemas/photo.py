@@ -44,5 +44,5 @@ class PhotoResponse(BaseModel):
     photo_id: int
 
     class Config:
-        from_attributes = True  #orm_mode = True
+        orm_mode = True
 

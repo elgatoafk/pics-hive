@@ -3,12 +3,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from backend.src.util.db import get_db
-
-#from auth import get_current_user    #TODO - to discuss
 from backend.src.config.security import get_current_user
 from backend.src.util.schemas.comment import Comment, CommentCreate, CommentUpdate
-from backend.src.util.crud.comment import create_comment,delete_comment,create_comment,update_comment, get_comments
+from backend.src.util.crud.comment import delete_comment, create_comment, update_comment, get_comments
 from backend.src.util.schemas.user import User
+
 from backend.src.config.dependencies import role_required
 
 router = APIRouter()

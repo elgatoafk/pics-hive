@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from backend.src.util.schemas.tag import PhotoTaggingResponse,PhotoTaggingRequest
@@ -10,7 +12,7 @@ from backend.src.util.crud.tag import get_tag_by_name
 router = APIRouter()
 
 
-@router.post("/photos/{photo_id}/tags", response_model=PhotoTaggingResponse)
+@router.post("/photos/{photo_id}/tags", response_model=List[PhotoTaggingResponse], status_code=status.HTTP_201_CREATED)
 async def add_tags_to_photo(
         photo_id: int, tagging_request: PhotoTaggingRequest, db: AsyncSession = Depends(db.get_db)
 ):

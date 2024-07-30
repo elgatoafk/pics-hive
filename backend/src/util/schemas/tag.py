@@ -6,7 +6,7 @@ class TagCreate(BaseModel):
     """Schema for creating a new tag.
 
     Attributes:
-        name (str): The name of the tag.
+        tag_name (str): The name of the tag.
     """
     name: str
 
@@ -33,6 +33,4 @@ class PhotoTaggingResponse(BaseModel):
     tags: List[str]
 
     class Config:
-        from_attributes = True #orm_mode = True
-
-
+        orm_mode = True
