@@ -22,8 +22,20 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
-
 async def create_access_token(data: dict, user_id: int, db: AsyncSession, expires_delta: Optional[timedelta] = None):
+    """
+    Create an access token with optional expiration time and store it in the database.
+
+    Args:
+        data (dict): The data to encode in the token.
+        user_id (int): The ID of the user for whom the token is created.
+        db (AsyncSession): The database session for storing the token.
+        expires_delta (Optional[timedelta], optional): The time delta after which the token will expire. 
+            If not provided, a default expiration time is used.
+
+    Returns:
+        str: The encoded JWT access token.
+    """
     logger.debug('create_access_token test')
     to_encode = data.copy()
     if expires_delta:
@@ -47,9 +59,20 @@ async def create_access_token(data: dict, user_id: int, db: AsyncSession, expire
     return encoded_jwt
 
 
-
-
 def verify_token(token: str, db: Session = Depends(get_db)):
+    """
+    Verify the validity of an access token, check its payload, and ensure it is not blacklisted.
+
+    Args:
+        token (str): The JWT access token to verify.
+        db (Session, optional): The database session for checking the token blacklist.
+
+    Raises:
+        HTTPException: If the token is invalid, expired, or blacklisted.
+
+    Returns:
+        TokenData: The data extracted from the valid token.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -68,6 +91,7 @@ def verify_token(token: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token is blacklisted")
     
     return token_data
+
 
 
 
