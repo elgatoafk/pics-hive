@@ -9,12 +9,12 @@ PhotoShare is a photo-sharing application built with FastAPI. It allows users to
 - Photo upload, edit, delete, and transformation
 - Comment on photos
 - Rate photos
-- Search and filter photos by keywords and tags
+
 
 ## Getting Started
 
 1. Clone the repository
 2. Install dependencies: `pip install -r requirements.txt`
 3. Set up the database (PostgreSQL is recommended)
-4. Configure environment variables
+4. Configure environment variables (example in .env file)
 5. Run the application: `uvicorn backend.main:app --reload`
