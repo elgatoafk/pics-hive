@@ -37,5 +37,11 @@ class User(AsyncAttrs, Base):
     is_active = Column(Boolean, default=True)
 
     tokens = relationship("Token", backref="user", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return self.email
+
+    def __str__(self):
+        return self.email
    
 

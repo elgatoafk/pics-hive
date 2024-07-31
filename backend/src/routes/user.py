@@ -13,7 +13,7 @@ from backend.src.config import security
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.logging_config import logger
 from backend.src.config.security import get_current_active_user
-from backend.src.util.crud.user import get_user_profile
+from backend.src.util.crud.user import get_user_profile, get_user
 
 router = APIRouter()
 
@@ -108,6 +108,10 @@ async def update_user(
         raise HTTPException(status_code=404, detail="User not found")
     if db_user.id != current_user.id and current_user.role not in ["admin", "moderator"]:
         raise HTTPException(status_code=403, detail="Not enough permissions")
+    if user.email:
+        existing_user = await crud_user.get_user_by_email(db, email=user.email)
+        if existing_user and existing_user.id != user_id:
+            raise HTTPException(status_code=400, detail="Email is already registered")
 
     logger.debug('user - update_user')
 
@@ -148,8 +152,10 @@ async def delete_user(
 
         if db_user is None:
             raise HTTPException(status_code=404, detail="User not found")
+
         if current_user.role != "admin":
             raise HTTPException(status_code=403, detail="Not enough permissions")
+
 
         logger.debug('start - delete_user')
 

@@ -96,7 +96,7 @@ async def create_user(db: AsyncSession, user: schema_user.UserCreate):
     await db.commit()
     await db.refresh(db_user)
 
-    access_token = create_access_token(data={"sub": db_user.email}, user_id=db_user.id, db=db)
+    access_token =  await create_access_token(data={"sub": db_user.email}, user_id=db_user.id, db=db)
     return db_user
 
 

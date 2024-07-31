@@ -1,9 +1,13 @@
+from fastapi import APIRouter, Request, Depends, HTTPException
+from sqlalchemy import text
 
-from fastapi import APIRouter, Request, Depends
-
+from backend.src.util.crud.photo import get_photo
 from backend.src.util.db import get_db
 from backend.src.services.photos import PhotoService
-from backend.src.config.security import get_current_user
+from backend.src.config.security import get_current_user, get_current_active_user
+from backend.src.util.logging_config import logger
+from backend.src.util.models import User
+from backend.src.util.schemas.photo import PhotoResponse
 
 router = APIRouter(prefix="/transformations", tags=["transformations"])
 
@@ -15,7 +19,7 @@ async def resize(
         width: int,
         height: int,
         db=Depends(get_db),
-        user=Depends(get_current_user),
+
 ):
     """
      Resize a photo to the specified dimensions.
@@ -29,29 +33,37 @@ async def resize(
         width (int): The desired width of the photo after resizing.
         height (int): The desired height of the photo after resizing.
         db (Session, optional): The database session dependency to handle any database operations.
-        user (User, optional): The current user performing the operation. This is determined 
-                               through dependency injection that ensures the user is logged in.
+
 
     Returns:
         A response object that includes the resized photo's details, or an error message if the operation cannot be completed.
 
     Raises:
-        HTTPException: If the photo cannot be found, or the user does not have permission to modify it,
-                        or if the resize parameters are invalid (e.g., non-positive dimensions).
+        HTTPException: If the photo cannot be found
 
     """
-    return await PhotoService.resize_photo(
-        photo_id=photo_id, width=width, height=height, user=user, db=db
-    )
+
+    photo = await db.execute(text("SELECT * FROM photos WHERE id = :id"), {"id": photo_id})
+    photo = photo.fetchone()
+    if not photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+    try:
+        return await PhotoService.resize_photo(
+            photo_id=photo_id, width=width, height=height, db=db
+        )
+    except Exception as e:
+        logger.exception("Failed to resize photo")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/filter/{photo_id}")
+@router.post("/filter/{photo_id}", response_model=PhotoResponse)
 async def add_filter(
         request: Request,
         photo_id: int,
         photo_filter: str,
         db=Depends(get_db),
-        user=Depends(get_current_user),
+        current_user: User = Depends(get_current_active_user)
+
 ):
     """ Applies a specified filter to a photo.
 
@@ -75,6 +87,19 @@ async def add_filter(
                         or if the specified filter is not recognized or applicable.
 
     """
-    return await PhotoService.add_filter(
-        photo_id=photo_id, filter=photo_filter, user=user, db=db
+    photo = await get_photo(db, photo_id)
+    url = await PhotoService.add_filter(
+        photo_id=photo_id, filter=photo_filter, db=db, current_user=current_user
     )
+    try:
+        photo_with_filter = {
+            "id": photo.id,
+            "description": photo.description,
+            "url": url,
+            "user_id": photo.user_id,
+            "filter": photo_filter,
+        }
+        return PhotoResponse(**photo_with_filter)
+    except Exception as e:
+        logger.exception("Failed to add filter")
+        raise HTTPException(status_code=500, detail="Internal Server Error")

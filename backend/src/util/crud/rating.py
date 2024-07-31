@@ -125,7 +125,7 @@ async def delete_rating(rate_id: int, db: AsyncSession, user: User) -> None:
     if rate:
         await db.delete(rate)  # Perform deletion
         await db.commit()  # Commit the transaction
-
+        return rate
     return None
 
 

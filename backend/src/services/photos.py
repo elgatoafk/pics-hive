@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from backend.src.config.config import settings
 from backend.src.util.models.user import User
+from backend.src.util.schemas.photo import PhotoResponse
 
 cloudinary.config(
     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
@@ -45,6 +46,7 @@ class PhotoService:
 
         """
         photo = await get_photo(db, photo_id)
+
         transformed_url = cloudinary.uploader.explicit(
             photo.public_id,
             type="upload",
@@ -66,7 +68,7 @@ class PhotoService:
         return url_to_return
 
     @staticmethod
-    async def add_filter(photo_id: int, filter: str,  db: Session):
+    async def add_filter(photo_id: int, filter: str,  db: Session, current_user: User):
         """Apply a filter to an image and return the transformed URL.
 
         """
@@ -93,8 +95,13 @@ class PhotoService:
         ]
         effect = f"art:{filter}" if filter in filters else filter
         photo = await get_photo(db, photo_id)
+        if not photo:
+            raise HTTPException(status_code=404, detail="Photo not found")
+        if photo.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not enough permissions")
+
         transformed_url = cloudinary.uploader.explicit(
-            photo.public_id,
+            photo.id,
             type="upload",
             eager=[
                 {
@@ -109,6 +116,7 @@ class PhotoService:
         except KeyError:
             raise HTTPException(status_code=400, detail="Invalid filter")
         return url_to_return
+
 
     @staticmethod
     async def generate_qr_code(photo_url: str):

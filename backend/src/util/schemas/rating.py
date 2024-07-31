@@ -17,6 +17,9 @@ class RatingCreate(RatingBase):
     photo_id (int): The ID of the photo being rated.
     """
     photo_id: int
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 class RatingResponse(RatingBase):
     """
@@ -36,3 +39,4 @@ class RatingResponse(RatingBase):
 
     class Config:
         orm_mode = True
+        from_attributes = True
