@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-
 from backend.src.util.db import Base
 from backend.src.util.models.photo import photo_m2m_tag
 

@@ -1,3 +1,4 @@
+
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -36,6 +37,6 @@ class User(AsyncAttrs, Base):
     is_active = Column(Boolean, default=True)
 
     tokens = relationship("Token", backref="user", cascade="all, delete-orphan")
-
-
+    photos = relationship("Photo", back_populates="owner")
+    comments = relationship("Comment", back_populates="user")
 

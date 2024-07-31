@@ -1,6 +1,9 @@
+
+from sqlalchemy.orm import joinedload
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.models.photo import Photo
+from backend.src.util.schemas.photo import PhotoUpdate, PhotoResponse
 from backend.src.util.models.tag import Tag
 from backend.src.util.schemas.photo import PhotoCreate, PhotoResponse
 from sqlalchemy.future import select
@@ -8,108 +11,89 @@ from sqlalchemy.future import select
 
 async def get_photo(db: AsyncSession, photo_id: int ):
     """
-    Retrieve a photo by its ID from the database.
+    Asynchronously retrieves a photo from the database by its ID.
 
     Parameters:
+    - db (AsyncSession): The SQLAlchemy AsyncSession object for database operations.
     - photo_id (int): The unique identifier of the photo to retrieve.
-    - db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
+
 
     Returns:
-    - Photo: The retrieved photo object if found, otherwise None.
-    """
-    result = await db.execute(select(Photo).filter(Photo.id == photo_id))
-    return result.scalars().first()
+    - PhotoResponse: A response object containing the photo's details.
 
-
-async def create_photo(db: AsyncSession, body: PhotoCreate, user_id: int) -> PhotoResponse:
+    Raises:
+    - HTTPException: If the photo is not found in the database, a 404 Not Found error is raised.
+    - HTTPException: If an error occurs during database operations, a 500 Internal Server Error is raised.
     """
-    Create a new photo in the database.
+    try:
+        result = await db.execute(select(Photo).options(joinedload(Photo.tags)).filter(Photo.id == photo_id))
+        db_photo = result.scalars().first()
+        if not db_photo:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+        tags = [tag.tag_name for tag in db_photo.tags]
+        response = PhotoResponse (id=db_photo.id, user_id=db_photo.user_id, url=db_photo.url, description=db_photo.description, tags=tags)
+        return response
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str (e))
+
+async def update_photo (db: AsyncSession, body: PhotoUpdate, photo_id: int) -> Photo:
+    """
+    Asynchronously updates a photo in the database by its ID.
 
     Parameters:
-    - body (PhotoCreate): The photo data to be created. It should be an instance of the PhotoCreate schema.
-    - user_id (int): The unique identifier of the user who is creating the photo.
-    - db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
-
-    Returns:
-    - PhotoResponse: The newly created photo object.
-    """
-    db_photo = Photo(description=body.description, url=body.url, user_id=user_id)
-    
-    if body.tags:
-        tag_instances = []
-        for tag_name in body.tags:
-            stmt = select(Tag).where(Tag.name == tag_name)
-            result = await db.execute(stmt)
-            tag = result.scalars().first()
-            if not tag:
-                tag = Tag(tag_name=tag_name)
-                db.add(tag)
-                await db.flush()
-            tag_instances.append(tag)
-        db_photo.tags = tag_instances
-    
-    db.add(db_photo)
-    await db.commit()
-    await db.refresh(db_photo)
-    return db_photo
-
-
-async def update_photo(db: AsyncSession, body: PhotoCreate, photo_id: int ):
-    """
-    Update an existing photo in the database.
-
-    Parameters:
-    - body (PhotoCreate): The updated photo data. It should be an instance of the PhotoCreate schema.
+    - db (AsyncSession): The SQLAlchemy AsyncSession object for database operations.
+    - body (PhotoUpdate): The updated photo data.
     - photo_id (int): The unique identifier of the photo to update.
-    - db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
+
 
     Returns:
-    - Photo: The updated photo object. If the photo with the given ID does not exist, it returns None.
+    - Photo: The updated photo object.
+
+    Raises:
+    - HTTPException: If the photo is not found in the database, a 404 Not Found error is raised.
+    - HTTPException: If an error occurs during database operations, a 500 Internal Server Error is raised.
     """
-    db_photo = await get_photo(db, photo_id)
+    try:
+        result = await db.execute(select(Photo).options(joinedload (Photo.tags)).filter (Photo.id == photo_id))
+        db_photo = result.scalars().first()
+        if not db_photo:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
-    if not db_photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
-    
-    for key, value in body.model_dump(exclude_unset=True, exclude=["tags"]).items():
-        setattr(db_photo, key, value)
+        for key, value in body.dict().items():
+            setattr(db_photo, key, value)
 
-    if body.tags:
-        tag_instances = []
-        for tag_name in body.tags:
-            stmt = select(Tag).where(Tag.name == tag_name)
-            result = await db.execute(stmt)
-            tag = result.scalars().first()
-            if not tag:
-                tag = Tag(tag_name=tag_name)
-                db.add(tag)
-                await db.flush()
-            tag_instances.append(tag)
-        db_photo.tags = tag_instances
+        await db.commit()
+        await db.refresh(db_photo)
+        return db_photo
 
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=str (e))
 
-    await db.commit()
-    await db.refresh(db_photo)
-    return db_photo
-
-
-async def delete_photo(db: AsyncSession,photo_id: int):
+async def delete_photo(db: AsyncSession, photo_id: int):
     """
-    Delete a photo from the database by its ID.
+    Asynchronously deletes a photo from the database by its ID.
 
     Parameters:
+    - db (AsyncSession): The SQLAlchemy AsyncSession object for database operations.
     - photo_id (int): The unique identifier of the photo to delete.
-    - db (AsyncSession): The asynchronous database session. It is optional and will be injected by the FastAPI framework.
 
     Returns:
-    - Photo: The deleted photo object if found and successfully deleted, otherwise None.
+    - Photo: The deleted photo object.
+
+    Raises:
+    - HTTPException: If the photo is not found in the database, a 404 Not Found error is raised.
+    - HTTPException: If an error occurs during database operations, a 500 Internal Server Error is raised.
     """
-    result = await db.execute(select(Photo).filter(Photo.id == photo_id))
-    db_photo = result.scalars().first()
+    try:
+        result = await db.execute(select(Photo).filter(Photo.id == photo_id))
+        db_photo = result.scalars().first()
+        if not db_photo:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+        await db.delete(db_photo)
+        await db.commit()
+        return db_photo
 
-    if not db_photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
-
-    await db.delete(db_photo)
-    await db.commit()
-    return db_photo
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str (e))
