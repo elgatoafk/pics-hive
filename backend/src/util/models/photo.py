@@ -11,6 +11,7 @@ photo_m2m_tag = Table(
     extend_existing=True)
 
 
+
 class Photo(Base):
     """
     This class represents a photo in the application. It is associated with a user,
@@ -33,7 +34,6 @@ class Photo(Base):
     description = Column(String)
     url = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
-
-    owner = relationship("User", back_populates="photos")
+    owner = relationship("User", backref="photos")
     tags = relationship("Tag", secondary=photo_m2m_tag, back_populates="photos")
-    comments = relationship ('Comment', back_populates='photo')
+

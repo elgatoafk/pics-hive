@@ -82,6 +82,24 @@ async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.put("/photos/{photo_id}", response_model=PhotoResponse)
 async def update_photo_route(body: PhotoUpdate, photo_id: int, db: AsyncSession = Depends(get_db)):
+    """
+        Update a photo record in the database.
+
+        Args:
+            body (PhotoUpdate): An instance of PhotoUpdate containing the new data for the photo.
+            photo_id (int): The ID of the photo to be updated.
+            db (AsyncSession): An asynchronous database session, provided by dependency injection.
+
+        Returns:
+            The updated photo record.
+
+        Example:
+            >>> body = PhotoUpdate(title="New Title", description="New Description")
+            >>> photo_id = 1
+            >>> updated_photo = await update_photo_route(body, photo_id)
+            >>> print(updated_photo)
+            Photo(id=1, title="New Title", description="New Description", ...)
+        """
     updated_photo = await update_photo(db, body, photo_id)
     return updated_photo
 
@@ -127,29 +145,4 @@ async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
         qr_code = str(qr_code).encode('utf-8')
     return StreamingResponse(io.BytesIO(qr_code), media_type="image/png", status_code=status.HTTP_201_CREATED)
 
-@router.post("/generate_qrcode/{photo_id}")
-async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
-    """
-    Generates a QR code for a photo based on its ID.
 
-    Parameters:
-    photo_id (int): The unique identifier of the photo for which to generate the QR code.
-    db (AsyncSession, optional): The database session. Defaults to Depends(get_db).
-
-    Returns:
-    StreamingResponse: A response object containing the generated QR code image in PNG format.
-    If the photo is not found, raises a 404 HTTPException.
-    If the QR code generation fails, also raises a 404 HTTPException.
-    """
-    photo = await get_photo(db, photo_id)
-    if photo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
-
-    qr_code = await PhotoService.generate_qr_code(photo.url)
-
-    if qr_code is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
-
-    if isinstance(qr_code, int):
-        qr_code = str(qr_code).encode('utf-8')
-    return StreamingResponse(io.BytesIO(qr_code), media_type="image/png", status_code=status.HTTP_201_CREATED)

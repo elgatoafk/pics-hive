@@ -132,7 +132,6 @@ bin/
 include/
 lib/
 share/
-Scripts/
 
 # Spyder project settings
 .spyderproject

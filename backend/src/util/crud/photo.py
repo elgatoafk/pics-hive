@@ -4,6 +4,8 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.util.models.photo import Photo
 from backend.src.util.schemas.photo import PhotoUpdate, PhotoResponse
+from backend.src.util.models.tag import Tag
+from backend.src.util.schemas.photo import PhotoCreate, PhotoResponse
 from sqlalchemy.future import select
 
 
@@ -14,6 +16,7 @@ async def get_photo(db: AsyncSession, photo_id: int ):
     Parameters:
     - db (AsyncSession): The SQLAlchemy AsyncSession object for database operations.
     - photo_id (int): The unique identifier of the photo to retrieve.
+
 
     Returns:
     - PhotoResponse: A response object containing the photo's details.
@@ -27,13 +30,12 @@ async def get_photo(db: AsyncSession, photo_id: int ):
         db_photo = result.scalars().first()
         if not db_photo:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
-
         tags = [tag.tag_name for tag in db_photo.tags]
         response = PhotoResponse (id=db_photo.id, user_id=db_photo.user_id, url=db_photo.url, description=db_photo.description, tags=tags)
         return response
 
     except Exception as e:
-        raise HTTPException (status_code=500, detail=str (e))
+        raise HTTPException(status_code=500, detail=str (e))
 
 async def update_photo (db: AsyncSession, body: PhotoUpdate, photo_id: int) -> Photo:
     """
@@ -44,6 +46,7 @@ async def update_photo (db: AsyncSession, body: PhotoUpdate, photo_id: int) -> P
     - body (PhotoUpdate): The updated photo data.
     - photo_id (int): The unique identifier of the photo to update.
 
+
     Returns:
     - Photo: The updated photo object.
 
@@ -52,21 +55,21 @@ async def update_photo (db: AsyncSession, body: PhotoUpdate, photo_id: int) -> P
     - HTTPException: If an error occurs during database operations, a 500 Internal Server Error is raised.
     """
     try:
-        result = await db.execute (select (Photo).options (joinedload (Photo.tags)).filter (Photo.id == photo_id))
-        db_photo = result.scalars ().first ()
+        result = await db.execute(select(Photo).options(joinedload (Photo.tags)).filter (Photo.id == photo_id))
+        db_photo = result.scalars().first()
         if not db_photo:
-            raise HTTPException (status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
-        for key, value in body.dict ().items ():
-            setattr (db_photo, key, value)
+        for key, value in body.dict().items():
+            setattr(db_photo, key, value)
 
-        await db.commit ()
-        await db.refresh (db_photo)
+        await db.commit()
+        await db.refresh(db_photo)
         return db_photo
 
     except Exception as e:
-        await db.rollback ()
-        raise HTTPException (status_code=500, detail=str (e))
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=str (e))
 
 async def delete_photo(db: AsyncSession, photo_id: int):
     """
@@ -85,12 +88,12 @@ async def delete_photo(db: AsyncSession, photo_id: int):
     """
     try:
         result = await db.execute(select(Photo).filter(Photo.id == photo_id))
-        db_photo = result.scalars ().first ()
+        db_photo = result.scalars().first()
         if not db_photo:
-            raise HTTPException (status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
         await db.delete(db_photo)
         await db.commit()
         return db_photo
 
     except Exception as e:
-        raise HTTPException (status_code=500, detail=str (e))
+        raise HTTPException(status_code=500, detail=str (e))

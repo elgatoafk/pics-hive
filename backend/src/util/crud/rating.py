@@ -1,9 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
+
 from backend.src.util.models.rating import Rating
 from backend.src.util.schemas.rating import RatingCreate
 from sqlalchemy.future import select
 from sqlalchemy import delete
+
+from backend.src.util.models import User, Photo
 
 
 async def get_rating(db: AsyncSession, rating_id: int) -> Rating:
@@ -27,23 +31,54 @@ async def get_rating(db: AsyncSession, rating_id: int) -> Rating:
     return rating
 
 
-async def create_rating(body: RatingCreate, db: AsyncSession, user_id: int) -> Rating:
+async def create_rating(photo_id: int, rate: int, user_id, db: AsyncSession) -> Rating:
     """
-    Create a new rating in the database.
+    Asynchronously rates a photo by a given user if not already rated by them and if the photo does not belong to them.
 
-    Parameters:
-    - body (RatingCreate): The rating data to be created. It should be an instance of the RatingCreate class.
-    - user_id (int): The unique identifier of the user creating the rating.
-    - db (AsyncSession): The database session object. It is optional and defaults to the result of calling the `get_db` function.
+    This function performs several checks before adding a new rating:
+    - It ensures the photo exists.
+    - It prevents users from rating their own photos.
+    - It prevents users from rating the same photo more than once.
+
+    Args:
+        photo_id (int): The ID of the photo to be rated.
+        rate (int): The rating score to be assigned to the photo.
+        user_id: The user_id
+        db (AsyncSession): The database session used to execute asynchronous queries.
 
     Returns:
-    - Rating: The newly created rating object.
+        Rating: An instance of the Rating model with the new rating details if successful.
+
+    Raises:
+        HTTPException: An error with status code 404 if no photo is found,
+                       with status code 423 if the user tries to rate their own photo or rate the same photo twice.
+
+    Example:
+        >>> user = User(id=1, name="John Doe")
+        >>> db_session = AsyncSession()
+        >>> await rate_photo(photo_id=123, rate=5, user=user, db=db_session)
+        <Rating>
     """
-    rating_db = Rating(**body.dict(), id=user_id)
-    db.add(rating_db)
+    result = await db.execute(select(Photo).filter(Photo.id == photo_id))
+    photo = result.scalars().first()
+    if photo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found.")
+    is_self_photo = photo.user_id == user_id
+
+    result = await db.execute(select(Rating).filter(Rating.photo_id == photo_id, Rating.user_id == user_id))
+    already_rated = result.scalars().first()
+
+    if is_self_photo:
+        raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="It's not possible to rate own photo.")
+    if already_rated:
+        raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="It's not possible to rate twice.")
+
+    new_rating = Rating(photo_id=photo_id, rate=rate, user_id=user_id)
+    db.add(new_rating)
     await db.commit()
-    await db.refresh(rating_db)
-    return rating_db
+    await db.refresh(new_rating)
+    return new_rating
+
 
 
 async def update_rating(db: AsyncSession, rating_id: int, body: RatingCreate) -> Rating:
@@ -72,22 +107,27 @@ async def update_rating(db: AsyncSession, rating_id: int, body: RatingCreate) ->
     return rating_db
 
 
-async def delete_rating(db: AsyncSession, rating_id: int) -> Rating:
+async def delete_rating(rate_id: int, db: AsyncSession, user: User) -> None:
     """
-    Delete a rating from the database by its ID.
+    The delete_rating function deletes a rating from the database.
 
-    Parameters:
-    - rating_id (int): The unique identifier of the rating to delete.
-    - db (AsyncSession): The database session object. It is optional and defaults to the result of calling the `get_db` function.
+    Args:
+        rate_id (int): The id of the rating to be deleted.
+        db (Session): A connection to the database.
+        user (User): The User object that removes the rate.
 
     Returns:
-    - Rating: The deleted rating object if found and successfully deleted, otherwise None.
+        None
     """
-    result = await db.execute(select(Rating).filter(Rating.id == rating_id))
-    rating_db = result.scalars().first()
+    result = await db.execute(select(Rating).filter(Rating.id == rate_id))
+    rate = result.scalars().first()
 
-    if rating_db:
-        await db.execute(delete(Rating).where(Rating.id == rating_id))
-        await db.commit()
+    if rate:
+        await db.delete(rate)  # Perform deletion
+        await db.commit()  # Commit the transaction
 
-    return rating_db
+    return None
+
+
+
+

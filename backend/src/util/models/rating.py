@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer,ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base
+from backend.src.util.db import Base
 
 class Rating(Base):
     """
