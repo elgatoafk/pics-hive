@@ -37,6 +37,5 @@ class User(AsyncAttrs, Base):
     is_active = Column(Boolean, default=True)
 
     tokens = relationship("Token", backref="user", cascade="all, delete-orphan")
-    photos = relationship("Photo", back_populates="owner")
-    comments = relationship("Comment", back_populates="user")
+   
 

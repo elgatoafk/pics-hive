@@ -134,7 +134,7 @@ async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     photo = await get_photo(db, photo_id)
     if photo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
 
     qr_code = await PhotoService.generate_qr_code(photo.url)
 

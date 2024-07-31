@@ -22,10 +22,10 @@ class Settings(BaseSettings):
     DATABASE_DOMAIN: str = os.getenv("DATABASE_DOMAIN")
     DATABASE_DB_NAME: str = os.getenv("DATABASE_DB_NAME")
 
-    # CLOUDINARY_CLOUD_NAME: str = os.getenv("CLOUDINARY_CLOUD_NAME")
-    # CLOUDINARY_API_KEY: str = os.getenv("CLOUDINARY_API_KEY")
-    # CLOUDINARY_API_SECRET: str = os.getenv("CLOUDINARY_API_SECRET")
-    # CLOUDINARY_API_URL: str = os.getenv("CLOUDINARY_API_URL")
+    CLOUDINARY_CLOUD_NAME: str = os.getenv("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY: str = os.getenv("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET: str = os.getenv("CLOUDINARY_API_SECRET")
+    CLOUDINARY_API_URL: str = os.getenv("CLOUDINARY_API_URL")
 
     model_config = SettingsConfigDict(env_file=os.path.join(os.path.dirname(__file__), '.env'))
 
