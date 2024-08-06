@@ -4,11 +4,12 @@ from sqlalchemy.orm import Session
 from typing import List
 from backend.src.util.db import get_db
 from backend.src.config.security import get_current_user
+from backend.src.util.models.user import UserRole
 from backend.src.util.schemas.comment import Comment, CommentCreate, CommentUpdate
 from backend.src.util.crud.comment import delete_comment, create_comment, update_comment, get_comments
 from backend.src.util.schemas.user import User
 
-from backend.src.config.dependencies import role_required
+from backend.src.config.dependency import role_required
 
 router = APIRouter()
 
@@ -64,8 +65,7 @@ async def update_photo_comment(comment_id: int, comment: CommentUpdate, db: Sess
         raise HTTPException(status_code=404, detail="Comment not found")
     return await update_comment(db=db, comment_id=comment_id, comment=comment)
 
-@router.delete("/comments/{comment_id}/", response_model=Comment)
-@role_required("admin", "moderator")
+@router.delete("/comments/{comment_id}/", response_model=Comment, dependencies=[Depends(role_required([UserRole.ADMIN, UserRole.MODERATOR]))])
 async def delete_photo_comment(comment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """
     Delete a specific comment.

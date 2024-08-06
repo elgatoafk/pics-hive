@@ -17,7 +17,6 @@ from backend.src.config.config import settings
 from backend.src.util.models import token as crud_token
 from backend.src.util.schemas.user import TokenData
 from backend.src.util.db import get_db
-from backend.src.util.logging_config import logger
 
 
 SECRET_KEY = settings.SECRET_KEY
@@ -26,7 +25,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 async def create_access_token(data: dict, user_id: int, db: SessionLocal, expires_delta: Optional[timedelta] = None):
-    logger.debug('create_access_token test')
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta

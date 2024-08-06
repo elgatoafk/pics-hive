@@ -5,7 +5,6 @@ from backend.src.util.crud.photo import get_photo
 from backend.src.util.db import get_db
 from backend.src.services.photos import PhotoService
 from backend.src.config.security import get_current_user, get_current_active_user
-from backend.src.util.logging_config import logger
 from backend.src.util.models import User
 from backend.src.util.schemas.photo import PhotoResponse
 
@@ -52,7 +51,6 @@ async def resize(
             photo_id=photo_id, width=width, height=height, db=db
         )
     except Exception as e:
-        logger.exception("Failed to resize photo")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
