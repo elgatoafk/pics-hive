@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/phv1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phv1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/transformations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/services/photos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/services/photos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/rating.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +28,9 @@
   &quot;keyToString&quot;: {
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;refactor/auth&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Я/Desktop/photoshare-ref&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -95,6 +87,8 @@
       <updated>1722431917498</updated>
       <workItem from="1722431919182" duration="1926000" />
       <workItem from="1722433988412" duration="2253000" />
+      <workItem from="1722959290620" duration="21000" />
+      <workItem from="1722959400321" duration="22000" />
     </task>
     <servers />
   </component>
