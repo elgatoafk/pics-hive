@@ -1,47 +1,66 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from backend.src.util.db import get_db
-
-
+from fastapi.responses import Response
 from datetime import timedelta
-
-from ..util import db
-from ..util.schemas import user as user_schemas
-from ..util.crud import user as user_crud, token as crud_token
-from ..config import security, jwt
-
+from backend.src.config.logging_config import log_function
+from backend.src.util.models.user import UserRole, User
+from backend.src.util.schemas import user as user_schemas
+from backend.src.util.crud import user as user_crud, token as crud_token
+from backend.src.config import security, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from backend.src.util.logging_config import logger
 
 router = APIRouter()
 
-@router.post("/signup", response_model=user_schemas.User)
+
+@router.post("/signup", status_code=status.HTTP_201_CREATED)
+@log_function
 async def signup(user: user_schemas.UserCreate, db: AsyncSession = Depends(get_db)):
-    logger.debug('test signup')
+    """
+    Handle user signup.
+
+    This endpoint registers a new user in the database. It first checks if the provided
+    email is already registered. If so, it raises an HTTP 409 Conflict error. If the email
+    is not registered, it creates a new user and returns an HTTP 201 Created status code.
+
+    Args:
+        user (user_schemas.UserCreate): The user creation schema containing the user's email
+                                        and password.
+        db (AsyncSession): The asynchronous database session, obtained via dependency injection.
+
+    Returns:
+        Response: An HTTP 201 status code on successful user creation.
+
+    Raises:
+        HTTPException: If the email is already registered (HTTP 409).
+    """
     db_user = await user_crud.get_user_by_email(db, email=user.email)
-
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-
-    logger.debug('before create_user')
-    result = await user_crud.create_user(db, user)
-    return result
+        raise HTTPException(status_code=409, detail="Email already registered")
+    await user_crud.create_user(db, user)
+    return Response(content="User created", status_code=status.HTTP_201_CREATED, media_type="text/plain")
 
 
+@router.post("/login", response_model=user_schemas.Token)
+@log_function
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    """
+    Logs in a user.
 
-@router.get("/me", response_model=user_schemas.User)
-async def read_users_me(current_user: user_schemas.User = Depends(security.get_current_user)):
-    logger.debug('me - read_users_me')
-    return current_user
+    This endpoint authenticates a user using the provided username and password. If the authentication
+    is successful, it generates and returns a JWT access token that can be used for authenticated requests.
+    If authentication fails, it raises an HTTP 401 Unauthorized error.
 
+    Args:
+        form_data (OAuth2PasswordRequestForm): The form data containing the username and password.
+        db (AsyncSession): The asynchronous database session, obtained via dependency injection.
 
-@router.post("/token", response_model=user_schemas.Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    Returns:
+        dict: A dictionary containing the access token and its type.
 
-    
-    logger.debug('token - authenticate_user')    
-
+    Raises:
+        HTTPException: If the username or password is incorrect (HTTP 401).
+    """
     user = await security.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -49,20 +68,34 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="Your account was disabled by admin.")
     access_token_expires = timedelta(minutes=jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
-
-    logger.debug('token - create_access_token')
 
     access_token = await jwt.create_access_token(
         data={"sub": user.email}, user_id=user.id, db=db, expires_delta=access_token_expires
     )
 
+    await user_crud.update_user_last_login(db, user.id)
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/logout")
-async def logout(token: str = Depends(OAuth2PasswordBearer(tokenUrl="token")), db: AsyncSession = Depends(get_db)):
+@router.post("/logout", status_code=status.HTTP_200_OK)
+@log_function
+async def logout(token: str = Depends(OAuth2PasswordBearer(tokenUrl="login")), db: AsyncSession = Depends(get_db)):
+    """
+    Logs out the user.
+
+    This endpoint logs out a user by invalidating their access token. The token is added to a blacklist
+    to prevent further use. Upon successful logout, it returns an HTTP 200 OK status.
+
+    Args:
+        token (str): The access token to be invalidated, obtained via dependency injection.
+        db (AsyncSession): The asynchronous database session, obtained via dependency injection.
+
+    Returns:
+        Response: An HTTP 200 OK status code on successful logout.
+    """
     await crud_token.add_token_to_blacklist(db, token)
-
-    return {"msg": "Successfully logged out"}
-
+    return Response(content="Logout successful", status_code=status.HTTP_200_OK, media_type="text/plain")
