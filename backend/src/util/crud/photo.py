@@ -1,5 +1,8 @@
 from sqlalchemy.orm import joinedload
 from fastapi import status
+
+from backend.src.config.logging_config import log_function
+from backend.src.util.crud.user import get_user
 from backend.src.util.models.photo import Photo
 from backend.src.util.schemas.photo import PhotoUpdate
 from backend.src.util.models.tag import Tag
@@ -29,6 +32,7 @@ class PhotoService:
     """
 
     @staticmethod
+    @log_function
     async def upload_photo(file):
         """Uploads an image to the cloud storage.
 
@@ -42,6 +46,7 @@ class PhotoService:
         return src_url
 
     @staticmethod
+    @log_function
     async def resize_photo(
             photo_id: int, width: int, height: int, db: AsyncSession
     ):
@@ -71,6 +76,7 @@ class PhotoService:
         return url_to_return
 
     @staticmethod
+    @log_function
     async def add_filter(photo_id: int, filter: str, db: AsyncSession, current_user: User):
         """Apply a filter to an image and return the transformed URL.
 
@@ -121,6 +127,7 @@ class PhotoService:
         return url_to_return
 
     @staticmethod
+    @log_function
     async def generate_qr_code(photo_url: str):
         """Generates a QR code image from the given image URL.
 
@@ -139,7 +146,7 @@ class PhotoService:
         qr_bytes = buffered.getvalue()
         return qr_bytes
 
-
+@log_function
 async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSession, tag_names: list) -> Photo:
     """
         Creates a Photo record in the database and uploads the image to Cloudinary.
@@ -182,7 +189,7 @@ async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSess
     await db.refresh(new_photo)
     return new_photo
 
-
+@log_function
 async def get_photo(db: AsyncSession, photo_id: int):
     """
     Asynchronously retrieves a photo from the database by its ID.
@@ -212,7 +219,7 @@ async def get_photo(db: AsyncSession, photo_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+@log_function
 async def update_photo_description(photo_id: int, new_description: str, db: AsyncSession) -> Photo:
     """
     Updates the description of a photo in the database.
@@ -225,18 +232,15 @@ async def update_photo_description(photo_id: int, new_description: str, db: Asyn
     Returns:
         Photo: The updated Photo object.
     """
-    result = await db.execute(select(Photo).where(Photo.id == photo_id))
-    photo = result.scalars().first()
 
-    if not photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+    photo = await get_photo(db, photo_id)
     photo.description = new_description
     db.add(photo)
     await db.commit()
     await db.refresh(photo)
     return photo
 
-
+@log_function
 async def delete_photo(db: AsyncSession, photo_id: int):
     """
     Deletes a photo from the database and decrements the owner's photo counter.
@@ -248,16 +252,13 @@ async def delete_photo(db: AsyncSession, photo_id: int):
     Raises:
     HTTPException: If the photo is not found.
     """
-    result = await db.execute(select(Photo).where(Photo.id == photo_id))
-    photo = result.scalars().first()
-    if not photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+    photo = await get_photo(db, photo_id)
 
-    user_result = await db.execute(select(User).where(User.id == photo.user_id))
-    user = user_result.scalars().first()
+    user = await get_user(db, photo.user_id)
     if user:
         user.photos_uploaded -= 1
         db.add(user)
 
     await db.delete(photo)
     await db.commit()
+

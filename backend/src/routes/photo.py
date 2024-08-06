@@ -3,6 +3,7 @@ from pydantic import conlist
 import io
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.config.dependency import owner_or_admin_dependency, PhotoDependency
+from backend.src.config.logging_config import log_function
 from backend.src.config.security import get_current_user
 from backend.src.util.schemas.photo import PhotoResponse
 from backend.src.util.crud.photo import get_photo, delete_photo, create_photo_in_db, PhotoService, \
@@ -16,6 +17,7 @@ router = APIRouter()
 
 
 @router.post("/photos/", response_model=dict, status_code=status.HTTP_201_CREATED)
+@log_function
 async def create_photo(description: str = Form(...),
                        tags: conlist(str, max_length=5) = Form(...),
                        file: UploadFile = File(...),
@@ -49,6 +51,7 @@ async def create_photo(description: str = Form(...),
 
 
 @router.get("/photos/{photo_id}", response_model=PhotoResponse)
+@log_function
 async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieves a photo from the database based on the provided photo ID.
@@ -64,6 +67,7 @@ async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/photos/{photo_id}/description", response_model=dict, status_code=status.HTTP_200_OK)
+@log_function
 async def update_description(
     photo_id: int,
     new_description: str,
@@ -98,6 +102,7 @@ async def update_description(
     )
 
 @router.delete("/photos/{photo_id}", response_model=dict, status_code=status.HTTP_200_OK)
+@log_function
 async def delete_photo_route(
     photo_id: int,
     db: AsyncSession = Depends(get_db),
@@ -121,6 +126,7 @@ async def delete_photo_route(
 
 
 @router.post("/generate_qrcode/{photo_id}")
+@log_function
 async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
     Generates a QR code for a photo based on its ID.
