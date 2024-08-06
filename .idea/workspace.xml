@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="" />
+    <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/dependency.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/dependency.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/transformations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/services/photos.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,9 +36,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python tests.pytest for test.test_upload_photo.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;refactor/auth&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;refactor/photos&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Я/Desktop/photoshare-ref&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -40,7 +50,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="phv1" />
       <option name="ENV_FILES" value="" />
@@ -64,9 +74,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test.test_upload_photo" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/src/services" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test.test_upload_photo&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python tests.pytest for test.test_upload_photo" />
       </list>
     </recent_temporary>
   </component>
@@ -90,7 +119,8 @@
       <workItem from="1722433988412" duration="2253000" />
       <workItem from="1722959290620" duration="21000" />
       <workItem from="1722959400321" duration="22000" />
-      <workItem from="1722959467905" duration="1378000" />
+      <workItem from="1722959467905" duration="8334000" />
+      <workItem from="1722967929288" duration="7203000" />
     </task>
     <servers />
   </component>
@@ -98,6 +128,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/phv1$main.coverage" NAME="main Coverage Results" MODIFIED="1722960758582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/phv1$main.coverage" NAME="main Coverage Results" MODIFIED="1722975050654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/phv1$pytest_for_test_test_upload_photo.coverage" NAME="pytest for test.test_upload_photo Coverage Results" MODIFIED="1722963526081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/services" />
   </component>
 </project>

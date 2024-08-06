@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy import text
 
-from backend.src.util.crud.photo import get_photo
+from backend.src.util.crud.photo import get_photo, PhotoService
 from backend.src.util.db import get_db
-from backend.src.services.photos import PhotoService
 from backend.src.config.security import get_current_user, get_current_active_user
 from backend.src.util.models import User
 from backend.src.util.schemas.photo import PhotoResponse
@@ -99,5 +98,4 @@ async def add_filter(
         }
         return PhotoResponse(**photo_with_filter)
     except Exception as e:
-        logger.exception("Failed to add filter")
         raise HTTPException(status_code=500, detail="Internal Server Error")

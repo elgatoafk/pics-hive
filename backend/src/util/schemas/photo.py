@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, conlist
 from typing import List, Optional
 
 class PhotoBase(BaseModel):
     description: str
     url: str
-    tags: Optional[List[str]] = []
+    tags: conlist(str, max_length=5)
 
 class PhotoCreate(PhotoBase):
     pass
