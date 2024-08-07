@@ -88,7 +88,7 @@ async def rate_photo(photo_id: int, rating: int, db: AsyncSession = Depends(get_
 
 
 @router.get("/ratings/", response_model=RatingResponse)
-async def get_rating_route(rating_id: int, db: Session = Depends(get_db)):
+async def get_rating_route(rating_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieves a rating by its ID.
 

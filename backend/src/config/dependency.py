@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from urllib.parse import urlparse
+from abc import abstractmethod, ABC
+
 from fastapi import HTTPException, status, Depends, Path
 from typing import List, Type, Callable
 

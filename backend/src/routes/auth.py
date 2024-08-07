@@ -7,11 +7,15 @@ from backend.src.util.db import get_db
 from fastapi.responses import Response
 from datetime import timedelta
 from backend.src.config.logging_config import log_function
+from backend.src.util.models import user
 from backend.src.util.models.user import UserRole, User
 from backend.src.util.schemas import user as user_schemas
 from backend.src.util.crud import user as user_crud, token as crud_token
 from backend.src.config import security, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
+from backend.src.util.schemas.user import UserCreate
 
 router = APIRouter()
 

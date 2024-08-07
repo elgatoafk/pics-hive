@@ -17,7 +17,7 @@ from backend.src.util.crud.tag import parse_tags
 from backend.src.util.crud.user import get_user
 from backend.src.util.models.photo import Photo
 from backend.src.util.models.user import User
-from backend.src.util.schemas.photo import PhotoResponse
+from backend.src.util.schemas.photo import PhotoResponse, PhotoUpdate
 
 cloudinary.config(
     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
@@ -206,6 +206,7 @@ async def get_photo(db: AsyncSession, photo_id: int):
 
 
 
+
 @log_function
 async def update_photo_description(photo_id: int, new_description: str, db: AsyncSession) -> Photo:
     """
@@ -225,6 +226,7 @@ async def update_photo_description(photo_id: int, new_description: str, db: Asyn
     await db.commit()
     await db.refresh(photo)
     return photo
+
 
 
 @log_function

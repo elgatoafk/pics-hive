@@ -21,6 +21,7 @@ class Photo(Base):
     id (int): The unique identifier of the photo.
     description (str): A brief description of the photo.
     url (str): The URL of the photo.
+    public_id(str): The unique identifier of the photo.
     user_id (int): The foreign key to the user who owns the photo.
     owner (User): The user who owns the photo.
     tags (List[Tag]): The list of tags associated with the photo.
@@ -31,7 +32,7 @@ class Photo(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
-    description = Column(String)
+    description = Column(String, nullable=True)
     url = Column(String)
     public_id = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))

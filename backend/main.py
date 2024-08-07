@@ -1,7 +1,6 @@
 import sys
 import os
 import uvicorn
-import logging
 from fastapi import FastAPI
 from backend.src.routes import auth, user, photo, comment, rating, root
 from backend.src.util.db import Base, async_engine
@@ -28,12 +27,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-
-# Database initialization
 
 async def init_db():
     async with async_engine.begin() as conn:
