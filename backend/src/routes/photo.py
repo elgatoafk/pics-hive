@@ -85,18 +85,20 @@ async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     Returns:
     PhotoResponse: The retrieved photo data. If the photo is not found, returns None.
     """
-    photo = await get_photo(db, photo_id)
+    result = await db.execute(select(Photo).options(joinedload(Photo.tags)).filter(Photo.id == photo_id))
+    photo = result.scalars().first()
     if not photo:
-        raise HTTPException(status_code=404, detail="Photo not found")
-    tags = [tag.name for tag in photo.tags]
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
-    return PhotoResponse(
+    tags = [TagResponse(id=tag.id, name=tag.name) for tag in photo.tags]
+    photo_with_tags = PhotoResponse(
         id=photo.id,
         description=photo.description,
         url=photo.url,
         user_id=photo.user_id,
         tags=tags
     )
+    return photo_with_tags
 
 
 @router.put("/photos/{photo_id}/description", response_model=PhotoResponse, status_code=status.HTTP_200_OK)
