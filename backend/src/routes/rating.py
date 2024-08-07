@@ -2,6 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+
+from backend.src.config.dependency import role_required
+from backend.src.util.crud.photo import get_photo
+from backend.src.util.models.user import UserRole
 from backend.src.util.schemas.rating import RatingCreate, RatingResponse
 from backend.src.util.crud.rating import create_rating, get_rating, update_rating, delete_rating
 from backend.src.util.db import get_db
@@ -14,47 +18,73 @@ from backend.src.util.models import User
 router = APIRouter()
 
 
-@router.post("/ratings/", response_model=RatingResponse)
-async def create_rating_route(photo_id: int, rating: int, user_id: int, db: AsyncSession = Depends(get_db)):
+@router.get("/photos/{photo_id}/rating", response_model=float)
+async def get_photo_rating(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
-    Creates a new rating for a specified photo by a given user. The function checks if the user
-    is rating their own photo or if they have already rated this photo before proceeding to create a new rating.
+        Retrieve the average rating for a specific photo.
 
-    Args:
-        photo_id (int): The ID of the photo to be rated.
-        rating (int): The score of the rating.
-        user_id (int): The ID of the user who is creating the rating.
-        db (AsyncSession, optional): The database session used for executing queries asynchronously.
+        This endpoint retrieves the average rating for a photo based on all ratings submitted by users.
+
+        Parameters:
+        photo_id (int): The unique identifier of the photo.
+        db (AsyncSession, optional): The database session. Defaults to Depends(get_db).
+
+        Returns:
+        float: The average rating of the photo. If no ratings are found, returns 0.
+        """
+    result = await db.execute(select(func.avg(Rating.rating)).where(Rating.photo_id == photo_id))
+    average_rating = result.scalar()
+    if average_rating is None:
+        return 0
+    return average_rating
+
+
+@router.post("/photos/{photo_id}/rate", status_code=status.HTTP_201_CREATED)
+async def rate_photo(photo_id: int, rating: int, db: AsyncSession = Depends(get_db),
+                     current_user: User = Depends(get_current_user)):
+    """
+    Submit a rating for a specific photo.
+
+    This endpoint allows authenticated users to submit a rating for a photo. If the user has already rated the photo,
+    their previous rating will be updated.
+
+    Parameters:
+    photo_id (int): The unique identifier of the photo to be rated.
+    rating (int): The rating value to be submitted (must be between 1 and 5).
+    db (AsyncSession, optional): The database session. Defaults to Depends(get_db).
+    current_user (User, optional): The current authenticated user. Defaults to Depends(get_current_user).
 
     Returns:
-        RatingResponse: A Pydantic schema representing the created rating.
+    dict: A message indicating the success of the operation.
 
     Raises:
-        HTTPException: With status code 404 if the photo is not found.
-                       With status code 423 if the user tries to rate their own photo or rate the same photo twice.
+    HTTPException: If the rating value is not between 1 and 5, or if the user tries to rate their own photo,
+    or if the user tries to change an existing rating.
     """
-    # Fetch the photo to check ownership and existence
-    photo = await db.execute(select(Photo).where(Photo.id == photo_id))
-    photo = photo.scalars().first()
+    if rating < 1 or rating > 5:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Rating must be between 1 and 5")
+
+
+    photo = await get_photo(db, photo_id)
     if not photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
 
-    if photo.user_id == user_id:
-        raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="Cannot rate your own photo.")
+    if photo.user_id == current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You cannot rate your own photo")
 
-    # Check if the user has already rated this photo
-    existing_rating = await db.execute(select(Rating).where(Rating.photo_id == photo_id, Rating.user_id == user_id))
+
+    existing_rating = await db.execute(
+        select(Rating).where(Rating.photo_id == photo_id, Rating.user_id == current_user.id))
     existing_rating = existing_rating.scalars().first()
-    if existing_rating:
-        raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="You have already rated this photo.")
 
-    # Create a new rating
-    new_rating = Rating(photo_id=photo_id, user_id=user_id, rating=rating)
+    if existing_rating:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="You cannot change your rating")
+
+    new_rating = Rating(rating=rating, user_id=current_user.id, photo_id=photo_id)
     db.add(new_rating)
     await db.commit()
-    await db.refresh(new_rating)
-
-    return RatingResponse.from_orm(new_rating)
+    return {"message": "Rating submitted successfully"}
 
 
 @router.get("/ratings/", response_model=RatingResponse)
@@ -72,8 +102,8 @@ async def get_rating_route(rating_id: int, db: Session = Depends(get_db)):
     return await get_rating(db, rating_id)
 
 
-@router.delete("/ratings/")
-async def delete_rate(rate_id: int, db: Session = Depends(get_db),
+@router.delete("/ratings/", dependencies=[Depends(role_required([UserRole.ADMIN, UserRole.MODERATOR]))])
+async def delete_rate(rate_id: int, db: AsyncSession = Depends(get_db),
                       current_user: User = Depends(get_current_user)):
     """
     The delete_rate function deletes a rate from the database.

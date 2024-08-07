@@ -13,31 +13,6 @@ from backend.src.config.logging_config import log_function
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-
-@log_function
-async def authenticate_user(db: AsyncSession, email: str, password: str):
-    """
-    Authenticate a user by their email and password.
-
-    This function checks if the provided email exists in the database and verifies the
-    provided password against the stored hashed password. If the authentication is
-    successful, it returns the user object; otherwise, it returns False.
-
-    Args:
-        db (AsyncSession): The asynchronous database session.
-        email (str): The email address of the user.
-        password (str): The plain text password of the user.
-
-    Returns:
-        model_user.User | bool: The authenticated user object if authentication is successful,
-                                otherwise False.
-    """
-    user = await get_user_by_email(db, email)
-    if not user or hash_handler.verify_password(password, user.hashed_password):
-        return False
-    return user
-
-
 @log_function
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
     """
@@ -94,7 +69,7 @@ async def get_current_active_user(current_user: model_user.User = Depends(get_cu
         Raises:
             HTTPException: If the user is inactive.
         """
-    if current_user.disabled:
+    if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
     return current_user

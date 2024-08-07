@@ -33,6 +33,7 @@ class Photo(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String)
     url = Column(String)
+    public_id = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
     owner = relationship("User", backref="photos")
     tags = relationship("Tag", secondary=photo_m2m_tag, back_populates="photos")

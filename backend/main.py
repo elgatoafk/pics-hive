@@ -3,12 +3,12 @@ import os
 import uvicorn
 import logging
 from fastapi import FastAPI
-from backend.src.routes import auth, user, photo, comment, tag, rating, root
+from backend.src.routes import auth, user, photo, comment, rating, root
 from backend.src.util.db import Base, async_engine
 from backend.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.src.routes import transformations
+
 
 # Ensure correct PYTHONPATH
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
@@ -46,9 +46,8 @@ app.include_router(auth.router, prefix="", tags=["auth"])
 app.include_router(user.router, prefix="", tags=["users"])
 app.include_router(photo.router, prefix="", tags=["photos"])
 app.include_router(comment.router, prefix="", tags=["comments"])
-app.include_router(tag.router, prefix="", tags=["tags"])
 app.include_router(rating.router, prefix="", tags=["ratings"])
-app.include_router(transformations.router, prefix="", tags=["transformations"])
+
 
 
 @app.on_event("startup")

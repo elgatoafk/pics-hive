@@ -1,6 +1,8 @@
 from fastapi import HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from backend.src.config.logging_config import log_function
 from backend.src.util.models import Tag
 
 
@@ -46,3 +48,30 @@ async def get_tag_by_name(db: AsyncSession, tag_name: str) -> Tag:
             detail="No tag found with this name"
         )
     return tag
+
+
+@log_function
+async def parse_tags(db: AsyncSession, tag_names: list, max_number: int) -> list:
+    tags = [tag.strip() for tag in tag_names[0].split(',')]
+    if len(tags) > max_number:
+        tags = tags[:max_number]
+    tag_instances = []
+    for tag_name in tags:
+        tag_instance = await db.execute(select(Tag).where(Tag.name == tag_name))
+        existing_tag = tag_instance.scalars().first()
+        if existing_tag:
+            tag_instances.append(existing_tag)
+        else:
+            new_tag = Tag(name=tag_name)
+            db.add(new_tag)
+            try:
+                await db.commit()
+                await db.refresh(new_tag)
+                tag_instances.append(new_tag)
+            except IntegrityError:
+                await db.rollback()
+                tag_instance = await db.execute(select(Tag).where(Tag.name == tag_name))
+                existing_tag = tag_instance.scalars().first()
+                if existing_tag:
+                    tag_instances.append(existing_tag)
+    return tag_instances

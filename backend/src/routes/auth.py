@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from sqlalchemy import select
+
+from backend.src.config.hash import hash_handler
 from backend.src.util.db import get_db
 from fastapi.responses import Response
 from datetime import timedelta
@@ -61,23 +64,23 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     Raises:
         HTTPException: If the username or password is incorrect (HTTP 401).
     """
-    user = await security.authenticate_user(db, form_data.username, form_data.password)
-    if not user:
+    result = await db.execute(select(User).where(User.email == form_data.username))
+    db_user = result.scalars().first()
+
+    if not db_user or not hash_handler.verify_password(form_data.password, db_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if not user.is_active:
+    if not db_user.is_active:
         raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="Your account was disabled by admin.")
     access_token_expires = timedelta(minutes=jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
 
     access_token = await jwt.create_access_token(
-        data={"sub": user.email}, user_id=user.id, db=db, expires_delta=access_token_expires
+        data={"sub": db_user.email}, user_id=db_user.id, db=db, expires_delta=access_token_expires
     )
-
-    await user_crud.update_user_last_login(db, user.id)
-
+    await user_crud.update_user_last_login(db, db_user.id)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
