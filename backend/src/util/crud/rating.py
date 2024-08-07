@@ -8,7 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy import delete
 
 from backend.src.util.models import User, Photo
-
+#work in progress
 
 async def get_rating(db: AsyncSession, rating_id: int) -> Rating:
     """

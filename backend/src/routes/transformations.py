@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy import text
 
-from backend.src.util.crud.photo import get_photo, PhotoService
+from backend.src.util.crud.photo import get_photo, PhotoService, update_photo_url
 from backend.src.util.db import get_db
 from backend.src.config.security import get_current_user, get_current_active_user
 from backend.src.util.models import User
@@ -17,6 +17,7 @@ async def resize(
         width: int,
         height: int,
         db=Depends(get_db),
+current_user: User = Depends(get_current_user)
 
 ):
     """
@@ -41,14 +42,12 @@ async def resize(
 
     """
 
-    photo = await db.execute(text("SELECT * FROM photos WHERE id = :id"), {"id": photo_id})
-    photo = photo.fetchone()
+    photo = await get_photo(db, photo_id)
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     try:
         return await PhotoService.resize_photo(
-            photo_id=photo_id, width=width, height=height, db=db
-        )
+            photo_id=photo_id, width=width, height=height, db=db)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
@@ -83,12 +82,35 @@ async def add_filter(
         HTTPException: If the photo cannot be found, or the user does not have permission to modify the photo,
                         or if the specified filter is not recognized or applicable.
 
+    Available filters:
+            "al_dente",
+            "athena",
+            "audrey",
+            "aurora",
+            "daguerre",
+            "eucalyptus",
+            "fes",
+            "frost",
+            "hairspray",
+            "hokusai",
+            "incognito",
+            "primavera",
+            "quartz",
+            "red_rock",
+            "refresh",
+            "sizzle",
+            "sonnet",
+            "ukulele",
+            "zorro",
+
     """
     photo = await get_photo(db, photo_id)
-    url = await PhotoService.add_filter(
-        photo_id=photo_id, filter=photo_filter, db=db, current_user=current_user
-    )
+    if not photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+
     try:
+        url = await PhotoService.add_filter(photo.public_id, photo_filter, db)
+        await update_photo_url(db, photo_id, url)
         photo_with_filter = {
             "id": photo.id,
             "description": photo.description,

@@ -1,20 +1,21 @@
+from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
-from fastapi import status
-
-from backend.src.config.logging_config import log_function
-from backend.src.util.crud.user import get_user
-from backend.src.util.models.photo import Photo
-from backend.src.util.schemas.photo import PhotoUpdate
-from backend.src.util.models.tag import Tag
-from sqlalchemy.future import select
 from io import BytesIO
 from uuid import uuid4
 import cloudinary
 import cloudinary.uploader
 import qrcode
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
+from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy.orm import joinedload
 from backend.src.config.config import settings
+from backend.src.config.logging_config import log_function
+from backend.src.config.security import get_current_user
+from backend.src.util.crud.tag import parse_tags
+from backend.src.util.crud.user import get_user
+from backend.src.util.models.photo import Photo
 from backend.src.util.models.user import User
 from backend.src.util.schemas.photo import PhotoResponse
 
@@ -43,18 +44,16 @@ class PhotoService:
         src_url = cloudinary.CloudinaryImage(public_id).build_url(
             version=r.get("version")
         )
-        return src_url
+        return public_id,src_url
 
     @staticmethod
     @log_function
     async def resize_photo(
-            photo_id: int, width: int, height: int, db: AsyncSession
-    ):
+            photo_id: int, width: int, height: int, db: AsyncSession):
         """Resizes an image using Cloudinary API.
 
         """
         photo = await get_photo(db, photo_id)
-
         transformed_url = cloudinary.uploader.explicit(
             photo.public_id,
             type="upload",
@@ -71,13 +70,14 @@ class PhotoService:
         )
         try:
             url_to_return = transformed_url["eager"][0]["secure_url"]
+            await update_photo_url(db, photo_id, url_to_return)
         except KeyError:
             raise HTTPException(status_code=400, detail="Invalid width or height")
         return url_to_return
 
     @staticmethod
     @log_function
-    async def add_filter(photo_id: int, filter: str, db: AsyncSession, current_user: User):
+    async def add_filter(public_id: int, filter: str, db: AsyncSession):
         """Apply a filter to an image and return the transformed URL.
 
         """
@@ -103,14 +103,8 @@ class PhotoService:
             "zorro",
         ]
         effect = f"art:{filter}" if filter in filters else filter
-        photo = await get_photo(db, photo_id)
-        if not photo:
-            raise HTTPException(status_code=404, detail="Photo not found")
-        if photo.user_id != current_user.id:
-            raise HTTPException(status_code=403, detail="Not enough permissions")
-
         transformed_url = cloudinary.uploader.explicit(
-            photo.id,
+            public_id,
             type="upload",
             eager=[
                 {
@@ -122,6 +116,7 @@ class PhotoService:
         )
         try:
             url_to_return = transformed_url["eager"][0]["secure_url"]
+
         except KeyError:
             raise HTTPException(status_code=400, detail="Invalid filter")
         return url_to_return
@@ -146,8 +141,9 @@ class PhotoService:
         qr_bytes = buffered.getvalue()
         return qr_bytes
 
+
 @log_function
-async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSession, tag_names: list) -> Photo:
+async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSession, tag_names: list = []) -> Photo:
     """
         Creates a Photo record in the database and uploads the image to Cloudinary.
 
@@ -161,33 +157,28 @@ async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSess
         Returns:
             Photo: The created Photo object.
         """
-    photo_url = await PhotoService.upload_photo(file)
-    tags = []
-    for name in tag_names:
-        tag = await db.execute(select(Tag).where(Tag.name == name))
-        tag = tag.scalars().first()
-        if not tag:
-            tag = Tag(name=name)
-            db.add(tag)
-            await db.commit()
-            await db.refresh(tag)
-        tags.append(tag)
+    public_id, photo_url = await PhotoService.upload_photo(file)
+    tag_instances = await parse_tags(db, tag_names, settings.MAX_TAGS)
     new_photo = Photo(
         description=description,
         url=photo_url,
+        public_id=public_id,
         user_id=user_id,
-        tags=tags
+        tags=tag_instances
     )
     db.add(new_photo)
-    user = await db.execute(select(User).where(User.id == user_id))
-    user = user.scalars().first()
+
+    user_result = await db.execute(select(User).where(User.id == user_id))
+    user = user_result.scalars().first()
     if user:
         user.photos_uploaded = user.photos_uploaded + 1
         db.add(user)
 
     await db.commit()
     await db.refresh(new_photo)
+
     return new_photo
+
 
 @log_function
 async def get_photo(db: AsyncSession, photo_id: int):
@@ -211,13 +202,11 @@ async def get_photo(db: AsyncSession, photo_id: int):
         db_photo = result.scalars().first()
         if not db_photo:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
-        tags = [tag.name for tag in db_photo.tags]
-        response = PhotoResponse(id=db_photo.id, user_id=db_photo.user_id, url=db_photo.url,
-                                 description=db_photo.description, tags=tags)
-        return response
+        return db_photo
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @log_function
 async def update_photo_description(photo_id: int, new_description: str, db: AsyncSession) -> Photo:
@@ -232,13 +221,13 @@ async def update_photo_description(photo_id: int, new_description: str, db: Asyn
     Returns:
         Photo: The updated Photo object.
     """
-
     photo = await get_photo(db, photo_id)
     photo.description = new_description
     db.add(photo)
     await db.commit()
     await db.refresh(photo)
     return photo
+
 
 @log_function
 async def delete_photo(db: AsyncSession, photo_id: int):
@@ -262,3 +251,21 @@ async def delete_photo(db: AsyncSession, photo_id: int):
     await db.delete(photo)
     await db.commit()
 
+
+async def update_photo_url(db: AsyncSession, photo_id: int, new_url: str, ) -> Photo:
+    """
+    Updates the URL of an existing Photo record in the database.
+
+    Args:
+        photo_id (int): The ID of the photo to update.
+        new_url (str): The new URL of the photo.
+        db (AsyncSession): The database session.
+    Returns:
+        Photo: The updated Photo object.
+    """
+    photo = await get_photo(db, photo_id)
+    photo.url = new_url
+    db.add(photo)
+    await db.commit()
+    await db.refresh(photo)
+    return photo

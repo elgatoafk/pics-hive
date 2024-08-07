@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from urllib.parse import urlparse
 from fastapi import HTTPException, status, Depends, Path
 from typing import List, Type, Callable
 
@@ -140,10 +140,11 @@ def owner_or_admin_dependency(dependency_class: Type[Dependency], resource_id_na
     Returns:
         Callable: A dependency function that performs the ownership or admin check.
     """
+
     async def dependency_check(
-        resource_id: int = Path(..., alias=resource_id_name),
-        current_user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
+            resource_id: int = Path(..., alias=resource_id_name),
+            current_user: User = Depends(get_current_user),
+            db: AsyncSession = Depends(get_db)
     ):
         """
         Checks if the user is the owner of the resource or an admin.
@@ -159,3 +160,6 @@ def owner_or_admin_dependency(dependency_class: Type[Dependency], resource_id_na
         await dependency_class.is_owner_or_admin(resource_id, current_user.id, db)
 
     return dependency_check
+
+
+

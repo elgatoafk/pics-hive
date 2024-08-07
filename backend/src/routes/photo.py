@@ -18,8 +18,8 @@ router = APIRouter()
 
 @router.post("/photos/", response_model=dict, status_code=status.HTTP_201_CREATED)
 @log_function
-async def create_photo(description: str = Form(...),
-                       tags: conlist(str, max_length=5) = Form(...),
+async def create_photo(description: str = Form(None),
+                       tags: conlist(str, max_length=5) = Form(None),
                        file: UploadFile = File(...),
                        db: AsyncSession = Depends(get_db),
                        current_user: User = Depends(get_current_user)):
@@ -63,11 +63,21 @@ async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     Returns:
     PhotoResponse: The retrieved photo data. If the photo is not found, returns None.
     """
-    return await get_photo(db, photo_id)
+    photo = await get_photo(db, photo_id)
+    if not photo:
+        raise HTTPException(status_code=404, detail="Photo not found")
+    tags = [tag.name for tag in photo.tags]
+
+    return PhotoResponse(
+        id=photo.id,
+        description=photo.description,
+        url=photo.url,
+        user_id=photo.user_id,
+        tags=tags
+    )
 
 
-@router.put("/photos/{photo_id}/description", response_model=dict, status_code=status.HTTP_200_OK)
-@log_function
+@router.put("/photos/{photo_id}/description", response_model=PhotoResponse, status_code=status.HTTP_200_OK)
 async def update_description(
     photo_id: int,
     new_description: str,

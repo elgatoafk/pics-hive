@@ -1,6 +1,9 @@
 from pydantic import BaseModel, conlist
 from typing import List, Optional
 
+from backend.src.util.schemas.tag import TagResponse
+
+
 class PhotoBase(BaseModel):
     description: str
     url: str
@@ -17,10 +20,8 @@ class PhotoResponse(BaseModel):
     id: int
     user_id: int
     url: str
-    description: str
-    tags: List[str] = []
+    description: Optional[str] = "No description provided"
+    tags: Optional[List[TagResponse]] = "No tags provided"
 
     class Config:
-        orm_mode = True
         from_attributes = True
-

@@ -18,7 +18,7 @@ class RatingCreate(RatingBase):
     """
     photo_id: int
     class Config:
-        orm_mode = True
+
         from_attributes = True
 
 class RatingResponse(RatingBase):
@@ -38,5 +38,5 @@ class RatingResponse(RatingBase):
     photo_id: int
 
     class Config:
-        orm_mode = True
+
         from_attributes = True

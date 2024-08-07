@@ -6,12 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/7b10b35ceafc_pre_prod.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/d52b8f2ff0e9_tables_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/versions/ecc41b9f9b74_add_public_id_column.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/f8c56202ac3a_tables_v2.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/config/dependency.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/config/dependency.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/routes/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/util/crud/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/photo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/crud/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/crud/tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/models/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/models/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/rating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/util/schemas/tag.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,22 +43,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.pytest for test.test_upload_photo.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "refactor/comments",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Я/Desktop/photoshare-ref",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python tests.pytest for test.test_upload_photo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;refactor/transformations&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Я/Desktop/photoshare-ref&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="phv1" />
@@ -65,6 +78,52 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/src/util/schemas" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/src/util/schemas/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phv1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend/src/util/crud" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backend/src/util/crud/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -94,6 +153,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.test (1)" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python tests.pytest for test.test_upload_photo" />
       </list>
     </recent_temporary>
@@ -120,15 +181,23 @@
       <workItem from="1722959400321" duration="22000" />
       <workItem from="1722959467905" duration="8334000" />
       <workItem from="1722967929288" duration="7203000" />
-      <workItem from="1722975805940" duration="7454000" />
+      <workItem from="1722975805940" duration="11340000" />
+      <workItem from="1722987495994" duration="10144000" />
+      <workItem from="1722998553502" duration="781000" />
+      <workItem from="1722999512586" duration="2869000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/phv1$main.coverage" NAME="main Coverage Results" MODIFIED="1722983303875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/phv1$test__1_.coverage" NAME="test (1) Coverage Results" MODIFIED="1722999088033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/util/schemas" />
+    <SUITE FILE_PATH="coverage/phv1$main.coverage" NAME="main Coverage Results" MODIFIED="1723002388222" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/phv1$test.coverage" NAME="test Coverage Results" MODIFIED="1722991475843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/util/crud" />
     <SUITE FILE_PATH="coverage/phv1$pytest_for_test_test_upload_photo.coverage" NAME="pytest for test.test_upload_photo Coverage Results" MODIFIED="1722963526081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/services" />
   </component>
 </project>

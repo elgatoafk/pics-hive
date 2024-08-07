@@ -32,7 +32,7 @@ async def add_tags_to_photo(
     Returns:
     schemas.PhotoTaggingResponse: A response containing the ID of the photo and the list of tags added.
     """
-    # Fetch the photo from the database
+
     result = await db.execute(select(models.Photo).filter_by(id=photo_id))
     photo = result.scalars().first()
 
@@ -41,12 +41,12 @@ async def add_tags_to_photo(
 
     tags = []
     for tag_data in tagging_request.tags:
-        # Check if the tag already exists
+
         result = await db.execute(select(models.Tag).filter_by(name=tag_data.name))
         tag = result.scalars().first()
 
         if not tag:
-            # Create the new tag
+            
             tag = models.Tag(tag_name=tag_data.name)
             db.add(tag)
             await db.commit()
