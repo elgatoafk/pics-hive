@@ -33,7 +33,6 @@ class User(AsyncAttrs, Base):
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
     hashed_password = Column(String)
-    disabled = Column(Boolean, default=False)
     role = Column(SQLEnum(UserRole), default=UserRole.USER)
     registered_at = Column(DateTime, default=datetime.utcnow)
     last_login = Column(DateTime, default=None, nullable=True)
