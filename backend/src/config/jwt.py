@@ -1,15 +1,8 @@
-from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from backend.src.util.schemas import user
 from backend.src.util.db import AsyncSessionLocal as SessionLocal
-from backend.src.config.config import settings
 from typing import Optional
-from backend.src.util.crud import user as crud_user
 from backend.src.util.models import user as model_user, token as model_token
 from datetime import datetime, timedelta
 from backend.src.config.config import settings

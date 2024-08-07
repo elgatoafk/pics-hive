@@ -33,4 +33,8 @@ class PhotoTaggingResponse(BaseModel):
     tags: List[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class TagResponse(BaseModel):
+    name: str

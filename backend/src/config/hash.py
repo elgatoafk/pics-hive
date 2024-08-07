@@ -37,17 +37,4 @@ class Hash:
         """
         return self.pwd_context.verify(plain_password, hashed_password)
 
-    @log_function
-    def get_password_hash(self, password):
-        """
-            Hash a plain password.
-
-            Args:
-                password (str): The plain text password to hash.
-
-            Returns:
-                str: The hashed password.
-        """
-        return self.pwd_context.hash(password)
-
 hash_handler = Hash()
