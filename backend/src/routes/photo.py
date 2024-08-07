@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.src.config.dependency import owner_or_admin_dependency, PhotoDependency
 from backend.src.config.logging_config import log_function
 from backend.src.config.security import get_current_user
+from backend.src.util.crud.tag import get_tag_by_name
 from backend.src.util.schemas.photo import PhotoResponse
 from backend.src.util.crud.photo import get_photo, delete_photo, create_photo_in_db, PhotoService, \
     update_photo_description
@@ -12,6 +13,8 @@ from backend.src.util.models import User
 from starlette.responses import StreamingResponse
 from backend.src.util.db import get_db
 from fastapi.responses import JSONResponse
+
+from backend.src.util.schemas.tag import TagResponse
 
 router = APIRouter()
 
@@ -162,3 +165,21 @@ async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
     if isinstance(qr_code, int):
         qr_code = str(qr_code).encode('utf-8')
     return StreamingResponse(io.BytesIO(qr_code), media_type="image/png", status_code=status.HTTP_201_CREATED)
+
+@router.get("photo/tags/", response_model=TagResponse)
+async def get_tag_route(tag_name: str, db: AsyncSession = Depends(get_db)):
+    """
+    Retrieve a tag by its name.
+
+    This function retrieves a tag from the database based on the provided tag name.
+    If the tag is found, it is returned. If the tag is not found, a 404 Not Found error is raised.
+
+    Parameters:
+    tag_name (str): The name of the tag to retrieve.
+    db (Session): The database session to use for querying. This parameter is optional and defaults to the session provided by the `get_db` dependency.
+
+    Returns:
+    Tag: The retrieved tag if found. If the tag is not found, a 404 Not Found error is raised.
+    """
+    return await get_tag_by_name(db, tag_name)
+

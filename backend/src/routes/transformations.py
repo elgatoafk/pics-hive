@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
-from sqlalchemy import text
-
 from backend.src.util.crud.photo import get_photo, PhotoService, update_photo_url
 from backend.src.util.db import get_db
 from backend.src.config.security import get_current_user, get_current_active_user

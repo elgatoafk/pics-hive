@@ -40,7 +40,7 @@ app.include_router(user.router, prefix="", tags=["users"])
 app.include_router(photo.router, prefix="", tags=["photos"])
 app.include_router(comment.router, prefix="", tags=["comments"])
 app.include_router(tag.router, prefix="", tags=["tags"])
-# app.include_router(rating.router, prefix="", tags=["ratings"])
+app.include_router(rating.router, prefix="", tags=["ratings"])
 app.include_router(transformations.router, prefix="", tags=["transformations"])
 
 
