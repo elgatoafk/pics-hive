@@ -1,0 +1,49 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Delete Photo - Admin{% endblock %}
+
+{% block admin_content %}
+<h2>Delete Photos</h2>
+
+<div class="row">
+    {% for photo in photos %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <img src="{{ photo.url }}" class="card-img-top" alt="Photo">
+            <div class="card-body">
+                <p class="card-text">{{ photo.description }}</p>
+                <form id="delete-form-{{ photo.id }}" action="/photos/delete/{{ photo.id }}" method="POST">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" id="delete-button-{{ photo.id }}" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    {% for photo in photos %}
+    document.getElementById("delete-button-{{ photo.id }}").addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        if (!confirm('Are you sure you want to delete this photo?')) {
+            return;
+        }
+
+        fetch(`/photos/delete-photo/{{ photo.id }}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+                window.location.reload();
+            })
+
+    });
+    {% endfor %}
+});
+</script>
+{% endblock %}

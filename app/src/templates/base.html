@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PhotoShare{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', path='favicon.png') }}" type="image/png">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand custom-brand" href="/">PhotoShare</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if request.cookies.get('logged_in') %}
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/photo/upload-form">+ Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/profile/my-photos">My Photos</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/discover/people">People</a>
+                    </li>
+                    {% if request.cookies.get('logged_in') %}
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/auth/logout-form">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/auth/login-form/">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/auth/signup-form/">Register</a>
+                    </li>
+                    {% endif %}
+                    {% if request.cookies.get('logged_in') and request.cookies.get('admin_access') %}
+                    <li class="nav-item">
+                        <a class="nav-link custom-button" href="/admin/dashboard">To Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div id="message-container" class="message-container"></div>
+        {% block content %}{% endblock %}
+    </div>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        /**
+         * Displays success and error messages based on URL query parameters.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            const error = urlParams.get('error');
+            const messageContainer = document.getElementById('message-container');
+
+            if (message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';  // Green alert for success
+                alertDiv.role = 'alert';
+                alertDiv.innerText = decodeURIComponent(message);
+                messageContainer.appendChild(alertDiv);
+            }
+
+            if (error) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';  // Red alert for error
+                alertDiv.role = 'alert';
+                alertDiv.innerText = decodeURIComponent(error);
+                messageContainer.appendChild(alertDiv);
+            }
+        });
+    </script>
+<footer class="custom-footer">
+    <p>&copy; <span id="current-year"></span> | Built by
+        <a href="https://github.com/elgatoafk" target="_blank">elgatoafk</a>,
+        <a href="https://github.com/MARVRK" target="_blank">MARVRK</a>
+    </p>
+    <p>If you found some nasty bug, please submit an issue here: <a href="https://github.com/elgatoafk/photoshare/issues" target="_blank">GitHub</a></p>
+</footer>
+<script>
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+
+
+</html>

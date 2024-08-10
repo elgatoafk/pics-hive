@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+}
+
+.navbar-custom {
+    background-color: #003366;
+    border-bottom: 1px solid #336699;
+}
+
+.navbar-custom .navbar-brand {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #FFCC00;
+    font-family: 'Roboto Slab', serif;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    color: #FFCC00;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #336699;
+    margin: 0.5rem;
+    text-align: center;
+    min-width: 100px;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: #FFCC00;
+    background-color: #6699CC;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 0;
+    padding-bottom: 20px;
+    margin-top: 0;  /* Ensure no margin at the top */
+}
+
+.custom-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    font-family: 'Roboto Slab', serif;
+    margin-top: 0; /* Ensures there's no extra space above the heading */
+}
+
+.custom-card {
+    border: 1px solid #f5e5c0;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Slab', serif;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.btn.custom-navbar-button {
+    background-color: #FF6600 !important;
+    border-color: #FF6600 !important;
+    color: #FFCC00 !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn.custom-navbar-button:hover {
+    background-color: #FF0033 !important;
+    border-color: #FF0033 !important;
+    color: #FFCC00 !important;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    padding: 10px;
+}
+
+.card img {
+    max-height: 150px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.custom-button {
+    background-color: #FF6600;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: #FFCC00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 0.5rem;
+}
+
+.custom-button:hover {
+    background-color: #FF0033;
+}
+
+.table-responsive {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.table {
+    margin: 0 auto;  /* Centering the table */
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.table img {
+    max-height: 50px;
+    width: auto;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Footer Styling */
+.custom-footer {
+    background-color: #003366;
+    color: #FFCC00;
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Roboto', sans-serif;
+    border-top: 1px solid #336699;
+    width: 100%;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin-top: auto;
+}
+
+.custom-footer a {
+    color: #FF6600;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.custom-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Ensure no extra spacing */
+h2.text-center {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.table-responsive {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Fine-tune spacing for the content */
+.custom-heading {
+    margin-bottom: 10px;  /* Adjust the margin between the heading and the table */
+}
+
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items at the top */
+    padding-top: 20px; /* Optional: Adjust if needed */
+    padding-bottom: 20px;
+}
+
+.photo-card .btn {
+    background-color: transparent; /* Transparent background */
+    color: #FF6600; /* Orange text */
+    border: 2px solid #FF6600; /* Orange border */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem; /* Rounded corners */
+}
+
+.photo-card .btn:hover {
+    background-color: #FF6600; /* Orange background on hover */
+    color: #FFFFFF; /* White text on hover */
+}
+
+.photo-card .tag-badge {
+    background-color: #336699; /* Background color of the tags */
+    color: #FFFFFF; /* Text color for tags */
+    padding: 0.3em 0.7em;
+    font-size: 0.85em;
+    font-weight: 600;
+    border-radius: 1rem; /* Rounded edges */
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+    display: inline-block;
+}
+
+.card-body .badge {
+    background-color: #336699; /* Background color of the tags */
+    color: #FFFFFF; /* Text color for tags */
+    padding: 0.3em 0.7em;
+    font-size: 0.85em;
+    font-weight: 600;
+    border-radius: 1rem; /* Rounded edges */
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+    display: inline-block;
+}
+
+/* Optional: Add different colors for different tags */
+.card-body .badge-1 { background-color: #003366; }
+.card-body .badge-2 { background-color: #336699; }
+.card-body .badge-3 { background-color: #6699CC; }
+.card-body .badge-4 { background-color: #FFCC00; color: #003366; }
+.card-body .badge-5 { background-color: #FF6600; }
+.card-body .badge-6 { background-color: #FF0033; }
+.card-body .badge-7 { background-color: #000000; }
+
+
+.card-body .btn {
+    background-color: transparent; /* Transparent background */
+    color: #FF6600; /* Orange text */
+    border: 2px solid #FF6600; /* Orange border */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem; /* Rounded corners */
+}
+
+.card-body .btn:hover {
+    background-color: #FF6600; /* Orange background on hover */
+    color: #FFFFFF; /* White text on hover */
+}
+
+
+/* Ban User Button */
+.ban-user-btn {
+    background-color: #FF0033; /* Red */
+    color: #FFFFFF; /* White text */
+    border: 2px solid #FF0033; /* Border matching background */
+}
+
+.ban-user-btn:hover {
+    background-color: #CC0026; /* Darker red on hover */
+    color: #FFFFFF; /* Keep text white */
+}
+
+/* Delete Photo Button */
+.delete-photo-btn {
+    background-color: #FF6600; /* Orange */
+    color: #FFFFFF; /* White text */
+    border: 2px solid #FF6600; /* Border matching background */
+}
+
+.delete-photo-btn:hover {
+    background-color: #CC5200; /* Darker orange on hover */
+    color: #FFFFFF; /* Keep text white */
+}
+
+.list-group-item-action {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem; /* Rounded corners */
+    text-align: center;
+    margin-bottom: 0.5rem; /* Space between buttons */
+}
+
+/* Admin Area Buttons */
+.btn-admin {
+    background-color: #FF6600; /* Orange color */
+    color: #FFCC00; /* Yellow text */
+    border: none;
+    border-radius: 25px;
+    padding: 10px 0px; /* Adjust the padding to ensure the height is not cropped */
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Remove fixed height to allow the button to adjust naturally */
+    width: 50%; /* Adjust the width to be less wide */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0.5rem auto; /* Center the button and add space between buttons */
+    text-align: center; /* Ensure text is centered */
+}
+
+.btn-admin:hover {
+    background-color: #FF0033; /* Darker hover color */
+    color: #FFCC00; /* Ensure text color remains the same */
+}
+
+
+.list-group .list-group-item {
+    background-color: #FF6600 !important;
+    border: none !important;
+    color: #FFCC00 !important;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding: 8px 20px; /* Adjust padding to make the buttons narrower and less tall */
+    border-radius: 20px !important; /* Keep the rounded style consistent */
+    margin-bottom: 10px; /* Space between buttons */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 200px; /* Adjust button width */
+    margin-left: auto;  /* Centering the button */
+    margin-right: auto; /* Centering the button */
+    font-size: 1rem; /* Adjust font size */
+}
+
+.list-group .list-group-item:hover {
+    background-color: #FF0033 !important;
+    color: #FFCC00 !important;
+}
+
+
+.badge-tag {
+    background-color: #FFCC00;
+    color: #003366;
+    padding: 5px 10px;
+    border-radius: 0.25rem;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.photo-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* or object-fit: cover, depending on your preference */
+}
+

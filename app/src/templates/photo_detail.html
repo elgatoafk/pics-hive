@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}{{ photo.description }} - PhotoShare{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column: Photo, Description, Tags -->
+        <div class="col-md-8"> <!-- Balanced column width to give space to the right column -->
+            <div class="card shadow-sm mb-4 photo-card">
+                <div class="card photo-card">
+                <img src="{{ photo.url }}" class="img-fluid" alt="{{ photo.description }}" style="width: 100%; height: auto; max-height: 80vh; object-fit: contain;"> <!-- Adjust image size -->
+                </div>
+            </div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 id="photo-description" class="card-title">{{ photo.description }}</h3>
+                    {% if current_user and current_user == photo.owner.username %}
+                    <button id="edit-description-button" class="btn btn-secondary btn-sm">Edit Description</button>
+                    {% endif %}
+
+                    <div id="edit-description-form" style="display: none;">
+                        <form class="mb-4">
+                            <textarea name="description" class="form-control" rows="3">{{ photo.description }}</textarea>
+                            <button type="submit" class="btn btn-primary mt-2">Save</button>
+                            <button type="button" id="cancel-edit" class="btn btn-secondary mt-2">Cancel</button>
+                        </form>
+                    </div>
+
+                    <p class="card-text mt-3">Uploaded by: <a href="/user/{{ photo.owner.username }}">{{ photo.owner.username }}</a></p>
+                    <p class="card-text">
+                        Tags:
+                        {% if photo.tags %}
+                            {% for tag in photo.tags %}
+                                <span class="tag-badge tag-color-{{ loop.index % 7 + 1 }}">{{ tag.name }}</span>
+                                {% if not loop.last %}
+                                    <span class="tag-divider">|</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No tags
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Ratings, Comments, etc. -->
+        <div class="col-md-4"> <!-- Give this column more space -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Average Rating</h4>
+                    <p class="card-text">{% if photo.average_rating %}{{ photo.average_rating }}{% else %}0{% endif %}/5</p>
+
+                    {% if current_user and current_user != photo.owner.username %}
+                    <h4 class="card-title">Leave a Rating</h4>
+                    <form action="/photos/rate" method="post">
+                    <input type="hidden" name="photo_id" value="{{ photo.id }}">
+                    <select name="rating" class="form-select" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2">Submit Rating</button>
+                    </form>
+
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Comments</h4>
+                    {% if photo.comments %}
+                        {% for comment in photo.comments %}
+                            <div class="comment position-relative mb-3">
+                                <p class="mb-1" style="word-wrap: break-word; overflow-wrap: break-word; padding-right: 50px;">
+                                    <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+                                </p>
+                                {% if current_user and current_user == comment.user.username %}
+                                <button class="btn btn-link btn-sm edit-comment-button position-absolute" style="top: 0; right: 0;" data-comment-id="{{ comment.id }}">edit</button>
+
+                                 <div id="edit-comment-form-{{ comment.id }}" style="display: none;">
+                        <form action="/comments/{{ comment.id }}/" method="POST" class="edit-comment-form" data-comment-id="{{ comment.id }}">
+                            <textarea name="comment_content" class="form-control mt-2" rows="2">{{ comment.content }}</textarea>
+                            <button type="submit" class="btn btn-primary mt-1">Save</button>
+                            <button type="button" class="btn btn-secondary cancel-edit-comment mt-1" data-comment-id="{{ comment.id }}">Cancel</button>
+                        </form>
+                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="card-text">No comments yet.</p>
+                    {% endif %}
+
+                    {% if current_user and current_user != photo.owner.username %}
+                    <h4 class="card-title">Leave a Comment</h4>
+                    <form action="/photos/create_comment/{{ photo.id }}/" method="post">
+                        <input type="hidden" name="next" value="{{ request.url.path }}">
+                        <textarea name="content" class="form-control" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('edit-description-button').addEventListener('click', function() {
+        document.getElementById('photo-description').style.display = 'none';
+        document.getElementById('edit-description-button').style.display = 'none';
+        document.getElementById('edit-description-form').style.display = 'block';
+    });
+
+    document.getElementById('cancel-edit').addEventListener('click', function() {
+        document.getElementById('photo-description').style.display = 'block';
+        document.getElementById('edit-description-button').style.display = 'block';
+        document.getElementById('edit-description-form').style.display = 'none';
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Comment editing functionality
+    document.querySelectorAll('.edit-comment-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-comment-id');
+            document.querySelector(`#edit-comment-form-${commentId}`).style.display = 'block';
+            this.style.display = 'none';
+        });
+    });
+
+    document.querySelectorAll('.cancel-edit-comment').forEach(button => {
+        button.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-comment-id');
+            document.querySelector(`#edit-comment-form-${commentId}`).style.display = 'none';
+            document.querySelector(`.edit-comment-button[data-comment-id="${commentId}"]`).style.display = 'inline-block';
+        });
+    });
+
+    document.querySelectorAll('.edit-comment-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(this); // Ensure `this` is a form element
+            const commentContent = formData.get('comment_content');
+            const commentId = this.getAttribute('data-comment-id');
+
+            fetch(`/comments/${commentId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ comment_content: commentContent }),
+            })
+            .then(response => {
+                window.location.reload();
+            })
+
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+</script>
+
+{% endblock %}

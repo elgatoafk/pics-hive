@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}QR Code - PhotoShare{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            QR Code
+        </div>
+        <div class="card-body text-center">
+
+            <img src="data:image/png;base64,{{ qr_code_data }}" alt="QR Code" class="img-fluid" style="border: 1px solid #ccc; padding: 10px; max-width: 300px; max-height: 300px;">
+            <a href="{{ referer }}" class="btn btn-primary mt-3">Go Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

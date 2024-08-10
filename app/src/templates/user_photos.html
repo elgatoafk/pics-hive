@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}My Photos - PhotoShare{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">My Photos</h2>
+    <div class="row">
+        {% for photo in photos %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <img src="{{ photo.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ photo.description }}</h5>
+                    <p class="card-text">
+                        Tags:
+                        {% for tag in photo.tags %}
+                            <span class="badge badge-tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">Average Rating: {{ photo.average_rating or 0 }}/5</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

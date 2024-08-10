@@ -1,20 +1,24 @@
-fastapi
-uvicorn
-sqlalchemy
-pydantic
+fastapi~=0.111.1
+uvicorn~=0.30.3
+sqlalchemy~=2.0.31
+pydantic~=2.8.2
 python-jose[cryptography]
-passlib[bcrypt]
+passlib[bcrypt]~=1.7.4
 python-multipart
-cloudinary
-qrcode
+cloudinary~=1.40.0
+qrcode~=7.4.2
 pillow
-python-dotenv
+python-dotenv~=1.0.1
 psycopg2-binary
 pydantic-settings
-bcrypt
+bcrypt~=4.2.0
 sqlalchemy[asyncio] 
 asyncpg
 greenlet
 python-jose[cryptography]
 
 
+
+nanoid~=2.0.0
+starlette~=0.37.2
+alembic~=1.13.2

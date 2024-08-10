@@ -17,7 +17,7 @@ sys.path.append(phv1_dir)  # Add 'phv1' to sys.path
 # Verify the path setup
 print("Updated PYTHONPATH:", sys.path)
 
-from backend.src.util.db import Base, DATABASE_URL
+from app.src.util.db import Base, DATABASE_URL
 # Now you can import your application's models
   # Ensure this path reflects your module's structure
 

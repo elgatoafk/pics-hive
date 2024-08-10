@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Photo - PhotoShare{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Edit Photo</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                {% if photo.url %}
+                <img src="{{ photo.url }}" class="img-fluid card-img-top" alt="{{ photo.description }}" style="max-height: 500px; object-fit: cover;">
+                {% else %}
+                <div class="card-body text-center">
+                    <p class="text-muted">Photo could not be loaded.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Edit Description -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Edit Description</h4>
+                    <form action="" method="post" id="edit-description-form">
+                        <div class="form-group mb-2">
+                            <textarea name="description" class="form-control" rows="3">{{ photo.description }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Save Description</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resize Photo -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Resize Photo</h4>
+                    <form action="/photos/resize/{{ photo.id }}" method="post">
+                        <div class="form-group mb-2">
+                            <label for="width">Width (px)</label>
+                            <input type="number" class="form-control" id="width" name="width" min="1" required>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="height">Height (px)</label>
+                            <input type="number" class="form-control" id="height" name="height" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Resize Photo</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Add Filter</h4>
+                    <form action="/photos/filter/{{ photo.id }}" method="post">
+                        <div class="form-group mb-2">
+                            <label for="filter">Choose a Filter</label>
+                            <select class="form-select" id="filter" name="photo_filter" required>
+                                <option value="al_dente">Al Dente</option>
+                                <option value="al_dente">Al Dente</option>
+                                <option value="athena">Athena</option>
+                                <option value="audrey">Audrey</option>
+                                <option value="aurora">Aurora</option>
+                                <option value="daguerre">Daguerre</option>
+                                <option value="eucalyptus">Eucalyptus</option>
+                                <option value="fes">Fes</option>
+                                <option value="frost">Frost</option>
+                                <option value="hairspray">Hairspray</option>
+                                <option value="hokusai">Hokusai</option>
+                                <option value="incognito">Incognito</option>
+                                <option value="primavera">Primavera</option>
+                                <option value="quartz">Quartz</option>
+                                <option value="red_rock">Red Rock</option>
+                                <option value="refresh">Refresh</option>
+                                <option value="sizzle">Sizzle</option>
+                                <option value="sonnet">Sonnet</option>
+                                <option value="ukulele">Ukulele</option>
+                                <option value="zorro">Zorro</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Apply Filter</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Photo -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-danger">Delete Photo</h4>
+                    <form action="/photos/delete/{{photo_id}}" method="post" id='delete-photo-form'>
+                        <button type="submit" class="btn btn-danger btn-block">Delete Photo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('edit-description-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const description = formData.get('description');
+
+        fetch(`/photos/{{ photo.id }}/description`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ new_description: description }),  // Ensure the key matches the parameter name in the endpoint
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Description updated successfully');
+                window.location.reload(); // Optionally reload the page to reflect the changes
+            } else {
+                alert('Failed to update description');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+<script>
+    document.getElementById('delete-photo-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const confirmed = confirm('Are you sure you want to delete this photo?');
+        if (!confirmed) return;
+
+        fetch(`/photos/delete/{{photo.id}}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Photo deleted successfully');
+                window.location.href = '/'; // Redirect to home or another appropriate page
+            } else {
+                alert('Failed to delete photo');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+{% endblock %}

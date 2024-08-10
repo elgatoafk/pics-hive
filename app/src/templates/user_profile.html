@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}'s Profile</h1>
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title">{{ user.username }}</h2>
+        <p class="card-text">Email: {{ user.email }}</p>
+        <p class="card-text">Registered At: {{ user.registered_at }}</p>
+        <p class="card-text">Photos Uploaded: {{ user.photos_uploaded }}</p>
+    </div>
+</div>
+<h2>Uploaded Photos</h2>
+<div class="row">
+    {% for photo in photos %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="{{ photo.url }}" class="card-img-top" alt="{{ photo.description }}">
+            <div class="card-body">
+                <p class="card-text">{{ photo.description }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
