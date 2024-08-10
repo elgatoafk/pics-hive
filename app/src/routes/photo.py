@@ -54,7 +54,7 @@ async def create_photo(description: str = Form(None),
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-    return RedirectResponse("/photo/upload-form/?message=Photo%20uploaded", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse("/profile/my-photos", status_code=status.HTTP_302_FOUND)
 
 
 @router.get("/photos/{photo_id}", response_model=PhotoResponse)
@@ -117,7 +117,7 @@ async def update_description(
     )
 
 
-@router.delete("/photos/delete-photo/{photo_id}", response_model=dict, status_code=status.HTTP_200_OK)
+@router.delete("/photos/delete-photo/{photo_id}", status_code=status.HTTP_303_SEE_OTHER)
 @log_function
 async def delete_photo_route(
         photo_id: int,
@@ -135,7 +135,7 @@ async def delete_photo_route(
     JSONResponse: A JSON response with a 'detail' key indicating the success message. If the photo is not found, raises a 404 HTTPException.
     """
     await delete_photo(db, photo_id)
-    return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.post("/photos/generate_qrcode/{photo_id}")
