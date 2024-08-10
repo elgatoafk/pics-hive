@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
+
 class CommentBase(BaseModel):
     """
     Base schema for comments containing the content of the comment.
@@ -10,30 +11,33 @@ class CommentBase(BaseModel):
     """
     content: str
 
+
 class CommentCreate(CommentBase):
     """
     Schema for creating a new comment.
     Inherits from CommentBase.
-    
+
     Attributes:
         content (str): The content of the comment.
     """
     pass
 
+
 class CommentUpdate(CommentBase):
     """
     Schema for updating an existing comment.
     Inherits from CommentBase.
-    
+
     Attributes:
         content (str): The updated content of the comment.
     """
     pass
 
+
 class Comment(CommentBase):
     """
     Schema for returning a comment, includes additional fields.
-    
+
     Attributes:
         id (int): The ID of the comment.
         photo_id (int): The ID of the associated photo.

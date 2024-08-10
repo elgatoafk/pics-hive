@@ -8,19 +8,14 @@ DATABASE_URL = f"postgresql+asyncpg://{settings.DATABASE_USER}:{settings.DATABAS
 
 Base = declarative_base()
 
-async_engine = create_async_engine(DATABASE_URL, echo=True)
+async_engine = create_async_engine(DATABASE_URL, echo=True, pool_pre_ping=True, pool_size=10, max_overflow=20, pool_timeout=30)
 
 AsyncSessionLocal = async_sessionmaker(
     bind=async_engine,
     class_=AsyncSession,
     expire_on_commit=False,
     autocommit=False,
-    autoflush=False,
-    pool_recycle=1800,
-    echo=True,
-    pool_size=10,
-    max_overflow=20,
-    pool_timeout=30,
+    autoflush=False
 )
 
 

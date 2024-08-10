@@ -16,6 +16,7 @@ from app.src.util.crud.user import get_user
 from app.src.util.models.photo import Photo
 from app.src.util.models.rating import Rating
 from app.src.util.models.user import User
+from tenacity import retry, wait_fixed, stop_after_attempt
 
 cloudinary.config(
     cloud_name=settings.CLOUDINARY_CLOUD_NAME,
@@ -245,6 +246,8 @@ async def update_photo_url(db: AsyncSession, photo_id: int, new_url: str, ) -> P
     return photo
 
 
+@retry(wait=wait_fixed(1), stop=stop_after_attempt(3))
+@log_function
 async def get_photos_with_details(db: AsyncSession):
     result = await db.execute(
         select(Photo)

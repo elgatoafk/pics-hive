@@ -9,14 +9,16 @@ class PhotoBase(BaseModel):
     url: str
     tags: conlist(str, max_length=5)
 
+
 class PhotoCreate(PhotoBase):
     pass
+
 
 class PhotoUpdate(PhotoBase):
     pass
 
-class PhotoResponse(BaseModel):
 
+class PhotoResponse(BaseModel):
     id: int
     user_id: int
     url: str

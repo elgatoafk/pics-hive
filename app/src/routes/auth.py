@@ -91,16 +91,17 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
         )
     if not db_user.is_active:
         raise HTTPException(status_code=status.HTTP_423_LOCKED, detail="Your account was disabled by admin.")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
+
     access_token = await create_access_token(
         data={"sub": db_user.email}, user_id=db_user.id, db=db, expires_delta=access_token_expires
     )
-    refresh_token = create_refresh_token(
-        data={"sub": db_user.email}, expires_delta=refresh_token_expires
+    refresh_token = await create_refresh_token(
+        data={"sub": db_user.email}, user_id=db_user.id, db=db, expires_delta=refresh_token_expires
     )
-    db_user.last_seen = datetime.utcnow()
+    db_user.last_login = datetime.utcnow()
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
@@ -145,24 +146,3 @@ async def logout(request: Request, db: AsyncSession = Depends(get_db)):
 
     return response
 
-
-@router.post("/token/refresh", response_model=Token)
-async def refresh_access_token(refresh_token: str = Depends(create_refresh_token), db: AsyncSession = Depends(get_db)):
-    try:
-        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
-    except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
-
-    user = get_user_by_email(db, email)
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-
-    return {"access_token": access_token, "token_type": "bearer"}

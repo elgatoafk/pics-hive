@@ -22,7 +22,7 @@ class Token(Base):
     token = Column(String, unique=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     created_at = Column(DateTime, default=dt.utcnow)
-    expires_at = Column(DateTime, default=lambda: dt.utcnow() + timedelta(minutes=30))
+    expires_at = Column(DateTime)
 
 
 
