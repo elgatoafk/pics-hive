@@ -11,7 +11,7 @@ from app.src.config.jwt import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES,
 from app.src.util.crud.token import blacklist_token
 from app.src.util.crud.user import get_user_by_email
 from app.src.util.db import get_db
-from datetime import timedelta
+from datetime import timedelta, datetime
 from app.src.config.logging_config import log_function
 from app.src.util.models.user import UserRole
 from app.src.util.schemas import user as user_schemas
@@ -100,6 +100,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     refresh_token = create_refresh_token(
         data={"sub": db_user.email}, expires_delta=refresh_token_expires
     )
+    db_user.last_seen = datetime.utcnow()
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
