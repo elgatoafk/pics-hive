@@ -1,3 +1,5 @@
+from sqlalchemy.exc import OperationalError
+
 from app.src.config.config import settings
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -11,14 +13,16 @@ async_engine = create_async_engine(DATABASE_URL, echo=True)
 AsyncSessionLocal = async_sessionmaker(
     bind=async_engine,
     class_=AsyncSession,
-    expire_on_commit=False
+    expire_on_commit=False,
+    autocommit=False,
+    autoflush=False,
 )
+
 
 async def get_db():
     async with AsyncSessionLocal() as session:
-        yield session
-
-
-
-
-
+        try:
+            yield session
+        except OperationalError as e:
+            await session.rollback()
+            raise e

@@ -3,6 +3,8 @@ import os
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
+from sqlalchemy import event, select
+from sqlalchemy.exc import DisconnectionError
 from starlette.responses import FileResponse
 from app.src.config.exceptions import custom_http_exception_handler, global_exception_handler, \
     validation_exception_handler, custom_404_handler
@@ -20,7 +22,6 @@ app = FastAPI(
     description=settings.DESCRIPTION,
     version=settings.VERSION
 )
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,10 +61,19 @@ async def favicon():
     return FileResponse("src/static/favicon.png")
 
 
-
 @app.on_event("startup")
 async def on_startup():
     await init_db()
+
+
+@event.listens_for(async_engine.sync_engine, "connect")
+async def test_connection(connection, branch):
+    if branch:
+        return
+    try:
+        await connection.scalar(select(1))
+    except DisconnectionError:
+        await connection.scalar(select(1))
 
 
 # Run the application
