@@ -1,6 +1,10 @@
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from app.main import app
 import os
 import uvicorn
+
+
 
 if __name__ == "__main__":
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'

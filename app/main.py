@@ -1,16 +1,16 @@
 import sys
 import os
 import uvicorn
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import RedirectResponse
 from starlette.responses import FileResponse
+from app.src.config.exceptions import custom_http_exception_handler, global_exception_handler, \
+    validation_exception_handler, custom_404_handler
 from app.src.routes import auth, user, photo, comment, rating, root, templating, admin_templating
 from app.src.util.db import Base, async_engine
-from app.src.config.config import settings, templates, FrontEndpoints, url_to_endpoint
+from app.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
-import urllib.parse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
@@ -20,13 +20,6 @@ app = FastAPI(
     description=settings.DESCRIPTION,
     version=settings.VERSION
 )
-
-app.mount("/static", StaticFiles(directory="src/static"), name="static")
-
-
-@app.get("/favicon.ico")
-async def favicon():
-    return FileResponse("static/favicon.png")
 
 
 app.add_middleware(
@@ -53,10 +46,20 @@ app.include_router(rating.router, prefix="", tags=["ratings"])
 app.include_router(templating.router, prefix="", tags=["front-end"])
 app.include_router(admin_templating.router, prefix="", tags=["admin front"])
 
-
-
-
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(StarletteHTTPException, custom_404_handler)
+app.add_exception_handler(HTTPException, custom_http_exception_handler)
+
+app.mount("/static", StaticFiles(directory="src/static"), name="static")
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    return FileResponse("src/static/favicon.png")
+
+
 
 @app.on_event("startup")
 async def on_startup():
@@ -66,4 +69,4 @@ async def on_startup():
 # Run the application
 if __name__ == "__main__":
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
-    uvicorn.run(app, host="127.0.0.1", port=8080, reload=debug_mode)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
