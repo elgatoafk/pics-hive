@@ -349,3 +349,48 @@ h2.text-center {
     height: auto;
     object-fit: contain;
 }
+
+/* Default navbar toggler icon styles */
+.navbar-custom .navbar-toggler-icon {
+    background-image: none; /* Removes the default Bootstrap icon */
+    background-color: transparent; /* Ensures the background is transparent */
+    border: 2px solid #FF6600; /* Bright Orange border */
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+/* Create the lines inside the toggler */
+.navbar-custom .navbar-toggler-icon::before,
+.navbar-custom .navbar-toggler-icon::after,
+.navbar-custom .navbar-toggler-icon div {
+    background-color: #FF6600; /* Bright Orange lines */
+    content: '';
+    display: block;
+    height: 2px;
+    width: 20px;
+    margin: 6px auto;
+}
+
+/* Reposition the toggler icon's inner lines */
+.navbar-custom .navbar-toggler-icon::before {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-custom .navbar-toggler-icon::after {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-custom .navbar-toggler-icon div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
