@@ -37,10 +37,7 @@ async def remove_expired_tokens(db: AsyncSession):
 def cleanup_expired_tokens():
     while True:
         db: AsyncSession = SessionLocal()
-        try:
-            remove_expired_tokens(db)
-        finally:
-            db.close()
+        remove_expired_tokens(db)
         time.sleep(86400)  # Run once a day
 
 

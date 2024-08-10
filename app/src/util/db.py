@@ -16,6 +16,11 @@ AsyncSessionLocal = async_sessionmaker(
     expire_on_commit=False,
     autocommit=False,
     autoflush=False,
+    pool_recycle=1800,
+    echo=True,
+    pool_size=10,
+    max_overflow=20,
+    pool_timeout=30,
 )
 
 
