@@ -8,7 +8,7 @@ from app.src.util.db import get_db
 from app.src.config.security import get_current_user
 from app.src.util.models.comment import Comment
 from app.src.util.models.user import UserRole
-from app.src.util.schemas.comment import Comment as CommentSchema
+from app.src.util.schemas.comment import Comment as CommentSchema, CommentUpdate
 from app.src.util.crud.comment import delete_comment, create_comment, update_comment, get_comments, \
     get_user_comment, get_comment_by_id
 from app.src.util.schemas.user import User

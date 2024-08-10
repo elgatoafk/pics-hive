@@ -1,11 +1,15 @@
-
 from datetime import datetime
+
+from sqlalchemy import delete
+
 from ..models.token import BlacklistedToken, Token
 import time
-from app.src.util.db import AsyncSessionLocal as SessionLocal
+from app.src.util.db import AsyncSessionLocal as SessionLocal, get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 import asyncio
+
+from ...config.logging_config import log_function
 
 
 async def blacklist_token(db: AsyncSession, token: str):
@@ -27,23 +31,27 @@ async def is_token_blacklisted(db: AsyncSession, token: str) -> bool:
     return blacklisted_token is not None
 
 
-async def remove_expired_tokens(db: AsyncSession):
-    while True:
-        async with SessionLocal() as db:
-            await remove_expired_tokens(db)
-        await asyncio.sleep(86400)  # Run once a day
-
-
-def cleanup_expired_tokens():
-    while True:
-        db: AsyncSession = SessionLocal()
-        remove_expired_tokens(db)
-        time.sleep(86400)  # Run once a day
-
-
+async def remove_expired_tokens():
+    async for session in get_db():
+        delete_stmt = delete(Token).where(Token.expires_at < datetime.utcnow())
+        await session.execute(delete_stmt)
+        await session.commit()
 
 async def get_active_tokens_for_user(db: AsyncSession, user_id: int):
     result = await db.execute(
         select(Token).filter(Token.user_id == user_id, Token.expires_at > datetime.utcnow())
     )
     return result.scalars().all()
+
+@log_function
+async def remove_blacklisted_tokens():
+    async for session in get_db():
+        result = await session.execute(select(BlacklistedToken))
+        tokens = result.scalars().all()
+        for token in tokens:
+            await session.delete(token)
+
+        await session.commit()
+
+
+

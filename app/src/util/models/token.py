@@ -23,9 +23,3 @@ class Token(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     created_at = Column(DateTime, default=dt.utcnow)
     expires_at = Column(DateTime)
-
-
-
-
-
-    

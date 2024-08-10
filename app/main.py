@@ -1,6 +1,8 @@
+import asyncio
 import sys
 import os
 import uvicorn
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy import event, select
@@ -14,6 +16,9 @@ from app.src.config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from apscheduler.schedulers.background import BackgroundScheduler
+
+from app.src.util.crud.token import remove_expired_tokens, remove_blacklisted_tokens
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
@@ -22,6 +27,14 @@ app = FastAPI(
     description=settings.DESCRIPTION,
     version=settings.VERSION
 )
+
+#schedule token cleanup
+scheduler = AsyncIOScheduler()
+
+scheduler.add_job(remove_expired_tokens, 'interval', minutes=30)
+scheduler.add_job(remove_blacklisted_tokens, 'interval', minutes=30)
+
+scheduler.start()
 
 app.add_middleware(
     CORSMiddleware,
@@ -53,12 +66,12 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, custom_404_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 
-app.mount("/static", StaticFiles(directory="src/static"), name="static")
+app.mount("/static", StaticFiles(directory="app/src/static"), name="static")
 
 
 @app.get("/favicon.ico")
 async def favicon():
-    return FileResponse("src/static/favicon.png")
+    return FileResponse("app/src/static/favicon.png")
 
 
 @app.on_event("startup")

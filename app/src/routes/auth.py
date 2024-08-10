@@ -4,11 +4,13 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
 import urllib.parse
 from jose import jwt, JWTError
+from sqlalchemy import delete
+
 from app.src.config.config import settings
 from app.src.config.hash import hash_handler
 from app.src.config.jwt import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, create_refresh_token, SECRET_KEY, \
     ALGORITHM
-from app.src.util.crud.token import blacklist_token
+from app.src.util.crud.token import blacklist_token, remove_blacklisted_tokens
 from app.src.util.crud.user import get_user_by_email
 from app.src.util.db import get_db
 from datetime import timedelta, datetime
