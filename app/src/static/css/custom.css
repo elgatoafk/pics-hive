@@ -50,7 +50,7 @@ html, body {
     justify-content: space-between;
     padding-top: 0;
     padding-bottom: 20px;
-    margin-top: 0;  /* Ensure no margin at the top */
+    margin-top: 0;
 }
 
 .custom-heading {
@@ -58,7 +58,7 @@ html, body {
     font-weight: bold;
     margin-bottom: 1.5rem;
     font-family: 'Roboto Slab', serif;
-    margin-top: 0; /* Ensures there's no extra space above the heading */
+    margin-top: 0;
 }
 
 .custom-card {
@@ -146,7 +146,7 @@ p {
 }
 
 .table {
-    margin: 0 auto;  /* Centering the table */
+    margin: 0 auto;
 }
 
 .table th, .table td {
@@ -162,7 +162,6 @@ p {
     vertical-align: middle;
 }
 
-/* Footer Styling */
 .custom-footer {
     background-color: #003366;
     color: #FFCC00;
@@ -188,71 +187,58 @@ p {
     text-decoration: underline;
 }
 
-/* Ensure no extra spacing */
 h2.text-center {
     margin-bottom: 0;
     padding-bottom: 0;
 }
 
-.table-responsive {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-/* Fine-tune spacing for the content */
-.custom-heading {
-    margin-bottom: 10px;  /* Adjust the margin between the heading and the table */
-}
-
-
 .container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align items at the top */
-    padding-top: 20px; /* Optional: Adjust if needed */
+    justify-content: flex-start;
+    padding-top: 20px;
     padding-bottom: 20px;
 }
 
 .photo-card .btn {
-    background-color: transparent; /* Transparent background */
-    color: #FF6600; /* Orange text */
-    border: 2px solid #FF6600; /* Orange border */
+    background-color: transparent;
+    color: #FF6600;
+    border: 2px solid #FF6600;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    border-radius: 0.25rem; /* Rounded corners */
+    border-radius: 0.25rem;
 }
 
 .photo-card .btn:hover {
-    background-color: #FF6600; /* Orange background on hover */
-    color: #FFFFFF; /* White text on hover */
+    background-color: #FF6600;
+    color: #FFFFFF;
 }
 
 .photo-card .tag-badge {
-    background-color: #336699; /* Background color of the tags */
-    color: #FFFFFF; /* Text color for tags */
+    background-color: #336699;
+    color: #FFFFFF;
     padding: 0.3em 0.7em;
     font-size: 0.85em;
     font-weight: 600;
-    border-radius: 1rem; /* Rounded edges */
+    border-radius: 1rem;
     margin-right: 0.3em;
     margin-bottom: 0.3em;
     display: inline-block;
 }
 
 .card-body .badge {
-    background-color: #336699; /* Background color of the tags */
-    color: #FFFFFF; /* Text color for tags */
+    background-color: #336699;
+    color: #FFFFFF;
     padding: 0.3em 0.7em;
     font-size: 0.85em;
     font-weight: 600;
-    border-radius: 1rem; /* Rounded edges */
+    border-radius: 1rem;
     margin-right: 0.3em;
     margin-bottom: 0.3em;
     display: inline-block;
 }
 
-/* Optional: Add different colors for different tags */
 .card-body .badge-1 { background-color: #003366; }
 .card-body .badge-2 { background-color: #336699; }
 .card-body .badge-3 { background-color: #6699CC; }
@@ -261,77 +247,71 @@ h2.text-center {
 .card-body .badge-6 { background-color: #FF0033; }
 .card-body .badge-7 { background-color: #000000; }
 
-
 .card-body .btn {
-    background-color: transparent; /* Transparent background */
-    color: #FF6600; /* Orange text */
-    border: 2px solid #FF6600; /* Orange border */
+    background-color: transparent;
+    color: #FF6600;
+    border: 2px solid #FF6600;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    border-radius: 0.25rem; /* Rounded corners */
+    border-radius: 0.25rem;
 }
 
 .card-body .btn:hover {
-    background-color: #FF6600; /* Orange background on hover */
-    color: #FFFFFF; /* White text on hover */
+    background-color: #FF6600;
+    color: #FFFFFF;
 }
 
-
-/* Ban User Button */
 .ban-user-btn {
-    background-color: #FF0033; /* Red */
-    color: #FFFFFF; /* White text */
-    border: 2px solid #FF0033; /* Border matching background */
+    background-color: #FF0033;
+    color: #FFFFFF;
+    border: 2px solid #FF0033;
 }
 
 .ban-user-btn:hover {
-    background-color: #CC0026; /* Darker red on hover */
-    color: #FFFFFF; /* Keep text white */
+    background-color: #CC0026;
+    color: #FFFFFF;
 }
 
-/* Delete Photo Button */
 .delete-photo-btn {
-    background-color: #FF6600; /* Orange */
-    color: #FFFFFF; /* White text */
-    border: 2px solid #FF6600; /* Border matching background */
+    background-color: #FF6600;
+    color: #FFFFFF;
+    border: 2px solid #FF6600;
 }
 
 .delete-photo-btn:hover {
-    background-color: #CC5200; /* Darker orange on hover */
-    color: #FFFFFF; /* Keep text white */
+    background-color: #CC5200;
+    color: #FFFFFF;
 }
 
 .list-group-item-action {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    border-radius: 0.25rem; /* Rounded corners */
+    border-radius: 0.25rem;
     text-align: center;
-    margin-bottom: 0.5rem; /* Space between buttons */
+    margin-bottom: 0.5rem;
 }
 
-/* Admin Area Buttons */
 .btn-admin {
-    background-color: #FF6600; /* Orange color */
-    color: #FFCC00; /* Yellow text */
+    background-color: #FF6600;
+    color: #FFCC00;
     border: none;
     border-radius: 25px;
-    padding: 10px 0px; /* Adjust the padding to ensure the height is not cropped */
+    padding: 10px 0px;
     font-size: 1.1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: auto; /* Remove fixed height to allow the button to adjust naturally */
-    width: 50%; /* Adjust the width to be less wide */
+    height: auto;
+    width: 50%;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 0.5rem auto; /* Center the button and add space between buttons */
-    text-align: center; /* Ensure text is centered */
+    margin: 0.5rem auto;
+    text-align: center;
 }
 
 .btn-admin:hover {
-    background-color: #FF0033; /* Darker hover color */
-    color: #FFCC00; /* Ensure text color remains the same */
+    background-color: #FF0033;
+    color: #FFCC00;
 }
-
 
 .list-group .list-group-item {
     background-color: #FF6600 !important;
@@ -339,21 +319,20 @@ h2.text-center {
     color: #FFCC00 !important;
     font-family: 'Roboto', sans-serif;
     text-align: center;
-    padding: 8px 20px; /* Adjust padding to make the buttons narrower and less tall */
-    border-radius: 20px !important; /* Keep the rounded style consistent */
-    margin-bottom: 10px; /* Space between buttons */
+    padding: 8px 20px;
+    border-radius: 20px !important;
+    margin-bottom: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 200px; /* Adjust button width */
-    margin-left: auto;  /* Centering the button */
-    margin-right: auto; /* Centering the button */
-    font-size: 1rem; /* Adjust font size */
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
 }
 
 .list-group .list-group-item:hover {
     background-color: #FF0033 !important;
     color: #FFCC00 !important;
 }
-
 
 .badge-tag {
     background-color: #FFCC00;
@@ -368,6 +347,5 @@ h2.text-center {
 .photo-card img {
     width: 100%;
     height: auto;
-    object-fit: contain; /* or object-fit: cover, depending on your preference */
+    object-fit: contain;
 }
-

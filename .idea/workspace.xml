@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="" />
+    <list default="true" id="c0b740b0-5e55-482e-ac34-dfdd5e410ef6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/static/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/static/css/custom.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +41,7 @@
     "Python.main (1).executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "MAJOR/add-frontend",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Я/Desktop/photoshare_experimental",
     "node.js.detected.package.eslint": "true",
@@ -135,6 +138,7 @@
       <workItem from="1723122509036" duration="55519000" />
       <workItem from="1723222604588" duration="33816000" />
       <workItem from="1723257880772" duration="14491000" />
+      <workItem from="1723275017313" duration="222000" />
     </task>
     <servers />
   </component>
