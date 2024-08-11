@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PhotoShare{% endblock %}</title>
     <link rel="icon" href="{{ url_for('static', path='favicon.png') }}" type="image/png">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/custom.css') }}">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -70,7 +70,7 @@
 
             if (message) {
                 const alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-success';  // Green alert for success
+                alertDiv.className = 'alert alert-success';
                 alertDiv.role = 'alert';
                 alertDiv.innerText = decodeURIComponent(message);
                 messageContainer.appendChild(alertDiv);
@@ -78,7 +78,7 @@
 
             if (error) {
                 const alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-danger';  // Red alert for error
+                alertDiv.className = 'alert alert-danger';
                 alertDiv.role = 'alert';
                 alertDiv.innerText = decodeURIComponent(error);
                 messageContainer.appendChild(alertDiv);

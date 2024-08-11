@@ -22,10 +22,11 @@
                     <a href="/photo/{{ photo.id }}" class="btn btn-primary btn-sm">View</a>
                     <a href="/photo/edit/{{ photo.id }}" class="btn btn-secondary btn-sm">Edit</a>
                     <!-- Generate QR Button -->
-                     <a href="/photo/show-qr/{{photo.id}}" class="btn btn-secondary btn-sm">QR code</a>
-            </div>
-        </div>
+                    <a href="/photo/show-qr/{{photo.id}}" class="btn btn-secondary btn-sm">QR code</a>
+                </div> <!-- Closing card-body -->
+            </div> <!-- Closing card -->
+        </div> <!-- Closing col-* -->
         {% endfor %}
-    </div>
-</div>
+    </div> <!-- Closing row -->
+</div> <!-- Closing container -->
 {% endblock %}

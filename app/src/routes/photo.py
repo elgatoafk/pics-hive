@@ -59,7 +59,7 @@ async def create_photo(description: str = Form(None),
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-    return RedirectResponse("/profile/my-photos", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse("/profile/my-photos", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.get("/photos/{photo_id}", response_model=PhotoResponse, dependencies=[Depends(verify_api_key)])
