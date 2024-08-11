@@ -19,7 +19,7 @@ from app.src.util.schemas import user as user_schemas
 from app.src.util.crud import user as user_crud
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.src.util.schemas.user import Token
+
 
 router = APIRouter()
 

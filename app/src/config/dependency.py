@@ -8,7 +8,7 @@ from app.src.util.db import get_db
 from app.src.util.models import Photo
 from app.src.util.models.comment import Comment
 from app.src.util.models.user import UserRole, User
-from src.config.config import settings
+from app.src.config.config import settings
 
 
 async def verify_api_key(api_key: str = Header(...)):

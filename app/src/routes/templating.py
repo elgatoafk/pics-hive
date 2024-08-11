@@ -12,7 +12,7 @@ from app.src.util.crud.photo import get_post_by_id, get_photo, PhotoService
 from app.src.util.db import get_db
 from app.src.util.models import User, Photo
 from app.src.util.schemas.user import User as UserSchema, UserProfile
-from src.services.aggregator import Aggregator
+from app.src.services.aggregator import Aggregator
 
 router = APIRouter()
 

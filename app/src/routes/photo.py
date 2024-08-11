@@ -26,7 +26,7 @@ from app.src.util.schemas.photo import PhotoResponse
 from app.src.util.schemas.tag import TagResponse
 from fastapi.responses import RedirectResponse
 
-from src.services.aggregator import Aggregator
+from app.src.services.aggregator import Aggregator
 
 router = APIRouter()
 

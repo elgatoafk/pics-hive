@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.util.crud.photo import get_photo, PhotoService
+from app.src.util.crud.photo import get_photo, PhotoService
 
 
 class Aggregator:

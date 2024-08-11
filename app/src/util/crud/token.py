@@ -1,15 +1,10 @@
 from datetime import datetime
-
 from sqlalchemy import delete
-
 from ..models.token import BlacklistedToken, Token
-import time
 from app.src.util.db import AsyncSessionLocal as SessionLocal, get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-import asyncio
-
-from ...config.logging_config import log_function
+from app.src.config.logging_config import log_function
 
 
 async def blacklist_token(db: AsyncSession, token: str):
