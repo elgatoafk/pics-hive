@@ -77,7 +77,7 @@ class UserUpdate(BaseModel):
     role: UserRole = None
 
 
-class UserProfile(UserBase):
+class UserProfile(BaseModel):
     """
     Schema for returning a user's profile.
     Inherits from UserBase.
@@ -117,7 +117,7 @@ class PrivateUser(UserBase):
         from_attributes = True  # This enables orm_mode to allow loading from SQLAlchemy models
 
 
-class User(UserBase):
+class User(BaseModel):
     """
     Schema for returning a user.
     Inherits from UserBase.

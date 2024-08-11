@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4521e6b0-0822-4be5-b0d4-1f1fbf678af6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/config/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/config/exceptions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/routes/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/routes/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/routes/templating.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/routes/templating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/templates/people.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/templates/people.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/templates/user_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/templates/user_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/util/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/util/schemas/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +120,7 @@
       <workItem from="1723299588345" duration="1589000" />
       <workItem from="1723323006022" duration="2460000" />
       <workItem from="1723330773826" duration="5862000" />
-      <workItem from="1723384173322" duration="678000" />
+      <workItem from="1723384173322" duration="1003000" />
     </task>
     <servers />
   </component>
