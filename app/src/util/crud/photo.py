@@ -119,7 +119,7 @@ class PhotoService:
         qr_code = qr.make_image(fill_color="black", back_color="white")
 
         qr_code_io = io.BytesIO()
-        qr_code.save(qr_code_io, format="PNG")
+        qr_code.save(qr_code_io)
         qr_code_io.seek(0)
 
         qr_code_base64 = base64.b64encode(qr_code_io.getvalue()).decode("utf-8")

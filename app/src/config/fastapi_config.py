@@ -25,15 +25,6 @@ origins = [
 ]
 
 
-@app.middleware("http")
-async def redirect_to_https(request: Request, call_next):
-    if settings.ENVIRONMENT == "production" and request.url.scheme == "http":
-        url = request.url.replace(scheme="https")
-        return RedirectResponse(url)
-    response = await call_next(request)
-    return response
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origins],
