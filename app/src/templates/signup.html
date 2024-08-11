@@ -7,9 +7,9 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <h2 class="custom-heading">Register</h2>
-        <form action="/auth/signup" method="post">
+        <form id="register-form" action="/auth/signup" method="post">
             <div class="mb-3">
-                 <input type="checkbox" id="cookie-consent-checkbox" name="cookie-consent" style="display: none;" required>
+                <input type="checkbox" id="cookie-consent-checkbox" name="cookie-consent" style="display: none;">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
@@ -21,9 +21,11 @@
         </form>
     </div>
 </div>
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const consentCheckbox = document.getElementById("cookie-consent-checkbox");
+    const form = document.getElementById("register-form");
     const consentBannerHTML = `
         <div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #003366; color: #fff; padding: 15px; text-align: center; z-index: 1000;">
             <p style="margin: 0; padding: 0 10px; display: inline-block;">We use necessary cookies to ensure you get the best experience on our site.</p>
@@ -31,27 +33,35 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     `;
 
+    const showConsentBanner = () => {
+        document.body.insertAdjacentHTML('beforeend', consentBannerHTML);
+        const consentBanner = document.getElementById("cookie-consent-banner");
+        document.getElementById("accept-cookies").addEventListener("click", function() {
+            localStorage.setItem("cookieConsent", "true");
+            consentCheckbox.checked = true;
+            consentBanner.style.display = "none";
+            form.submit();
+        });
+    };
 
-    document.body.insertAdjacentHTML('beforeend', consentBannerHTML);
+    const checkConsent = () => {
+        if (localStorage.getItem("cookieConsent") === "true") {
+            consentCheckbox.checked = true;
+        } else {
+            showConsentBanner();
+        }
+    };
 
-    const consentBanner = document.getElementById("cookie-consent-banner");
-    const consentCheckbox = document.getElementById("cookie-consent-checkbox");
+    checkConsent();
 
-
-    document.getElementById("accept-cookies").addEventListener("click", function() {
-        consentCheckbox.checked = true;
-        consentBanner.style.display = "none";
-    });
-
-
-    document.getElementById("register-form").addEventListener("submit", function(event) {
+    form.addEventListener("submit", function(event) {
         if (!consentCheckbox.checked) {
             event.preventDefault();
-            consentBanner.style.display = "block";
             alert("You must accept necessary cookies to register.");
+
         }
     });
 });
-
 </script>
+
 {% endblock %}
