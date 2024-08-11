@@ -36,9 +36,15 @@ scheduler.add_job(remove_blacklisted_tokens, 'interval', minutes=30)
 
 scheduler.start()
 
+
+origins = [
+    "http://127.0.0.1:8000",
+    "https://loose-paule-logicforge-b366e4a4.koyeb.app/",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
+    allow_origins=[origins],  
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
