@@ -47,6 +47,13 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
         RedirectResponse: Redirects to the appropriate GET endpoint with an error message.
     """
     error_message = urllib.parse.quote(exc.detail)
+    if exc.status_code == status.HTTP_401_UNAUTHORIZED:
+        response = RedirectResponse(url="/auth/login-form")
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        response.delete_cookie("logged_in")
+        response.delete_cookie("admin_access")
+        return response
     for key, endpoint in url_to_endpoint.items():
         if key in request.url.path:
             return RedirectResponse(url=f"{endpoint}?error={error_message}", status_code=status.HTTP_302_FOUND)
