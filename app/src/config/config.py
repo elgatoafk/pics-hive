@@ -40,6 +40,9 @@ class Settings(BaseSettings):
     DESCRIPTION: str = "API for PhotoShare application"
     VERSION: str = "1.5"
 
+    DEV_API_KEY: str = os.getenv("DEV_API_KEY")
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT")
+
     MAX_TAGS: int = 5
     USERNAME_LENGTH: int = 8
 

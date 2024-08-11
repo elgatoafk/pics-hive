@@ -1,6 +1,5 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.util.crud.photo import get_photo, PhotoService
 
 
@@ -28,3 +27,4 @@ class Aggregator:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QR Code not Found")
 
         return qr_code
+

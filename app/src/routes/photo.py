@@ -12,7 +12,7 @@ from starlette.responses import StreamingResponse
 from app.src.config.config import templates
 from app.src.util.models import Photo
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.src.config.dependency import owner_or_admin_dependency, PhotoDependency
+from app.src.config.dependency import owner_or_admin_dependency, PhotoDependency, verify_api_key
 from app.src.config.logging_config import log_function
 from app.src.config.security import get_current_user
 from app.src.util.crud.tag import get_tag_by_name
@@ -31,7 +31,7 @@ from src.services.aggregator import Aggregator
 router = APIRouter()
 
 
-@router.post("/photos/new/", response_model=dict, status_code=status.HTTP_201_CREATED)
+@router.post("/photos/new/")
 @log_function
 async def create_photo(description: str = Form(None),
                        tags: conlist(str, max_length=5) = Form(None),
@@ -62,7 +62,7 @@ async def create_photo(description: str = Form(None),
     return RedirectResponse("/profile/my-photos", status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/photos/{photo_id}", response_model=PhotoResponse)
+@router.get("/photos/{photo_id}", response_model=PhotoResponse, dependencies=[Depends(verify_api_key)])
 @log_function
 async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     """

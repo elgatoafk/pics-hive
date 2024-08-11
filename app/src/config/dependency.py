@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from fastapi import HTTPException, status, Depends, Path
+from fastapi import HTTPException, status, Depends, Path, Request, Depends, Header
 from typing import List, Type, Callable
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +8,12 @@ from app.src.util.db import get_db
 from app.src.util.models import Photo
 from app.src.util.models.comment import Comment
 from app.src.util.models.user import UserRole, User
+from src.config.config import settings
+
+
+async def verify_api_key(api_key: str = Header(...)):
+    if api_key != settings.DEV_API_KEY:
+        raise HTTPException(status_code=403, detail="Access denied")
 
 
 def role_required(allowed_roles: List[UserRole]):

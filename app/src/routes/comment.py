@@ -12,7 +12,7 @@ from app.src.util.schemas.comment import Comment as CommentSchema, CommentUpdate
 from app.src.util.crud.comment import delete_comment, create_comment, update_comment, get_comments, \
     get_user_comment, get_comment_by_id
 from app.src.util.schemas.user import User
-from app.src.config.dependency import role_required
+from app.src.config.dependency import role_required, verify_api_key
 from fastapi.responses import RedirectResponse
 
 router = APIRouter()
@@ -42,7 +42,7 @@ async def create_photo_comment(photo_id: int, content: str = Form(...), db: Asyn
     return RedirectResponse(url=next, status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/photos/{photo_id}/comments/", response_model=List[CommentSchema])
+@router.get("/photos/{photo_id}/comments/", response_model=List[CommentSchema], dependencies=[Depends(verify_api_key)])
 @log_function
 async def read_photo_comments(photo_id: int, db: AsyncSession = Depends(get_db)):
     """

@@ -1,11 +1,10 @@
 import urllib
+from uuid import uuid4
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
 import urllib.parse
-from jose import jwt, JWTError
-from sqlalchemy import delete
-
 from app.src.config.config import settings
 from app.src.config.hash import hash_handler
 from app.src.config.jwt import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, create_refresh_token, SECRET_KEY, \
@@ -20,8 +19,8 @@ from app.src.util.schemas import user as user_schemas
 from app.src.util.crud import user as user_crud
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.src.util.schemas.user import Token
+
 
 router = APIRouter()
 
@@ -130,6 +129,7 @@ async def logout(request: Request, db: AsyncSession = Depends(get_db)):
         request (Request): The request object.
         db (AsyncSession): The asynchronous database session, obtained via dependency injection.
 
+
     Returns:
         RedirectResponse: Redirects to the home page after successful logout.
     """
@@ -149,6 +149,5 @@ async def logout(request: Request, db: AsyncSession = Depends(get_db)):
 
     if request.cookies.get("admin_access") == "true":
         response.delete_cookie("admin_access")
-
     return response
 

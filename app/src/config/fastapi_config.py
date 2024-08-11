@@ -1,6 +1,8 @@
-from fastapi import FastAPI, HTTPException
+import os
+
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.exceptions import RequestValidationError
-from starlette.responses import FileResponse
+from starlette.responses import FileResponse, RedirectResponse
 from starlette.staticfiles import StaticFiles
 from app.src.config.config import settings
 from app.src.config.exceptions import custom_http_exception_handler, global_exception_handler, \
@@ -13,13 +15,24 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=settings.DESCRIPTION,
-    version=settings.VERSION
+    version=settings.VERSION, docs_url=None if settings.ENVIRONMENT == "production" else "/docs",
+              redoc_url=None if settings.ENVIRONMENT == "production" else "/redoc"
 )
 
 origins = [
     "http://127.0.0.1:8000",
     "https://loose-paule-logicforge-b366e4a4.koyeb.app/",
 ]
+
+
+@app.middleware("http")
+async def redirect_to_https(request: Request, call_next):
+    if settings.ENVIRONMENT == "production" and request.url.scheme == "http":
+        url = request.url.replace(scheme="https")
+        return RedirectResponse(url)
+    response = await call_next(request)
+    return response
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,10 +59,10 @@ app.add_exception_handler(StarletteHTTPException, custom_404_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 app.add_exception_handler(HTTPException, custom_401_handler)
 
-app.mount("/static", StaticFiles(directory="app/src/static"), name="static")
+static_directory = os.path.join(os.path.dirname(__file__), '..', 'static')
+app.mount("/static", StaticFiles(directory=static_directory), name="static")
 
 
 @app.get("/favicon.ico")
 async def favicon():
-    return FileResponse("app/src/static/favicon.png")
-
+    return FileResponse(f"{static_directory}/favicon.png")
