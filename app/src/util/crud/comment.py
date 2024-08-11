@@ -7,6 +7,7 @@ from app.src.util.models.comment import Comment
 from app.src.util.schemas.comment import CommentUpdate
 from sqlalchemy.future import select
 
+
 @log_function
 async def create_comment(db: AsyncSession, comment: str, user_id: int, photo_id: int):
     """
@@ -38,6 +39,7 @@ async def create_comment(db: AsyncSession, comment: str, user_id: int, photo_id:
     await db.refresh(new_comment)
     return new_comment
 
+
 @log_function
 async def get_comments(db: AsyncSession, photo_id: int):
     """
@@ -67,6 +69,7 @@ async def get_comments(db: AsyncSession, photo_id: int):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
+
 @log_function
 async def update_comment(db: AsyncSession, comment_id: int, comment: CommentUpdate):
     """
@@ -89,6 +92,7 @@ async def update_comment(db: AsyncSession, comment_id: int, comment: CommentUpda
         await db.commit()
         await db.refresh(db_comment)
     return db_comment
+
 
 @log_function
 async def get_comment_by_id(db: AsyncSession, comment_id: int):
@@ -120,6 +124,7 @@ async def get_comment_by_id(db: AsyncSession, comment_id: int):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
+
 @log_function
 async def delete_comment(db: AsyncSession, comment_id: int):
     """
@@ -137,6 +142,7 @@ async def delete_comment(db: AsyncSession, comment_id: int):
     await db.delete(db_comment)
     await db.commit()
     return db_comment
+
 
 @log_function
 async def get_user_comment(db: AsyncSession, user_id: int, comment_id: int):

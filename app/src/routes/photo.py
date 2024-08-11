@@ -75,7 +75,7 @@ async def get_photo_route(photo_id: int, db: AsyncSession = Depends(get_db)):
     Returns:
     PhotoResponse: The retrieved photo data. If the photo is not found, returns None.
     """
-    result = await db.execute(select(Photo).options(joinedload(Photo.tags)).filter(Photo.id == photo_id))
+    result = await db.execute(select(Photo).options(joinedload(Photo.tags)).where(Photo.id == photo_id))
     photo = result.scalars().first()
     if not photo:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
@@ -210,7 +210,7 @@ async def resize(
 
     """
 
-    result = await db.execute(select(Photo).filter(Photo.id == photo_id))
+    result = await db.execute(select(Photo).where(Photo.id == photo_id))
     photo = result.scalars().first()
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
@@ -272,7 +272,7 @@ async def add_filter(
             "zorro",
 
     """
-    result = await db.execute(select(Photo).filter(Photo.id == photo_id))
+    result = await db.execute(select(Photo).where(Photo.id == photo_id))
     photo = result.scalars().first()
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")

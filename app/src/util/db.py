@@ -26,3 +26,7 @@ async def get_db():
         except OperationalError as e:
             await session.rollback()
             raise e
+
+async def init_db():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all, checkfirst=True)
