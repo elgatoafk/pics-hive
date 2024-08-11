@@ -1,3 +1,5 @@
+import base64
+
 from fastapi import APIRouter, Request, Depends, Path, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,10 +8,11 @@ from app.src.config.logging_config import log_function
 from fastapi.responses import HTMLResponse
 from app.src.config.config import templates, FrontEndpoints
 from app.src.config.security import get_current_user, get_current_user_cookies
-from app.src.util.crud.photo import get_post_by_id, get_photo
+from app.src.util.crud.photo import get_post_by_id, get_photo, PhotoService
 from app.src.util.db import get_db
 from app.src.util.models import User, Photo
 from app.src.util.schemas.user import User as UserSchema, UserProfile
+from src.services.aggregator import Aggregator
 
 router = APIRouter()
 
@@ -178,29 +181,6 @@ async def edit_photo(photo_id: int, request: Request, db: AsyncSession = Depends
                                       {"request": request, "photo": photo, "current_user": current_user})
 
 
-@router.get("photo/qrcode/{photo_id}", response_class=HTMLResponse)
-async def display_qr_code(photo_id: int, request: Request):
-    """
-    Display the QR code for the photo URL.
-
-    Args:
-        photo_id (int): The unique identifier of the photo.
-        request (Request): The HTTP request object.
-
-    Returns:
-        TemplateResponse: The rendered template with the QR code.
-    """
-    qr_code_data = request.headers.get("qr_code_data")
-    if not qr_code_data:
-        raise HTTPException(status_code=404, detail="QR code not found")
-
-    return templates.TemplateResponse("qr_code.html", {
-        "request": request,
-        "photo_id": photo_id,
-        "qr_code_data": qr_code_data
-    })
-
-
 @router.get(FrontEndpoints.PROFILE_MY_PHOTOS.value, response_class=HTMLResponse)
 async def get_user_photos(request: Request, db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(get_current_user)):
@@ -215,6 +195,28 @@ async def get_user_photos(request: Request, db: AsyncSession = Depends(get_db),
     photos = user_photos.scalars().all()
 
     return templates.TemplateResponse("user_photos.html", {"request": request, "photos": photos})
+
+
+@router.get("/photo/show-qr/{photo_id}", response_class=HTMLResponse)
+async def display_qr_code(photo_id: int, request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Display the QR code for a photo URL by calling the existing POST endpoint.
+
+    Args:
+        photo_id (int): The unique identifier of the photo.
+        db (AsyncSession): The SQLAlchemy asynchronous session.
+        request (Request): The HTTP request object.
+
+    Returns:
+        TemplateResponse: The rendered template with the QR code.
+    """
+    qr_code = await Aggregator.generate_qr(photo_id, db)
+    ref = request.headers.get("referer")
+    return templates.TemplateResponse("qr_code.html", {
+        "request": request,
+        "qr_code": qr_code,
+        "referer": ref,
+    })
 
 
 

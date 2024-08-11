@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 load_dotenv()
 
-templates = Jinja2Templates(directory="src/templates")
+templates = Jinja2Templates(directory="app/src/templates")
 
 
 class FrontEndpoints(Enum):

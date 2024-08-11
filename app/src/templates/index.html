@@ -22,9 +22,7 @@
                     <a href="/photo/edit/{{ photo.id }}" class="btn btn-secondary btn-sm">Edit</a>
                     {% endif %}
                     <!-- Generate QR Button -->
-                    <form action="/photos/generate_qrcode/{{ photo.id }}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-info btn-sm">Generate QR</button>
-                    </form>
+                     <a href="/photo/show-qr/{{photo.id}}" class="btn btn-secondary btn-sm">QR code</a>
                 </div>
             </div>
         </div>

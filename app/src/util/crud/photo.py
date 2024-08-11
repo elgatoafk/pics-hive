@@ -1,3 +1,7 @@
+import base64
+import io
+from base64 import b64encode
+
 from sqlalchemy import and_, func, desc
 from sqlalchemy.orm import joinedload, selectinload
 from io import BytesIO
@@ -100,10 +104,9 @@ class PhotoService:
 
     @staticmethod
     @log_function
-    async def generate_qr_code(photo_url: str):
-        """Generates a QR code image from the given image URL.
+    async def generate_qr_code(photo_url: str) -> str:
+        """Generates a QR code image from the given image URL and returns it as a base64 encoded string."""
 
-        """
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -112,12 +115,16 @@ class PhotoService:
         )
         qr.add_data(photo_url)
         qr.make(fit=True)
-        qr_code = qr.make_image(fill_color="black", back_color="white")
-        buffered = BytesIO()
-        qr_code.save(buffered, "PNG")
-        qr_bytes = buffered.getvalue()
-        return qr_bytes
 
+        qr_code = qr.make_image(fill_color="black", back_color="white")
+
+        qr_code_io = io.BytesIO()
+        qr_code.save(qr_code_io, format="PNG")
+        qr_code_io.seek(0)
+
+        qr_code_base64 = base64.b64encode(qr_code_io.getvalue()).decode("utf-8")
+
+        return qr_code_base64
 
 @log_function
 async def create_photo_in_db(description: str, file, user_id: int, db: AsyncSession, tag_names: list = []) -> Photo:

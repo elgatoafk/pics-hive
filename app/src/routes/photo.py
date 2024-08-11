@@ -6,6 +6,9 @@ from pydantic import conlist
 from sqlalchemy.orm import joinedload
 from sqlalchemy.future import select
 from base64 import b64encode
+
+from starlette.responses import StreamingResponse
+
 from app.src.config.config import templates
 from app.src.util.models import Photo
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,6 +25,8 @@ from app.src.util.crud.photo import get_photo, PhotoService, update_photo_url
 from app.src.util.schemas.photo import PhotoResponse
 from app.src.util.schemas.tag import TagResponse
 from fastapi.responses import RedirectResponse
+
+from src.services.aggregator import Aggregator
 
 router = APIRouter()
 
@@ -140,7 +145,7 @@ async def delete_photo_route(
 
 @router.post("/photos/generate_qrcode/{photo_id}")
 @log_function
-async def generate_qr_code(photo_id: int, request: Request, db: AsyncSession = Depends(get_db), ):
+async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db), ):
     """
         Generate and display a QR code for the photo URL in response to a POST request.
 
@@ -148,32 +153,13 @@ async def generate_qr_code(photo_id: int, request: Request, db: AsyncSession = D
             photo_id (int): The unique identifier of the photo.
             db (AsyncSession): The SQLAlchemy asynchronous session.
 
+
         Returns:
             TemplateResponse: The rendered template with the QR code.
         """
-    # Retrieve the photo details
-    photo = await get_photo(db, photo_id)
-    if photo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
+    qr_code = await Aggregator.generate_qr(photo_id, db)
+    return StreamingResponse(qr_code, media_type="image/png")
 
-    # Generate the QR code
-    qr_code = await PhotoService.generate_qr_code(photo.url)
-    if qr_code is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
-
-    img = qrcode.make(photo.url)
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    buf.seek(0)
-
-    qr_code_data = b64encode(buf.getvalue()).decode('utf-8')
-    referer = request.headers.get('referer')
-
-    return templates.TemplateResponse("qr_code.html", {
-        "request": request,
-        "referer": referer,
-        "qr_code_data": qr_code_data
-    })
 
 
 @router.get("/photo/tags/", response_model=TagResponse)

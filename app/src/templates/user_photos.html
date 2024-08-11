@@ -21,9 +21,8 @@
                     <p class="card-text">Average Rating: {{ photo.average_rating or 0 }}/5</p>
                     <a href="/photo/{{ photo.id }}" class="btn btn-primary btn-sm">View</a>
                     <a href="/photo/edit/{{ photo.id }}" class="btn btn-secondary btn-sm">Edit</a>
-                    <form action="/photos/generate_qrcode/{{ photo.id }}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-info btn-sm">Generate QR</button>
-                </div>
+                    <!-- Generate QR Button -->
+                     <a href="/photo/show-qr/{{photo.id}}" class="btn btn-secondary btn-sm">QR code</a>
             </div>
         </div>
         {% endfor %}
