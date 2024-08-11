@@ -11,6 +11,7 @@
         {% endif %}
         <form action="/auth/login" method="post">
             <div class="mb-3">
+                <input type="hidden" name="next" value="{{ next }}">
                 <label for="username" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="username" name="username" required>
             </div>

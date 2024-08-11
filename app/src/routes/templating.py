@@ -30,18 +30,19 @@ async def signup_form(request: Request, message: str = None):
 
 @router.get(FrontEndpoints.LOGIN_FORM.value, response_class=HTMLResponse)
 @log_function
-async def get_login_form(request: Request):
+async def get_login_form(request: Request, next: str = "/"):
     """
     Render the login form without a message
 
     Args:
         request (Request): The request object.
+        next (str, optional): The URL to redirect to after a successful login. Defaults to "/".
 
 
     Returns:
         TemplateResponse: The rendered login form template
     """
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request, "next": next})
 
 
 @router.get(FrontEndpoints.LOGOUT_FORM.value, response_class=HTMLResponse)
