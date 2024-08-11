@@ -2,21 +2,22 @@ from fastapi import APIRouter, Depends, HTTPException, status, Form
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
-from app.src.config.dependency import role_required
+from app.src.config.dependency import role_required, verify_api_key
 from app.src.util.crud.photo import get_photo
 from app.src.util.models.user import UserRole
 from app.src.util.schemas.rating import RatingResponse
-from app.src.util.crud.rating import get_rating,  delete_rating
+from app.src.util.crud.rating import get_rating, delete_rating
 from app.src.util.db import get_db
 from sqlalchemy.future import select
 from app.src.util.models.rating import Rating
 from app.src.config.security import get_current_user
 from app.src.util.models import User
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
 
-@router.get("/photos/{photo_id}/rating", response_model=float)
+@router.get("/photos/{photo_id}/rating", response_model=float, dependencies=[Depends(verify_api_key)])
 async def get_photo_rating(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
         Retrieve the average rating for a specific photo.
@@ -37,10 +38,7 @@ async def get_photo_rating(photo_id: int, db: AsyncSession = Depends(get_db)):
     return average_rating
 
 
-from fastapi.responses import RedirectResponse
-
-
-@router.post("/photos/rate", status_code=status.HTTP_201_CREATED)
+@router.post("/photos/rate")
 async def rate_photo(photo_id: int = Form(...), rating: int = Form(...), db: AsyncSession = Depends(get_db),
                      current_user: User = Depends(get_current_user)):
     """
@@ -56,7 +54,7 @@ async def rate_photo(photo_id: int = Form(...), rating: int = Form(...), db: Asy
     current_user (User, optional): The current authenticated user. Defaults to Depends(get_current_user).
 
     Returns:
-    dict: A message indicating the success of the operation.
+    RedirectResponse to photo page if successful.
 
     Raises:
     HTTPException: If the rating value is not between 1 and 5, or if the user tries to rate their own photo,
@@ -87,7 +85,7 @@ async def rate_photo(photo_id: int = Form(...), rating: int = Form(...), db: Asy
     return RedirectResponse(url=f"/photo/{photo_id}", status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/ratings/", response_model=RatingResponse)
+@router.get("/ratings/", response_model=RatingResponse,dependencies=[Depends(verify_api_key)])
 async def get_rating_route(rating_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieves a rating by its ID.

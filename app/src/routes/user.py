@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from app.src.config.dependency import role_required
+from app.src.config.dependency import role_required, verify_api_key
 from app.src.util.models.user import UserRole, User
 from app.src.util.schemas import user as schema_user
 from app.src.util.crud import user as crud_user
@@ -13,7 +13,7 @@ from fastapi.responses import RedirectResponse
 router = APIRouter()
 
 
-@router.get("/users", response_model=List[schema_user.User])
+@router.get("/users", response_model=List[schema_user.User],dependencies=[Depends(verify_api_key)])
 @log_function
 async def get_users(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)):
     """
@@ -31,7 +31,7 @@ async def get_users(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(g
     return users
 
 
-@router.get("/{user_id}", response_model=schema_user.User)
+@router.get("/{user_id}", response_model=schema_user.User, dependencies=[Depends(verify_api_key)])
 @log_function
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     """

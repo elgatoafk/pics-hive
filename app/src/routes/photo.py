@@ -143,9 +143,9 @@ async def delete_photo_route(
     return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
 
 
-@router.post("/photos/generate_qrcode/{photo_id}")
+@router.post("/photos/generate_qrcode/{photo_id}", dependencies=[Depends(verify_api_key)])
 @log_function
-async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db), ):
+async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db)):
     """
         Generate and display a QR code for the photo URL in response to a POST request.
 
@@ -162,7 +162,7 @@ async def generate_qr_code(photo_id: int, db: AsyncSession = Depends(get_db), ):
 
 
 
-@router.get("/photo/tags/", response_model=TagResponse)
+@router.get("/photo/tags/", response_model=TagResponse, dependencies=[Depends(verify_api_key)])
 async def get_tag_route(tag_name: str, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a tag by its name.

@@ -39,4 +39,4 @@ async def test_connection(connection, branch):
 # Run the application
 if __name__ == "__main__":
     debug_mode = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=debug_mode)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=debug_mode)
