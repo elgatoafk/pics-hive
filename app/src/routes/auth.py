@@ -10,7 +10,7 @@ from app.src.config.hash import hash_handler
 from app.src.config.jwt import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, create_refresh_token, SECRET_KEY, \
     ALGORITHM
 from app.src.util.crud.token import blacklist_token, remove_blacklisted_tokens
-from app.src.util.crud.user import get_user_by_email
+from app.src.util.crud.user import get_user_by_email, update_user_last_login
 from app.src.util.db import get_db
 from datetime import timedelta, datetime
 from app.src.config.logging_config import log_function
@@ -106,7 +106,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     refresh_token = await create_refresh_token(
         data={"sub": db_user.email}, user_id=db_user.id, db=db, expires_delta=refresh_token_expires
     )
-    db_user.last_login = datetime.utcnow()
+    await update_user_last_login(db, db_user.id)
     response = RedirectResponse(url=next, status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)

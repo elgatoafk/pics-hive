@@ -10,7 +10,7 @@
             <div class="card h-100">
                 <img src="{{ photo.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">{{ photo.description }}</h5>
+                    <h5 class="card-title">{{ photo.description if photo.description else "No description provided" }}</h5>
                     <p class="card-text">Uploaded by: <a href="/user/{{ photo.owner.username }}">{{ photo.owner.username }}</a></p>
                     <p class="card-text">
                         {% for tag in photo.tags %}
