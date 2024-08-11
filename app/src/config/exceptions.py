@@ -35,14 +35,6 @@ async def custom_404_handler(request: Request, exc: StarletteHTTPException):
     """
     return templates.TemplateResponse("404.html", {"request": request}, status_code=status.HTTP_404_NOT_FOUND)
 
-
-async def custom_401_handler(request: Request, exc: StarletteHTTPException):
-    if exc.status_code == status.HTTP_401_UNAUTHORIZED:
-        original_url = request.url.path
-        return RedirectResponse(url=f"/login?next={original_url}", status_code=status.HTTP_303_SEE_OTHER)
-    return await request.app.exception_handler(HTTPException)(request, exc)
-
-
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
     """
     Custom handler for HTTP exceptions with routing logic based on the request path.

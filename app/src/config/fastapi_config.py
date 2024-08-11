@@ -7,7 +7,7 @@ from starlette.staticfiles import StaticFiles
 from app.src.config.config import settings
 from app.src.config.exceptions import custom_http_exception_handler, global_exception_handler, \
     validation_exception_handler, \
-    custom_404_handler, custom_401_handler
+    custom_404_handler
 from app.src.routes import root, auth, user, photo, comment, rating, templating, admin_templating
 from starlette.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -48,7 +48,7 @@ app.add_exception_handler(Exception, global_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, custom_404_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
-app.add_exception_handler(HTTPException, custom_401_handler)
+
 
 static_directory = os.path.join(os.path.dirname(__file__), '..', 'static')
 app.mount("/static", StaticFiles(directory=static_directory), name="static")

@@ -15,6 +15,43 @@ from app.src.config.jwt import create_access_token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
+def clear_cookies(response: JSONResponse):
+    """
+        Clears authentication-related cookies from the client's browser.
+
+        This function deletes the following cookies from the response:
+        - "access_token": The JWT access token used for authenticating the user.
+        - "refresh_token": The JWT refresh token used for obtaining new access tokens.
+        - "logged_in": A cookie indicating whether the user is logged in.
+        - "admin_access": A cookie indicating whether the user has admin privileges.
+
+        Args:
+            response (JSONResponse): The FastAPI JSONResponse object to which the
+                                     cookies will be cleared.
+
+        Example:
+            response = JSONResponse(content={"detail": "Logged out successfully"})
+            clear_cookies(response)
+        """
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    response.delete_cookie("logged_in")
+    response.delete_cookie("admin_access")
+
+
+def remove_and_401(response: JSONResponse):
+    response = JSONResponse(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content={"detail": "Could not validate credentials"}
+    )
+    clear_cookies(response)
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Please login to access this page.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
 def get_email_from_token(token: str) -> str:
     """
     Extracts the email (subject) from a JWT token.
@@ -79,41 +116,9 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
     access_token = request.cookies.get("access_token")
     refresh_token = request.cookies.get("refresh_token")
 
-    def clear_cookies(response: JSONResponse):
-        """
-            Clears authentication-related cookies from the client's browser.
-
-            This function deletes the following cookies from the response:
-            - "access_token": The JWT access token used for authenticating the user.
-            - "refresh_token": The JWT refresh token used for obtaining new access tokens.
-            - "logged_in": A cookie indicating whether the user is logged in.
-            - "admin_access": A cookie indicating whether the user has admin privileges.
-
-            Args:
-                response (JSONResponse): The FastAPI JSONResponse object to which the
-                                         cookies will be cleared.
-
-            Example:
-                response = JSONResponse(content={"detail": "Logged out successfully"})
-                clear_cookies(response)
-            """
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
-        response.delete_cookie("logged_in")
-        response.delete_cookie("admin_access")
-
     if not access_token and not refresh_token:
-        response = JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"detail": "Not authenticated"}
-        )
-        clear_cookies(response)
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
+        response = JSONResponse(content={"detail": "Could not validate credentials"})
+        remove_and_401(response)
     token_to_use = access_token
 
     if access_token:
@@ -124,31 +129,15 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
     if not token_to_use and refresh_token:
         token_to_use = refresh_token.replace("Bearer ", "")
         if await is_token_blacklisted(db, token_to_use):
-            response = JSONResponse(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                content={"detail": "Both access and refresh tokens are blacklisted"}
-            )
-            clear_cookies(response)
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Both access and refresh tokens are blacklisted",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            response = JSONResponse(content={"detail": "Could not validate credentials"})
+            remove_and_401(response)
         else:
 
             email = get_email_from_token(refresh_token)
             user = await get_user_by_email(db, email=email)
             if not user:
-                response = JSONResponse(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    content={"detail": "Could not validate credentials"}
-                )
-                clear_cookies(response)
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Could not validate credentials",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )
+                response = JSONResponse(content={"detail": "Could not validate credentials"})
+                remove_and_401(response)
             new_access_token = await create_access_token(data={"sub": email}, user_id=user.id, db=db)
             response = JSONResponse(
                 content={"detail": "New access token issued"}
@@ -157,16 +146,8 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
             token_to_use = new_access_token
 
     if not token_to_use:
-        response = JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"detail": "Not authenticated"}
-        )
-        clear_cookies(response)
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        response = JSONResponse(content={"detail": "Could not validate credentials"})
+        remove_and_401(response)
 
     try:
         payload = jwt.decode(token_to_use, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])

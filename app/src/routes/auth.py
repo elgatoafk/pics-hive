@@ -21,7 +21,6 @@ from app.src.util.crud import user as user_crud
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.src.util.schemas.user import Token
 
-
 router = APIRouter()
 
 
@@ -60,7 +59,7 @@ async def signup(request: Request, db: AsyncSession = Depends(get_db),
 @router.post("/login", response_model=user_schemas.Token)
 @log_function
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db),
-                request: Request = None, response: Response = None, next:str = "/"):
+                request: Request = None, response: Response = None):
     """
     Logs in a user.
 
@@ -73,7 +72,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
         db (AsyncSession): The asynchronous database session, obtained via dependency injection.
         request (Request): The request object.
         response (Response): The response to be sent in the request object.
-        next (str, optional): The URL to redirect to after a successful login. Defaults to "/".
+
 
 
     Returns:
@@ -107,7 +106,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
         data={"sub": db_user.email}, user_id=db_user.id, db=db, expires_delta=refresh_token_expires
     )
     await update_user_last_login(db, db_user.id)
-    response = RedirectResponse(url=next, status_code=status.HTTP_303_SEE_OTHER)
+
+    response = RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
     response.set_cookie(key="logged_in", value=f"{db_user.username}", httponly=True)
@@ -150,4 +150,3 @@ async def logout(request: Request, db: AsyncSession = Depends(get_db)):
     if request.cookies.get("admin_access") == "true":
         response.delete_cookie("admin_access")
     return response
-

@@ -7,18 +7,13 @@ body {
     font-size: 1.2rem;
     margin: 0;
     padding: 0;
-    height: 100%;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
+    min-height: 100vh; /* Ensure body takes up at least full height */
     display: flex;
     flex-direction: column;
 }
 
-.container {
-    flex: 1;
+html, body {
+    height: 100%;
 }
 
 .navbar-custom {
@@ -50,12 +45,13 @@ html, body {
     background-color: #6699CC;
 }
 
+/* Single container style that manages content space */
 .container {
-    min-height: 100vh;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding-top: 0;
+    justify-content: flex-start; /* Align items to start of the container */
+    padding-top: 20px;
     padding-bottom: 20px;
     margin-top: 0;
 }
@@ -112,6 +108,7 @@ p {
 .card img {
     max-height: 150px;
     object-fit: cover;
+    width: 100%; /* Ensure images take full width */
 }
 
 .card-body {
@@ -177,11 +174,7 @@ p {
     font-family: 'Roboto', sans-serif;
     border-top: 1px solid #336699;
     width: 100%;
-    position: relative;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin-top: auto;
+    margin-top: auto; /* Ensure footer is pushed to the bottom */
 }
 
 .custom-footer a {
@@ -197,15 +190,6 @@ p {
 h2.text-center {
     margin-bottom: 0;
     padding-bottom: 0;
-}
-
-.container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
 .photo-card .btn {
@@ -400,4 +384,68 @@ h2.text-center {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .custom-heading {
+        font-size: 1.8rem;
+    }
+    .navbar-custom .navbar-brand {
+        font-size: 1.8rem;
+    }
+    .navbar-custom .navbar-nav .nav-link {
+        padding: 0.3rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-custom .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+    }
+    .navbar-custom .navbar-toggler-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .custom-footer {
+        padding: 10px 0;
+    }
+}
+
+/* Custom styles for login and signup pages */
+.auth-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.auth-heading {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.auth-form {
+    margin-top: 20px;
+}
+
+.auth-form .form-label {
+    font-weight: bold;
+}
+
+.auth-form .form-control {
+    margin-bottom: 15px;
+}
+
+.auth-form .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF6600;
+    border-color: #FF6600;
+    color: #FFF;
+}
+
+.auth-form .btn:hover {
+    background-color: #FF0033;
+    border-color: #FF0033;
 }

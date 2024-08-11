@@ -1,67 +1,69 @@
 {% extends "base.html" %}
 
-{% block title %}Signup - PhotoShare{% endblock %}
+{% block title %}Register - PhotoShare{% endblock %}
 
 {% block content %}
-
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="custom-heading">Register</h2>
-        <form id="register-form" action="/auth/signup" method="post">
-            <div class="mb-3">
+<div class="container auth-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="auth-heading">Register</h2>
+            {% if message %}
+            <div class="custom-card message">{{ message }}</div>
+            {% endif %}
+            <form action="/auth/signup" method="post" class="auth-form" id="register-form">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <!-- Hidden consent checkbox -->
                 <input type="checkbox" id="cookie-consent-checkbox" name="cookie-consent" style="display: none;">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn custom-button">Register</button>
-        </form>
+                <button type="submit" class="btn custom-button">Register</button>
+            </form>
+        </div>
     </div>
 </div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const consentCheckbox = document.getElementById("cookie-consent-checkbox");
-    const form = document.getElementById("register-form");
-    const consentBannerHTML = `
-        <div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #003366; color: #fff; padding: 15px; text-align: center; z-index: 1000;">
-            <p style="margin: 0; padding: 0 10px; display: inline-block;">We use necessary cookies to ensure you get the best experience on our site.</p>
-            <button id="accept-cookies" style="margin-left: 10px; padding: 5px 10px; background-color: #4CAF50; color: #fff; border: none; cursor: pointer;">Accept</button>
-        </div>
-    `;
+    document.addEventListener("DOMContentLoaded", function() {
+        const consentCheckbox = document.getElementById("cookie-consent-checkbox");
+        const form = document.getElementById("register-form");
+        const consentBannerHTML = `
+            <div id="cookie-consent-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #003366; color: #fff; padding: 15px; text-align: center; z-index: 1000;">
+                <p style="margin: 0; padding: 0 10px; display: inline-block;">We use necessary cookies to ensure you get the best experience on our site.</p>
+                <button id="accept-cookies" style="margin-left: 10px; padding: 5px 10px; background-color: #4CAF50; color: #fff; border: none; cursor: pointer;">Accept</button>
+            </div>
+        `;
 
-    const showConsentBanner = () => {
-        document.body.insertAdjacentHTML('beforeend', consentBannerHTML);
-        const consentBanner = document.getElementById("cookie-consent-banner");
-        document.getElementById("accept-cookies").addEventListener("click", function() {
-            localStorage.setItem("cookieConsent", "true");
-            consentCheckbox.checked = true;
-            consentBanner.style.display = "none";
-            form.submit();
+        const showConsentBanner = () => {
+            document.body.insertAdjacentHTML('beforeend', consentBannerHTML);
+            const consentBanner = document.getElementById("cookie-consent-banner");
+            document.getElementById("accept-cookies").addEventListener("click", function() {
+                localStorage.setItem("cookieConsent", "true");
+                consentCheckbox.checked = true;
+                consentBanner.style.display = "none";
+
+            });
+        };
+
+        const checkConsent = () => {
+            if (localStorage.getItem("cookieConsent") === "true") {
+                consentCheckbox.checked = true;
+            } else {
+                showConsentBanner();
+            }
+        };
+
+        checkConsent();
+
+        form.addEventListener("submit", function(event) {
+            if (!consentCheckbox.checked) {
+                event.preventDefault();
+                alert("You must accept necessary cookies to register.");
+            }
         });
-    };
-
-    const checkConsent = () => {
-        if (localStorage.getItem("cookieConsent") === "true") {
-            consentCheckbox.checked = true;
-        } else {
-            showConsentBanner();
-        }
-    };
-
-    checkConsent();
-
-    form.addEventListener("submit", function(event) {
-        if (!consentCheckbox.checked) {
-            event.preventDefault();
-            alert("You must accept necessary cookies to register.");
-
-        }
     });
-});
 </script>
-
 {% endblock %}
