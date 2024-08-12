@@ -22,7 +22,7 @@
                     <div id="edit-description-form" style="display: none;">
                         <form class="mb-4">
                             <textarea name="description" class="form-control" rows="3">{{ photo.description }}</textarea>
-                            <button type="submit" class="btn btn-primary mt-2">Save</button>
+                            <button type="submit" class="btn btn-primary mt-2" id="save-description">Save</button>
                             <button type="button" id="cancel-edit" class="btn btn-secondary mt-2">Cancel</button>
                         </form>
                     </div>
@@ -126,10 +126,36 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
+    <script>
+    document.getElementById('edit-description-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const description = formData.get('description');
+
+        fetch(`/photos/{{ photo.id }}/description`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ new_description: description }),  // Ensure the key matches the parameter name in the endpoint
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Description updated successfully');
+                window.location.reload(); // Optionally reload the page to reflect the changes
+            } else {
+                alert('Failed to update description');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Comment editing functionality
+
     document.querySelectorAll('.edit-comment-button').forEach(button => {
         button.addEventListener('click', function() {
             const commentId = this.getAttribute('data-comment-id');
@@ -148,9 +174,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.querySelectorAll('.edit-comment-form').forEach(form => {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
-            const formData = new FormData(this); // Ensure `this` is a form element
+            const formData = new FormData(this);
             const commentContent = formData.get('comment_content');
             const commentId = this.getAttribute('data-comment-id');
 
