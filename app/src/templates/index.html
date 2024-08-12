@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Home - PhotoShare{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        {% for photo in photos %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <img src="{{ photo.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ photo.description if photo.description else "No description provided" }}</h5>
+                    <p class="card-text">Uploaded by: <a href="/user/{{ photo.owner.username }}">{{ photo.owner.username }}</a></p>
+                    <p class="card-text">
+                        {% for tag in photo.tags %}
+                            <span class="badge badge-{{ loop.index }}">{{ tag.name }}</span>
+                        {% endfor %}
+                    </p>
+                    <a href="/photo/{{ photo.id }}" class="btn btn-primary btn-sm">View</a>
+                    {% if current_user and current_user == photo.owner.username %}
+                    <a href="/photo/edit/{{ photo.id }}" class="btn btn-secondary btn-sm">Edit</a>
+                    {% endif %}
+                    <!-- Generate QR Button -->
+                     <a href="/photo/show-qr/{{photo.id}}" class="btn btn-secondary btn-sm">QR code</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Logout Confirmation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-body">
+            <h1 class="card-title">Are you sure you want to leave?</h1>
+            <div class="mt-4">
+                <a href="/" class="btn btn-lg custom-navbar-button">Home</a>
+                <form method="post" action="/auth/logout" style="display: inline;">
+                    <button type="submit" class="btn btn-lg custom-navbar-button">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

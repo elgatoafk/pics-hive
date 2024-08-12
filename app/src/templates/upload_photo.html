@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Photo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="custom-heading" style="margin-bottom: 20px;">Upload a New Photo</h1> <!-- Adjusted margin-bottom -->
+    <form action="/photos/new/" method="post" enctype="multipart/form-data" id="photo-upload-form" class="form-container">
+        <div id="message-container" style="margin-bottom: 15px;"></div> <!-- Added a container for messages -->
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="tags" class="form-label">Tags (comma separated, max 5)</label>
+            <input type="text" class="form-control" id="tags" name="tags">
+        </div>
+
+        <div class="mb-3">
+            <label for="file" class="form-label">Photo</label>
+            <input class="form-control" type="file" id="file" name="file" required>
+        </div>
+
+        <button type="submit" class="btn custom-button">Upload Photo</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('photo-upload-form').addEventListener('submit', async function(event) {
+        event.preventDefault();  // Prevent default form submission
+
+        const form = document.getElementById('photo-upload-form');
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/photos/new/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                document.getElementById('message-container').innerHTML = `<div class="alert alert-success">Photo uploaded.</div>`;
+            } else {
+                const errorText = await response.text();
+                document.getElementById('message-container').innerHTML = `<div class="alert alert-danger">${errorText}</div>`;
+            }
+        } catch (error) {
+            document.getElementById('message-container').innerHTML = `<div class="alert alert-danger">An unexpected error occurred.</div>`;
+        }
+    });
+</script>
+{% endblock %}

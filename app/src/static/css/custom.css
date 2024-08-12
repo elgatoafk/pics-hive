@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Ensure body takes up at least full height */
+    display: flex;
+    flex-direction: column;
+}
+
+html, body {
+    height: 100%;
+}
+
+.navbar-custom {
+    background-color: #003366;
+    border-bottom: 1px solid #336699;
+}
+
+.navbar-custom .navbar-brand {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #FFCC00;
+    font-family: 'Roboto Slab', serif;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    color: #FFCC00;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #336699;
+    margin: 0.5rem;
+    text-align: center;
+    min-width: 100px;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: #FFCC00;
+    background-color: #6699CC;
+}
+
+/* Single container style that manages content space */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items to start of the container */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 0;
+}
+
+.custom-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    font-family: 'Roboto Slab', serif;
+    margin-top: 0;
+}
+
+.custom-card {
+    border: 1px solid #f5e5c0;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Slab', serif;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.btn.custom-navbar-button {
+    background-color: #FF6600 !important;
+    border-color: #FF6600 !important;
+    color: #FFCC00 !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn.custom-navbar-button:hover {
+    background-color: #FF0033 !important;
+    border-color: #FF0033 !important;
+    color: #FFCC00 !important;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    padding: 10px;
+}
+
+.card img {
+    max-height: 150px;
+    object-fit: cover;
+    width: 100%; /* Ensure images take full width */
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.custom-button {
+    background-color: #FF6600;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: #FFCC00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 0.5rem;
+}
+
+.custom-button:hover {
+    background-color: #FF0033;
+}
+
+.table-responsive {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.table {
+    margin: 0 auto;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.table img {
+    max-height: 50px;
+    width: auto;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.custom-footer {
+    background-color: #003366;
+    color: #FFCC00;
+    text-align: center;
+    padding: 20px 0;
+    font-family: 'Roboto', sans-serif;
+    border-top: 1px solid #336699;
+    width: 100%;
+    margin-top: auto; /* Ensure footer is pushed to the bottom */
+}
+
+.custom-footer a {
+    color: #FF6600;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.custom-footer a:hover {
+    text-decoration: underline;
+}
+
+h2.text-center {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.photo-card .btn {
+    background-color: transparent;
+    color: #FF6600;
+    border: 2px solid #FF6600;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem;
+}
+
+.photo-card .btn:hover {
+    background-color: #FF6600;
+    color: #FFFFFF;
+}
+
+.photo-card .tag-badge {
+    background-color: #336699;
+    color: #FFFFFF;
+    padding: 0.3em 0.7em;
+    font-size: 0.85em;
+    font-weight: 600;
+    border-radius: 1rem;
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+    display: inline-block;
+}
+
+.card-body .badge {
+    background-color: #336699;
+    color: #FFFFFF;
+    padding: 0.3em 0.7em;
+    font-size: 0.85em;
+    font-weight: 600;
+    border-radius: 1rem;
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+    display: inline-block;
+}
+
+.card-body .badge-1 { background-color: #003366; }
+.card-body .badge-2 { background-color: #336699; }
+.card-body .badge-3 { background-color: #6699CC; }
+.card-body .badge-4 { background-color: #FFCC00; color: #003366; }
+.card-body .badge-5 { background-color: #FF6600; }
+.card-body .badge-6 { background-color: #FF0033; }
+.card-body .badge-7 { background-color: #000000; }
+
+.card-body .btn {
+    background-color: transparent;
+    color: #FF6600;
+    border: 2px solid #FF6600;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem;
+}
+
+.card-body .btn:hover {
+    background-color: #FF6600;
+    color: #FFFFFF;
+}
+
+.ban-user-btn {
+    background-color: #FF0033;
+    color: #FFFFFF;
+    border: 2px solid #FF0033;
+}
+
+.ban-user-btn:hover {
+    background-color: #CC0026;
+    color: #FFFFFF;
+}
+
+.delete-photo-btn {
+    background-color: #FF6600;
+    color: #FFFFFF;
+    border: 2px solid #FF6600;
+}
+
+.delete-photo-btn:hover {
+    background-color: #CC5200;
+    color: #FFFFFF;
+}
+
+.list-group-item-action {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border-radius: 0.25rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.btn-admin {
+    background-color: #FF6600;
+    color: #FFCC00;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 0px;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0.5rem auto;
+    text-align: center;
+}
+
+.btn-admin:hover {
+    background-color: #FF0033;
+    color: #FFCC00;
+}
+
+.list-group .list-group-item {
+    background-color: #FF6600 !important;
+    border: none !important;
+    color: #FFCC00 !important;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding: 8px 20px;
+    border-radius: 20px !important;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+}
+
+.list-group .list-group-item:hover {
+    background-color: #FF0033 !important;
+    color: #FFCC00 !important;
+}
+
+.badge-tag {
+    background-color: #FFCC00;
+    color: #003366;
+    padding: 5px 10px;
+    border-radius: 0.25rem;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.photo-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Default navbar toggler icon styles */
+.navbar-custom .navbar-toggler-icon {
+    background-image: none; /* Removes the default Bootstrap icon */
+    background-color: transparent; /* Ensures the background is transparent */
+    border: 2px solid #FF6600; /* Bright Orange border */
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+/* Create the lines inside the toggler */
+.navbar-custom .navbar-toggler-icon::before,
+.navbar-custom .navbar-toggler-icon::after,
+.navbar-custom .navbar-toggler-icon div {
+    background-color: #FF6600; /* Bright Orange lines */
+    content: '';
+    display: block;
+    height: 2px;
+    width: 20px;
+    margin: 6px auto;
+}
+
+/* Reposition the toggler icon's inner lines */
+.navbar-custom .navbar-toggler-icon::before {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-custom .navbar-toggler-icon::after {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-custom .navbar-toggler-icon div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .custom-heading {
+        font-size: 1.8rem;
+    }
+    .navbar-custom .navbar-brand {
+        font-size: 1.8rem;
+    }
+    .navbar-custom .navbar-nav .nav-link {
+        padding: 0.3rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-custom .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+    }
+    .navbar-custom .navbar-toggler-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .custom-footer {
+        padding: 10px 0;
+    }
+}
+
+/* Custom styles for login and signup pages */
+.auth-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.auth-heading {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.auth-form {
+    margin-top: 20px;
+}
+
+.auth-form .form-label {
+    font-weight: bold;
+}
+
+.auth-form .form-control {
+    margin-bottom: 15px;
+}
+
+.auth-form .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF6600;
+    border-color: #FF6600;
+    color: #FFF;
+}
+
+.auth-form .btn:hover {
+    background-color: #FF0033;
+    border-color: #FF0033;
+}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}User Profiles{% endblock %}
+
+{% block content %}
+<h1>User Profiles</h1>
+<div class="profiles row">
+    {% for user in users %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="/user/{{ user.username }}" class="text-decoration-none">{{ user.username }}</a>
+                </h2>
+                <p class="card-text">Registered At: {{ user.registered_at }}</p>
+                <p class="card-text">Photos Uploaded: {{ user.photos_uploaded }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
